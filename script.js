@@ -51,13 +51,12 @@ window.addEventListener("DOMContentLoaded", ()=>{
   });
 });
 
-/* --- LÓGICA DO MODAL (ESTILO NETFLIX COM YOUTUBE) --- */
-function openModal(title, desc, youtubeId) {
+function openModal(title, desc, videoSrc) {
   const modal = document.getElementById("netflixModal");
   const iframe = document.getElementById("modalVideo");
   const bannerVideo = document.getElementById("banner-video");
 
-  // PAUSA E MUTA O VÍDEO DE FUNDO À FORÇA!
+  // PAUSA O VÍDEO DE FUNDO
   if(bannerVideo) {
     bannerVideo.pause();
     bannerVideo.muted = true; 
@@ -66,8 +65,21 @@ function openModal(title, desc, youtubeId) {
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalDesc").textContent = desc;
 
-  // MÁGICA AQUI: adicionei &start=10 no final do link!
-  iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&start=10`;
+  // LÓGICA DE DETECÇÃO: YouTube ou Link Direto (Cloudinary)
+  if (videoSrc.includes("youtube.com") || videoSrc.includes("youtu.be") || videoSrc.length < 15) {
+    // Se for um ID curto ou link do YT, usa o Iframe
+    const youtubeId = videoSrc.includes("v=") ? videoSrc.split("v=")[1] : videoSrc;
+    iframe.style.display = "block";
+    iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&controls=1&rel=0`;
+    
+    // Esconde um possível player de vídeo comum se você decidir adicionar um depois
+  } else {
+    // Se for link do Cloudinary (.mp4), vamos transformar o iframe em um player de vídeo
+    // DICA: Para simplicidade extrema, você pode abrir o link direto no iframe, 
+    // mas o ideal para o Cloudinary é que o link termine em .mp4
+    iframe.style.display = "block";
+    iframe.src = videoSrc; 
+  }
   
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -96,3 +108,91 @@ document.getElementById("netflixModal").addEventListener("click", e => {
   if(e.target.id === "netflixModal") closeModal();
 });
 
+document.querySelectorAll('.free-game-trigger').forEach(card => {
+  card.addEventListener('click', function() {
+    // 1. Coleta os dados novos
+    const novaLogo = this.getAttribute('data-logo');
+    const novaDesc = this.getAttribute('data-desc');
+    const novoVideo = this.getAttribute('data-video');
+    const novoLink = this.getAttribute('data-link');
+
+    // 2. Atualiza a LOGO e a DESCRIÇÃO
+    const imgLogo = document.getElementById('banner-logo');
+    if (imgLogo) {
+      imgLogo.src = novaLogo;
+    }
+    document.getElementById('banner-desc').textContent = novaDesc;
+    
+    // 3. Atualiza o VÍDEO
+    const videoElement = document.getElementById('banner-video');
+    videoElement.src = novoVideo;
+    videoElement.load(); // Força o carregamento do novo vídeo
+    videoElement.play();
+
+    // 4. Atualiza o Botão de Download
+    const downloadBtn = document.querySelector('.banner-content a');
+    if (downloadBtn) {
+      downloadBtn.href = novoLink;
+    }
+
+    // 5. Sobe para o topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+/* --- LÓGICA DE LOGIN --- */
+const loginForm = document.getElementById('login-form');
+
+loginForm.addEventListener('submit', function(e) {
+  e.preventDefault(); // Impede a página de recarregar
+
+  const emailInput = document.getElementById('user-email').value;
+  const passwordInput = document.getElementById('user-password').value;
+
+  // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
+  const emailCorreto = "testegratis@gameflix.com";
+  const senhaCorreta = "l";
+
+  if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
+    // Esconde a tela de login
+    document.getElementById('login-screen').classList.add('hidden');
+    
+    // Opcional: Inicia o vídeo do banner após entrar
+    const bannerVideo = document.getElementById("banner-video");
+    if(bannerVideo) bannerVideo.play().catch(()=>{});
+    
+    alert("Bem-vindo a melhor plataforma de games do Brasil!");
+  } else {
+    alert("Email ou senha incorretos. Tente novamente.");
+  }
+});
+
+/* --- AJUSTE EXCLUSIVO PARA O POPUP WHATSAPP (MODAL NOVO) --- */
+function openWppModal() {
+  const modalWpp = document.getElementById("wppModal");
+  const bannerVideo = document.getElementById("banner-video");
+  
+  if(modalWpp) {
+      modalWpp.style.display = "flex";
+      document.body.style.overflow = "hidden";
+  }
+  if(bannerVideo) bannerVideo.pause();
+}
+
+function closeWppModal() {
+  const modalWpp = document.getElementById("wppModal");
+  const bannerVideo = document.getElementById("banner-video");
+
+  if(modalWpp) {
+      modalWpp.style.display = "none";
+      document.body.style.overflow = "auto";
+  }
+  if(bannerVideo) bannerVideo.play().catch(()=>{});
+}
+
+/* FECHAR MODAIS CLICANDO FORA */
+window.addEventListener('click', function(event) {
+    const modalWpp = document.getElementById("wppModal");
+    const modalNetflix = document.getElementById("netflixModal");
+    if (event.target === modalWpp) closeWppModal();
+    if (event.target === modalNetflix) closeModal();
+});
