@@ -1,157 +1,985 @@
-/* --- SCROLL INTELIGENTE DO TOP 10 --- */
-const top10 = document.getElementById('top10');
-
-function scrollLeft(){
-  if(!top10) return;
-  const card = top10.querySelector(".card-container");
-  if(!card) return;
-  top10.scrollBy({ left: -(card.offsetWidth + 45) * 2, behavior: "smooth" });
+:root {
+  --netflix-red: #e50914;
+  --bg-dark: #000000; /* Antes era #141414 (cinza escuro) */
+  --text-gray: #a3a3a3;
 }
 
-function scrollRight(){
-  if(!top10) return;
-  const card = top10.querySelector(".card-container");
-  if(!card) return;
-  top10.scrollBy({ left: (card.offsetWidth + 45) * 2, behavior: "smooth" });
-}
-
-/* --- EFEITO DO HEADER NO SCROLL --- */
-window.addEventListener('scroll', ()=>{
-  const header = document.getElementById('header');
-  if(window.scrollY > 50) {
-    header.style.background = 'rgba(20,20,20,0.95)';
-  } else {
-    header.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, transparent)';
-  }
-});
-
-/* --- CONTROLE DO VÍDEO DO BANNER (LOOP INTELIGENTE) --- */
-window.addEventListener("DOMContentLoaded", ()=>{
-  const bannerSection = document.getElementById("main-banner");
-  const bannerVideo = document.getElementById("banner-video");
-  if(!bannerVideo || !bannerSection) return;
-
-  // 1. Removemos o loop padrão do HTML para o JavaScript assumir o controle
-  bannerVideo.removeAttribute("loop");
-
-  // 2. Quando o vídeo terminar, ele muta o som e começa de novo!
-  bannerVideo.addEventListener("ended", () => {
-    bannerVideo.muted = true; // Fica mudo
-    bannerVideo.play().catch(()=>{}); // Recomeça o vídeo
-  });
-
-  // 3. Clique no banner para ligar/desligar o som manualmente, se o usuário quiser
-  bannerSection.addEventListener("click", ()=>{
-    if(bannerVideo.muted){
-      bannerVideo.muted = false;
-      bannerVideo.volume = 0.3; // Volume agradável
-    } else {
-      bannerVideo.muted = true;
-    }
-  });
-});
-
-/* --- LÓGICA DO MODAL (ESTILO NETFLIX COM YOUTUBE) --- */
-function openModal(title, desc, youtubeId) {
-  const modal = document.getElementById("netflixModal");
-  const iframe = document.getElementById("modalVideo");
-  const bannerVideo = document.getElementById("banner-video");
-
-  // PAUSA E MUTA O VÍDEO DE FUNDO À FORÇA!
-  if(bannerVideo) {
-    bannerVideo.pause();
-    bannerVideo.muted = true; 
-  }
-
-  document.getElementById("modalTitle").textContent = title;
-  document.getElementById("modalDesc").textContent = desc;
-
-  // MÁGICA AQUI: adicionei &start=10 no final do link!
-  iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&start=10`;
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #000000;
+  color: #fff;
   
-  modal.classList.add("active");
-  document.body.style.overflow = "hidden";
+  overflow-x: hidden;
 }
 
-function closeModal(){
-  const modal = document.getElementById("netflixModal");
-  const iframe = document.getElementById("modalVideo");
-  const bannerVideo = document.getElementById("banner-video");
+/* --- HEADER --- */
+.pinning-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, transparent);
+  transition: background 0.3s;
+}
 
-  // Remove o vídeo do YouTube para ele parar de tocar
-  iframe.src = "";
+.main-header {
+  display: flex;
+  align-items: center;
+  padding: 15px 4%;
+  gap: 20px;
+}
 
-  modal.classList.remove("active");
-  document.body.style.overflow = "";
+.logo {
+  color: var(--netflix-red);
+  font-size: 28px;
+  font-weight: bold;
+  text-decoration: none;
+  letter-spacing: -1px;
+}
 
-  // Volta a rodar o vídeo de fundo, mas MUTADO para não atrapalhar a paz
-  if(bannerVideo) {
-    bannerVideo.muted = true;
-    bannerVideo.play().catch(()=>{});
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 18px;
+  padding: 0;
+  font-size: 14px;
+}
+
+.nav-links a {
+  color: #e5e5e5;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--text-gray); }
+
+.header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-actions button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.header-actions img.profile {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.banner {
+  height: 100vh;
+  display: flex;
+  align-items: flex-end; /* Alinha o conteúdo no fundo */
+  padding: 0 4% 120px 4%; /* O 120px garante que o texto não fique 'colado' no chão */
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0px !important;
+}
+.banner-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.banner::after {
+  content: '';
+  position: absolute;
+  bottom: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 60px; /* Diminuído para apenas 60px para ser um corte seco e elegante */
+  background: linear-gradient(to top, #000000, transparent);
+  z-index: 1;
+}
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.2));
+  z-index: 1;
+}
+
+.banner-content {
+  max-width: 600px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 20px; /* Ajuste fino para a altura dos botões */
+}
+
+.banner-content h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+.banner-content p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+.btn-play {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 10px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.btn-info {
+  background: rgba(109, 109, 110, 0.7);
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.row h2 {
+  font-size: 1.4vw;
+  color: #e5e5e5;
+  margin-bottom: 2px;
+}
+
+.top-10-container {
+  position: relative;
+}
+
+.top-10-scroll {
+  display: flex;
+  gap: 45px;
+  overflow-x: auto;
+  padding: 20px 0;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.top-10-scroll::-webkit-scrollbar { display: none; }
+
+.card-container {
+  position: relative;
+  min-width: 300px;
+  height: 260px;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.card-container:hover {
+  transform: scale(1.05);
+}
+
+.rank-number {
+  position: absolute;
+  left: -10px;
+  bottom: -25px;
+  font-size: 260px;
+  font-weight: 900;
+  line-height: 1;
+  color: #000;
+  -webkit-text-stroke: 6px #6a6a6a;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.poster-img {
+  width: 180px;
+  height: 260px;
+  object-fit: cover;
+  z-index: 2;
+  margin-left: 110px;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.badge-new {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  background-color: var(--netflix-red);
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 2px;
+  z-index: 3;
+  text-transform: uppercase;
+}
+
+/* Setas de navegação */
+.arrow-left, .arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(20,20,20,0.7);
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+  width: 40px;
+  height: 60px;
+}
+
+.arrow-left { left: 5px; }
+.arrow-right { right: 5px; }
+
+/* ROW normal jogos */
+.games-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.games-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.game-card {
+  width: calc((100% / 9) - 14px);
+  height: 307px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform .3s;
+}
+
+.game-card:hover{
+  transform:scale(1.08);
+}
+
+/* BOTÃO COMPRAR AGORA - Estilo Futurista Neon */
+.netflix-btn {
+  display: inline-block;
+  padding: 22px 55px;
+  font-size: 26px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(90deg, #e50914, #ff3b3b);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #e50914, 0 0 20px #ff3b3b, 0 0 30px #ff3b3b;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+/* Glow animado */
+.netflix-btn::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, #ff0000, #ff3b3b, #ff0000, #ff3b3b);
+  animation: glow 2.5s linear infinite;
+  filter: blur(15px);
+  z-index: -1;
+}
+
+@keyframes glow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.netflix-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #ff0000, 0 0 30px #ff3b3b, 0 0 40px #ff3b3b;
+}
+
+.floating-btn-container {
+  text-align: center;
+  margin: 40px 0;
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.05); }
+}
+
+/* FAIXAS DE DESTAQUE */
+.faixa-destaque{
+  font-family:'Bebas Neue', sans-serif;
+  color:#fff;
+  text-align:center;
+  padding:24px 40px;
+  font-size:36px;
+}
+
+.top10-banner {
+  display: flex;
+  justify-content: center;
+  margin-top: -0px; 
+  margin-bottom: 110px;
+}
+
+.top10-banner img {
+  max-width: 90%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+
+  /* Máscara horizontal: começa transparente na esquerda e fica sólida rapidamente */
+  -webkit-mask-image: linear-gradient(
+    to right, 
+    transparent 0%, 
+    black 15%, 
+    black 100%
+  );
+  mask-image: linear-gradient(
+    to right, 
+    transparent 0%, 
+    black 15%, 
+    black 100%
+  );
+}
+
+/* ===== MODAL NETFLIX STYLE ===== */
+.netflix-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.netflix-modal.active {
+  display: flex;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 900px;
+  background: #141414;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,0,0,0.8);
+  animation: modalFade .3s ease;
+}
+
+@keyframes modalFade {
+  from { transform: scale(.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-video {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  background: #000;
+}
+
+.modal-info {
+  padding: 20px;
+}
+
+.modal-info h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+}
+
+.modal-info p {
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Definição da Animação */
+@keyframes subirSuave {
+  from {
+    opacity: 0;
+    transform: translateY(30px); /* Começa 30px abaixo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Termina na posição original */
   }
 }
 
-/* Fecha o modal clicando fora dele (na parte escura) */
-document.getElementById("netflixModal").addEventListener("click", e => {
-  if(e.target.id === "netflixModal") closeModal();
-});
+/* Aplicando a animação ao conteúdo do banner */
+.banner-content {
+  max-width: 600px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 20px;
+  
+  /* Configurações da animação */
+  animation: subirSuave 1s ease-out forwards;
+  opacity: 0; /* Começa invisível até a animação iniciar */
+}
 
-document.querySelectorAll('.free-game-trigger').forEach(card => {
-  card.addEventListener('click', function() {
-    // 1. Coleta os dados novos
-    const novaLogo = this.getAttribute('data-logo');
-    const novaDesc = this.getAttribute('data-desc');
-    const novoVideo = this.getAttribute('data-video');
-    const novoLink = this.getAttribute('data-link');
+/* Opcional: Pequeno atraso para os botões aparecerem depois do título */
+.banner-content h1 {
+  animation: subirSuave 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
 
-    // 2. Atualiza a LOGO e a DESCRIÇÃO
-    const imgLogo = document.getElementById('banner-logo');
-    if (imgLogo) {
-      imgLogo.src = novaLogo;
-    }
-    document.getElementById('banner-desc').textContent = novaDesc;
-    
-    // 3. Atualiza o VÍDEO
-    const videoElement = document.getElementById('banner-video');
-    videoElement.src = novoVideo;
-    videoElement.load(); // Força o carregamento do novo vídeo
-    videoElement.play();
+.banner-content p {
+  animation: subirSuave 0.8s ease-out 0.4s forwards;
+  opacity: 0;
+}
 
-    // 4. Atualiza o Botão de Download
-    const downloadBtn = document.querySelector('.banner-content a');
-    if (downloadBtn) {
-      downloadBtn.href = novoLink;
-    }
+.banner-content a, .btn-info {
+  display: inline-block; /* Garante que a animação funcione bem nos botões */
+  animation: subirSuave 0.8s ease-out 0.6s forwards;
+  opacity: 0;
+}
 
-    // 5. Sobe para o topo
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-/* --- LÓGICA DE LOGIN --- */
-const loginForm = document.getElementById('login-form');
+/* ===== ESTILOS DA TELA DE SPLASH GAMEFLIX ===== */
+#splash-screen {
+  position: fixed;
+  inset: 0;
+  background-color: #000; /* Fundo preto absoluto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000; /* Fica acima de tudo (header, banner, etc.) */
+  overflow: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s;
+}
 
-loginForm.addEventListener('submit', function(e) {
-  e.preventDefault(); // Impede a página de recarregar
+/* Container do conteúdo para centralizar */
+.splash-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  const emailInput = document.getElementById('user-email').value;
-  const passwordInput = document.getElementById('user-password').value;
+/* --- O Texto Principal (GAMEFLIX) --- */
+.splash-text {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #e50914; /* Vermelho Netflix */
+  font-size: 5rem; /* Tamanho grande inicial */
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  
+  /* Aplica a animação de Zoom, Desfoque e Cores */
+  animation: gameflix-intro 3.5s ease-out forwards;
+}
 
-  // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
-  const emailCorreto = "t@gameflix.com";
-  const senhaCorreta = "g";
+/* --- Camadas de Cores Extras (Aberração Cromática) --- */
+.splash-shadow-r, .splash-shadow-b {
+  position: absolute;
+  inset: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  opacity: 0;
+  z-index: 1;
+}
 
-  if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
-    // Esconde a tela de login
-    document.getElementById('login-screen').classList.add('hidden');
-    
-    // Opcional: Inicia o vídeo do banner após entrar
-    const bannerVideo = document.getElementById("banner-video");
-    if(bannerVideo) bannerVideo.play().catch(()=>{});
-    
-    alert("Bem-vindo a melhor plataforma de games do Brasail!");
-  } else {
-    alert("Email ou senha incorretos. Tente novamente.");
+/* Camada Vermelha Atômica (Direita) */
+.splash-shadow-r {
+  color: #ff0000;
+  animation: shadow-r 3.5s ease-out forwards;
+}
+
+/* Camada Azul/Ciano (Esquerda) */
+.splash-shadow-b {
+  color: #00ffff;
+  animation: shadow-b 3.5s ease-out forwards;
+}
+
+/* === DEFINIÇÃO DAS ANIMAÇÕES (KEYFRAMES) === */
+
+/* 1. Animação Principal: Zoom e Desfoque do Texto */
+@keyframes gameflix-intro {
+  0% {
+    transform: scale(0.6); /* Começa menor */
+    filter: blur(5px); /* Bem desfocado */
+    opacity: 0;
   }
-});
+  15% {
+    transform: scale(1.1); /* Zoom rápido (efeito de impacto) */
+    filter: blur(0px); /* Fica nítido */
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1.1); /* Mantém o tamanho e nitidez */
+    filter: blur(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(10); /* Zoom GIGANTE (passa pela tela) */
+    filter: blur(30px); /* Desfoca muito no final */
+    opacity: 0; /* Some */
+  }
+}
 
+/* 2. Animação da Camada Vermelha (Se desfaz para a direita) */
+@keyframes shadow-r {
+  0%, 15% { opacity: 0; transform: translateX(0); }
+  20% { opacity: 1; transform: translateX(10px) scale(1.1); filter: blur(2px); }
+  100% { opacity: 0; transform: translateX(150px) scale(15); filter: blur(30px); }
+}
 
+/* 3. Animação da Camada Ciano (Se desfaz para a esquerda) */
+@keyframes shadow-b {
+  0%, 15% { opacity: 0; transform: translateX(0); }
+  20% { opacity: 1; transform: translateX(-10px) scale(1.1); filter: blur(2px); }
+  100% { opacity: 0; transform: translateX(-150px) scale(15); filter: blur(30px); }
+}
+
+/* Classe para esconder a splash screen no final */
+#splash-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* Garante que o usuário possa clicar no site */
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #444;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    outline: none;
+    width: 0; /* Começa fechada */
+    transition: width 0.4s;
+    font-size: 14px;
+}
+
+/* Quando passar o mouse ou focar, ela abre */
+.search-box:hover input, .search-box input:focus {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.search-box button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* --- RODAPÉ ESTILO NETFLIX REAL --- */
+.footer {
+  background-color: #000;
+  color: #757575; /* Cinza clássico da Netflix */
+  padding: 50px 4% 20px;
+  font-size: 13px;
+  margin-top: 50px;
+}
+
+.footer-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer-contact {
+  margin-bottom: 30px;
+}
+
+.footer-contact a {
+  color: #757575;
+  text-decoration: none;
+}
+
+.footer-contact a:hover {
+  text-decoration: underline;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.footer-column {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 12px;
+}
+
+.footer-column a {
+  color: #757575;
+  text-decoration: none;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+
+.footer-country {
+  font-size: 11px;
+}
+
+/* --- ESTILO DA TELA DE LOGIN --- */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+              url('https://assets.nflxext.com/ffe/siteui/vlv3/f841d4c7-10e1-40af-bca1-07e3f8eb14af/60a92d3f-5835-43a0-98ef-66b976c1233f/BR-pt-20220502-popsignuptwoweeks-perspective_alpha_website_large.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 50000; /* Garante que fica na frente de tudo */
+  display: flex;
+  flex-direction: column;
+}
+
+.login-header { padding: 25px 50px; }
+
+.login-box {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 60px;
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+  border-radius: 8px;
+}
+
+.login-box h1 { margin-bottom: 28px; font-size: 32px; }
+
+.input-group { margin-bottom: 16px; }
+
+/* --- AJUSTE DOS CAMPOS DE LOGIN --- */
+.login-box .input-group input {
+  width: 100%;
+  padding: 16px;
+  background-color: #333 !important; /* O !important garante que o branco não volte */
+  border: none;
+  border-radius: 4px;
+  color: #ffffff; /* Letras brancas ao digitar */
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box; /* Evita que o campo 'escape' da caixa */
+}
+
+/* Cor do texto de exemplo (Email/Senha) */
+.login-box .input-group input::placeholder {
+  color: #8c8c8c;
+}
+
+/* Quando o usuário clica para digitar (Foco) */
+.login-box .input-group input:focus {
+  background-color: #454545 !important;
+  box-shadow: 0 1px 0 var(--netflix-red); /* Linha vermelha discreta embaixo ao focar */
+}
+
+/* Remove o fundo amarelo/branco que o Chrome coloca automaticamente no preenchimento automático */
+.login-box .input-group input:-webkit-autofill,
+.login-box .input-group input:-webkit-autofill:hover, 
+.login-box .input-group input:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #333 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.btn-login-submit {
+  width: 100%;
+  padding: 16px;
+  background: var(--netflix-red);
+  color: white;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+.login-help {
+  display: flex;
+  justify-content: space-between;
+  color: #b3b3b3;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.login-footer-info { margin-top: 40px; color: #737373; }
+.login-footer-info a { color: white; text-decoration: none; }
+
+/* Classe para esconder a tela após login */
+#login-screen.hidden { display: none; }
+
+/* Ajuste da Logo do Banner */
+#banner-logo {
+    width: 100%;
+    max-width: 350px; /* Tamanho ideal para desktop */
+    height: auto;
+    margin-bottom: 10px;
+    display: block;
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.8)); /* Faz a logo se destacar do vídeo */
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   AJUSTE MOBILE UNIFICADO - GAMEFLIX (NÃO AFETA O PC)
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* 1. Ajustes de Topo e Banner */
+  .pinning-header { height: 60px; }
+  
+  .banner { 
+    height: 45vh !important; 
+    margin-top: 0;
+    padding-bottom: 80px !important;
+  }
+
+  .banner-content {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  #banner-logo {
+    max-width: 220px !important;
+    margin: 0 auto 15px auto !important;
+  }
+
+  .banner-content h1 { font-size: 1.8rem !important; }
+  .banner-content p { font-size: 14px !important; }
+
+  .btn-play, .btn-info {
+    font-size: 14px !important;
+    padding: 10px 15px !important;
+    width: 90%;
+    margin: 5px auto !important;
+    display: block !important;
+  }
+
+  /* 2. Navegação e Busca */
+  .nav-links { display: none !important; } /* Esconde categorias que não cabem */
+  
+  .header-actions { gap: 8px; }
+  .search-box input:focus, .search-box:hover input { width: 120px; }
+
+  /* 3. Ajuste das Fileiras de Jogos (Rows) */
+  .row {
+    margin-top: 20px !important;
+    padding: 0 15px;
+  }
+
+  .row h2 {
+    font-size: 1.1rem !important;
+    margin-bottom: 15px !important;
+  }
+
+  .games-scroll {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Permite deslizar para o lado como na Netflix */
+    overflow-x: auto !important;
+    gap: 10px !important;
+    padding-bottom: 15px;
+  }
+
+  .game-card {
+    min-width: 130px !important;
+    height: 190px !important;
+    flex-shrink: 0;
+    width: auto !important; /* Sobrescreve o cálculo de 9 colunas do PC */
+  }
+
+  /* 4. Números e Cards do Top 10 */
+  .top10-banner {
+    margin-bottom: 20px !important;
+    margin-top: 10px;
+  }
+
+  .card-container {
+    min-width: 160px !important;
+    margin-right: 25px !important;
+  }
+
+  .rank-number {
+    font-size: 100px !important;
+    bottom: -15px !important;
+    left: -10px !important;
+    -webkit-text-stroke: 2px #6a6a6a !important;
+    letter-spacing: -5px;
+  }
+
+  .poster-img {
+    width: 110px !important;
+    height: 160px !important;
+    margin-left: 55px !important;
+  }
+
+  /* 5. Splash Screen e Modal */
+  .splash-text { font-size: 2.5rem !important; }
+  
+  .modal-content { width: 95%; }
+  .modal-video { height: 250px; }
+
+  /* 6. Rodapé e Botões */
+  .footer-links { grid-template-columns: repeat(2, 1fr); }
+  
+  .netflix-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+  }
+}
+
+/* --- ESTILO DO POPUP GAMEFLIX --- */
+.modal-wpp { 
+    display: none; 
+    position: fixed; 
+    z-index: 9999; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.85); 
+    backdrop-filter: blur(8px); 
+    align-items: center; 
+    justify-content: center; 
+    font-family: 'Arial', sans-serif; 
+}
+
+/* --- ESTILO ULTRA: AÇO ESCOVADO --- */
+.modal-wpp-content { 
+    background: rgba(0, 0, 0, 0.6); /* Fundo semi-transparente */
+    backdrop-filter: blur(15px);   /* Efeito de vidro desfocado */
+    color: white; 
+    padding: 50px 40px; 
+    border-radius: 15px; /* Bordas arredondadas ficam melhores no estilo futurista */
+    width: 90%; 
+    max-width: 450px; 
+    text-align: center; 
+    position: relative; 
+    overflow: hidden; /* Importante para a luz não escapar */
+    border: 1px solid rgb(0, 0, 0); /* Borda de vidro sutil */
+    
+    /* Glow futurista ciano/azul */
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.332), 
+                0 20px 50px rgba(0, 0, 0, 0.9);
+}
+
+/* --- ANIMAÇÃO --- */
+@keyframes modalSurgir { 
+    from { opacity: 0; transform: translateY(-30px) scale(0.9); } 
+    to { opacity: 1; transform: translateY(0) scale(1); } 
+}
+
+.modal-wpp-content h2 { 
+    color: #e50914; 
+    margin-bottom: 15px; 
+    font-size: 26px; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    font-family: 'Bebas Neue', sans-serif; 
+} 
+
+.modal-wpp-content p { 
+    font-size: 16px; 
+    line-height: 1.6; 
+    margin-bottom: 30px; 
+    color: #efefef; 
+    font-weight: 300; 
+}
+
+.btn-wpp { 
+    display: inline-block;
+    padding: 15px 35px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(90deg, #e50914, #ff3b3b);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    z-index: 1;
+    transition: 0.3s;
+    /* O mesmo brilho (glow) dos botões do site */
+    box-shadow: 0 0 10px #e50914, 0 0 20px #ff3b3b;
+    /* A mesma animação de flutuar/pulsar */
+    animation: float 2.5s ease-in-out infinite;
+}
+
+.btn-wpp:hover { 
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #ff0000, 0 0 40px #ff3b3b;
+}
+
+/* Deixando o ícone do Zap branco para combinar com o estilo Premium */
+.btn-wpp img { 
+    width: 22px;
+    vertical-align: middle;
+    margin-right: 10px;
+    filter: brightness(0) invert(1);
+}
+
+.close-wpp { 
+    position: absolute; 
+    top: 15px; 
+    right: 20px; 
+    font-size: 28px; 
+    color: #666; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    line-height: 1; 
+}
+
+.close-wpp:hover { 
+    color: #fff; 
+    transform: rotate(90deg);
+}
