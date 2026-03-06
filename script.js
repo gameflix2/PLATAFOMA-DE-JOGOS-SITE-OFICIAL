@@ -106,14 +106,13 @@ document.getElementById("netflixModal").addEventListener("click", e => {
   if(e.target.id === "netflixModal") closeModal();
 });
 
-/* --- LÓGICA DE TROCA DO BANNER PARA JOGOS GRÁTIS --- */
 document.querySelectorAll('.free-game-trigger').forEach(card => {
   card.addEventListener('click', function() {
-    // 1. Coleta os dados dos atributos 'data-' do card clicado
+    // 1. Coleta os dados (Adicionei a linha do Drive aqui)
     const novaLogo = this.getAttribute('data-logo');
     const novaDesc = this.getAttribute('data-desc');
     const novoVideo = this.getAttribute('data-video');
-    const novoLink = this.getAttribute('data-link');
+    const linkDrive = this.getAttribute('data-drive'); // Captura o link do Drive
 
     // 2. Atualiza a LOGO e a DESCRIÇÃO no banner
     const imgLogo = document.getElementById('banner-logo');
@@ -122,7 +121,7 @@ document.querySelectorAll('.free-game-trigger').forEach(card => {
     const descElement = document.getElementById('banner-desc');
     if (descElement) descElement.textContent = novaDesc;
     
-    // 3. Atualiza e dá play no VÍDEO de fundo
+    // 3. Atualiza o VÍDEO
     const videoElement = document.getElementById('banner-video');
     if (videoElement) {
       videoElement.src = novoVideo;
@@ -130,24 +129,20 @@ document.querySelectorAll('.free-game-trigger').forEach(card => {
       videoElement.play().catch(()=>{});
     }
 
-    // 4. ATUALIZA O BOTÃO PARA "DOWNLOAD GRATIS"
-    const actionBtn = document.getElementById('btn-main-action');
+    // 4. ATUALIZA O BOTÃO PARA O LINK DO DRIVE
     const downloadAnchor = document.getElementById('banner-link');
-    
-    if (actionBtn) {
-      // Aqui mudamos o texto visualmente
-      actionBtn.innerHTML = "▶ DOWNLOAD GRATIS"; 
-      // Garante que ele use o estilo de botão principal (branco)
-      actionBtn.className = "btn-play"; 
-    }
+    const actionBtn = document.getElementById('btn-main-action');
     
     if (downloadAnchor) {
-      // Define o link de download e força o navegador a baixar
-      downloadAnchor.href = novoLink;
-      downloadAnchor.setAttribute('download', 'game-gameflix'); 
+      downloadAnchor.href = linkDrive; // Define o link do Google Drive
+      downloadAnchor.target = "_blank"; // Abre em nova aba para não fechar seu site
+    }
+    
+    if (actionBtn) {
+      actionBtn.innerHTML = "▶ DOWNLOAD GRATIS"; 
+      actionBtn.className = "btn-play"; 
     }
 
-    // 5. Sobe a página suavemente para o topo para mostrar o banner trocado
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
@@ -203,6 +198,7 @@ window.addEventListener('click', function(event) {
     if (event.target === modalWpp) closeWppModal();
     if (event.target === modalNetflix) closeModal();
 });
+
 
 
 
