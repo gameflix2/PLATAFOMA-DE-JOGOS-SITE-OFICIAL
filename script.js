@@ -166,7 +166,7 @@ loginForm.addEventListener('submit', function(e) {
 
   // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
   const emailCorreto = "testegratis@gameflix.com";
-  const senhaCorreta = "testegratisgameflix";
+  const senhaCorreta = "a";
 
   if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
     // Esconde a tela de login
@@ -208,27 +208,60 @@ window.addEventListener('click', function(event) {
     if (event.target === modalNetflix) closeModal();
 });
 
-/* --- REDIRECIONAMENTO PARA ESCOLHA SEU PACK (EXCETO GRÁTIS) --- */
-document.addEventListener('click', function(e) {
-  // Verifica se o clique foi em um card de jogo ou no container do Top 10
-  const gameCard = e.target.closest('.game-card, .card-container');
-  
-  if (gameCard) {
-    // Se o card tiver a classe 'free-game-trigger', não fazemos nada (deixa o modal grátis abrir)
-    if (gameCard.classList.contains('free-game-trigger')) {
-      return; 
+/* --- SISTEMA DE CLIQUE UNIFICADO (RESOLVENDO CONFLITO) --- */
+
+// 1. Funções do Modal (Abre e Fecha)
+function openGamePage(title, videoSrc) {
+    const modal = document.getElementById('gamePageModal');
+    if(!modal) return;
+    document.getElementById('modalTitle').innerText = title;
+    
+    // Vídeo Padrão do Modal
+    document.getElementById('modalVideo').innerHTML = `
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoSrc}?autoplay=1&mute=1" 
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    `;
+
+    // BLOQUEIA O FUNDO
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+}
+
+function closeGamePage() {
+    const modal = document.getElementById('gamePageModal');
+    if(modal) {
+        // DESBLOQUEIA O FUNDO
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.getElementById('modalVideo').innerHTML = ""; 
     }
+}
+
+// Gerenciador de Cliques Corrigido
+document.addEventListener('click', function(e) {
+    const card = e.target.closest('.game-card, .card-container');
     
-    // Para todos os outros cards (Premium, Top 10, Categorias), redireciona:
-    window.open('https://gameflix2.github.io/escolhaseupack/', '_blank');
-    
-    // Impede que outras funções (como abrir o modal de WhatsApp) executem no mesmo clique
-    e.stopImmediatePropagation();
+    // 1. Se não clicou em um card, não faz nada
+    if (!card) return;
+
+    // 2. REGRA DE OURO: Se for Jogo Grátis (Login), SAIA IMEDIATAMENTE
+    // Não usamos preventDefault aqui para não travar o sistema de login
+    if (card.classList.contains('free-game-trigger')) {
+        console.log("Login detectado - permitindo fluxo normal");
+        return; 
+    }
+
+    // 3. REGRA PREMIUM: Redireciona na mesma aba
+    if (card.closest('.row-premium')) {
+        window.location.href = "https://gameflixoficial.com.br/escolhaseupack/";
+        return;
+    }
+
+    // 4. RESTANTE (Top 10, Lendários, etc): Redireciona para Nova Aba
+    // Só damos preventDefault aqui, depois de ter certeza que não é login
     e.preventDefault();
-  }
-}, true); // O 'true' garante que o script capture o clique antes de outras funções
-
-
-
-
-
+    e.stopPropagation();
+    
+    const linkOferta = "https://gameflix2.github.io/PAGUE-MAIS-BARATO/";
+    window.open(linkOferta, '_blank'); 
+});
