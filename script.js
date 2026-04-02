@@ -237,31 +237,33 @@ function closeGamePage() {
     }
 }
 
-// Gerenciador de Cliques Corrigido
+// Gerenciador de Cliques - Versão Anti-Trava de Login
 document.addEventListener('click', function(e) {
-    const card = e.target.closest('.game-card, .card-container');
-    
-    // 1. Se não clicou em um card, não faz nada
-    if (!card) return;
-
-    // 2. REGRA DE OURO: Se for Jogo Grátis (Login), SAIA IMEDIATAMENTE
-    // Não usamos preventDefault aqui para não travar o sistema de login
-    if (card.classList.contains('free-game-trigger')) {
-        console.log("Login detectado - permitindo fluxo normal");
+    // 1. SE O CLIQUE FOR DENTRO DO FORMULÁRIO DE LOGIN, PARE TUDO E DEIXE FUNCIONAR
+    if (e.target.closest('#login-screen') || e.target.closest('#login-form')) {
         return; 
     }
 
-    // 3. REGRA PREMIUM: Redireciona na mesma aba
+    const card = e.target.closest('.game-card, .card-container');
+    
+    // 2. Se não for um card, não faz nada
+    if (!card) return;
+
+    // 3. SE FOR JOGO GRÁTIS (que abre o login), PARE TUDO E DEIXE O LOGIN ABRIR
+    if (card.classList.contains('free-game-trigger')) {
+        return; 
+    }
+
+    // 4. SE FOR PREMIUM (R$ 14,90), REDIRECIONA NA MESMA ABA
     if (card.closest('.row-premium')) {
         window.location.href = "https://gameflixoficial.com.br/escolhaseupack/";
         return;
     }
 
-    // 4. RESTANTE (Top 10, Lendários, etc): Redireciona para Nova Aba
-    // Só damos preventDefault aqui, depois de ter certeza que não é login
+    // 5. TODO O RESTO (Top 10 em diante): REDIRECIONA NOVA ABA E MATA O POP-UP
     e.preventDefault();
     e.stopPropagation();
     
     const linkOferta = "https://gameflix2.github.io/PAGUE-MAIS-BARATO/";
     window.open(linkOferta, '_blank'); 
-});
+}, true); // O 'true' garante que a regra do card seja verificada antes do modal antigo
