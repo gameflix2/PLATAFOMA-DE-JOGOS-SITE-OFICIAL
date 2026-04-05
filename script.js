@@ -1,19 +1,51 @@
-/* --- SCROLL INTELIGENTE DO TOP 10 --- */
-const top10 = document.getElementById('top10');
+/* --- SCROLL INTELIGENTE DO TOP 10 CORRIGIDO --- */
+const top10 = document.getElementById('top10'); // Certifique-se que o ID no HTML é 'top10'
 
-function scrollLeft(){
-  if(!top10) return;
-  const card = top10.querySelector(".card-container");
-  if(!card) return;
-  top10.scrollBy({ left: -(card.offsetWidth + 45) * 2, behavior: "smooth" });
+function scrollTop10Left() {
+  const el = document.getElementById('top10');
+
+  if (el.scrollLeft <= 0) {
+    el.scrollLeft = el.scrollWidth;
+  } else {
+    el.scrollBy({ left: -400, behavior: 'smooth' });
+  }
 }
 
-function scrollRight(){
-  if(!top10) return;
-  const card = top10.querySelector(".card-container");
-  if(!card) return;
-  top10.scrollBy({ left: (card.offsetWidth + 45) * 2, behavior: "smooth" });
+function scrollTop10Right() {
+  const el = document.getElementById('top10');
+
+  if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 5) {
+    el.scrollLeft = 0;
+  } else {
+    el.scrollBy({ left: 400, behavior: 'smooth' });
+  }
 }
+
+function scrollTop20Left() {
+  const el = document.getElementById('top20');
+
+  if (el.scrollLeft <= 0) {
+    el.scrollLeft = el.scrollWidth;
+  } else {
+    el.scrollBy({ left: -400, behavior: 'smooth' });
+  }
+}
+
+function scrollTop20Right() {
+  const el = document.getElementById('top20');
+
+  if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 5) {
+    el.scrollLeft = 0;
+  } else {
+    el.scrollBy({ left: 400, behavior: 'smooth' });
+  }
+}
+
+function scrollCategory(button, direction) {
+  const container = button.parentElement.querySelector('.games-scroll');
+  container.scrollLeft += direction * 300;
+}
+  
 
 /* --- EFEITO DO HEADER NO SCROLL --- */
 window.addEventListener('scroll', ()=>{
@@ -237,33 +269,50 @@ function closeGamePage() {
     }
 }
 
-// Gerenciador de Cliques - Versão Anti-Trava de Login
+/* --- NOVO GERENCIADOR DE CLIQUES PADRONIZADO --- */
 document.addEventListener('click', function(e) {
-    // 1. SE O CLIQUE FOR DENTRO DO FORMULÁRIO DE LOGIN, PARE TUDO E DEIXE FUNCIONAR
+    // 1. Não interfere no sistema de Login
     if (e.target.closest('#login-screen') || e.target.closest('#login-form')) {
         return; 
     }
 
+    // Busca o card clicado (seja da lista especial ou do Top 10)
     const card = e.target.closest('.game-card, .card-container');
-    
-    // 2. Se não for um card, não faz nada
     if (!card) return;
 
-    // 3. SE FOR JOGO GRÁTIS (que abre o login), PARE TUDO E DEIXE O LOGIN ABRIR
-    if (card.classList.contains('free-game-trigger')) {
-        return; 
-    }
+    // Tenta pegar a imagem que contém os dados (data-attributes)
+    const gameData = card.querySelector('img') || card;
+    
+    const title = gameData.getAttribute('data-title');
+    const desc = gameData.getAttribute('data-desc');
+    const video = gameData.getAttribute('data-video');
+    const logo = gameData.getAttribute('data-logo');
 
-    // 4. SE FOR PREMIUM (R$ 14,90), REDIRECIONA NA MESMA ABA
-    if (card.closest('.row-premium')) {
-        window.location.href = "https://gameflixoficial.com.br/escolhaseupack/";
+    // Se o card tiver os dados, ele executa a subida do trailer
+    if (title && video) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const bannerVideo = document.getElementById('banner-video');
+        const bannerTitle = document.getElementById('banner-logo');
+        const bannerDesc = document.getElementById('banner-desc');
+
+        // Troca o vídeo no topo e ativa o som
+        if (bannerVideo) {
+            bannerVideo.src = video;
+            bannerVideo.load(); // Garante que o novo vídeo carregue
+            bannerVideo.play();
+            bannerVideo.muted = false; 
+            bannerVideo.volume = 0.5;
+        }
+
+        // Troca o Logo e a Descrição no topo
+        if (bannerDesc) bannerDesc.textContent = desc;
+        if (bannerTitle) bannerTitle.src = logo;
+
+        // Sobe a página para o topo para o usuário ver o trailer
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
         return;
     }
-
-    // 5. TODO O RESTO (Top 10 em diante): REDIRECIONA NOVA ABA E MATA O POP-UP
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const linkOferta = "https://gameflix2.github.io/PAGUE-MAIS-BARATO/";
-    window.open(linkOferta, '_blank'); 
-}, true); // O 'true' garante que a regra do card seja verificada antes do modal antigo
+}, true);
