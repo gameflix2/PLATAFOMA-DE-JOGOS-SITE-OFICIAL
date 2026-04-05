@@ -162,71 +162,134 @@
 
   <div class="row">
    <h2>VEJA A LISTA DOS TOP 10 JOGOS DA GAMEFLIX</h2>
-    <div class="top-10-container">
-      <button class="arrow-left" onclick="scrollLeft()">‹</button>
-      <div class="top-10-scroll" id="top10">     
-        
-        <div class="card-container" onclick="openModal('Battlefield 6', 'Guerra em escala monumental.', 'ASzOzrB-a9E')">
-          <span class="rank-number">1</span>
-          <img src="https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25" class="poster-img" alt="Capa">
-        </div>
-
-        <div class="card-container" onclick="openModal('Resident Evil Requiem', 'Lançamento Exclusivo.', 'SEU_LINK_DO_CLOUDINARY_AQUI')">
-  <span class="rank-number">2</span>
-  <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" class="poster-img" alt="Capa">
-</div>
-
-        <div class="card-container" onclick="openModal('Red Dead Redemption 2', 'A lenda do oeste.', 'eaW0tYpxsp4')">
-          <span class="rank-number">3</span>
-          <img src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" class="poster-img" alt="Capa">
-        </div>
+<div class="top-10-container">
       
-        <div class="card-container" onclick="openModal('FIFA 26', 'A nova geração do futebol.', 'pBNguPszRSk')">
-          <span class="rank-number">4</span>
-          <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1771886278/Captura_de_tela_2026-02-23_185713_cljm2d.png" class="poster-img" alt="Capa">
-        </div>
+    <button onclick="scrollTop10Left()">⮜</button>
 
-         <div class="card-container" onclick="openModal('God of War Ragnarok', 'O fim do mundo nórdico.', 'hfJ4Km46A-0')">
-          <span class="rank-number">5</span>
-          <img src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" class="poster-img" alt="Capa">
-        </div>
+  <div id="top10" class="top-10-row">
+  
+  <div class="card-container">
+    <span class="rank-number">1</span>
+    <img src="https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25" 
+         class="poster-img" 
+         data-title="Battlefield 6" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="Guerra em escala monumental." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
 
-        <div class="card-container" onclick="openModal('Forza Horizon 6', 'Corridas em mundo aberto.', 'FYH9n37B7Yw')">
-          <span class="rank-number">6</span>
-          <img src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" class="poster-img" alt="Capa">
-        </div>
-        <div class="card-container" onclick="openModal('Uncharted: Legacy of Thieves', 'Aventuras de Nathan Drake.', 'mIfOMhRkpe4')">
-          <span class="rank-number">7</span>
-          <img src="https://m.media-amazon.com/images/M/MV5BODIwYWZmYWMtYTliNC00YWQ5LTg5ZmEtNTZhNmUxNjdiMzNiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="poster-img" alt="Capa">
-        </div>
-        <div class="card-container" onclick="openModal('Call of Duty: MW2 Remastered', 'Campanha épica de tiro.', 'E5xszHhM0mw')">
-          <span class="rank-number">8</span>
-          <img src="https://bdjogos.com.br/capas/24175-call-of-duty-black-ops-6-capa-1.webp" class="poster-img" alt="Capa">
-        </div>
-        
-        <div class="card-container" onclick="openModal('Spider-Man 2', 'Peter e Miles contra Venom.', 'bgqGdIoa52s')">
-          <span class="rank-number">9</span>
-          <img src="https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_MarvelsSpiderManDigitalDeluxeEdition_InsomniacGamesNixxesSoftware_Editions_S2_1200x1600-148e0014e79aa7c2cb23ae2414b11a16" class="poster-img" alt="Capa">
-        </div>
-        <div class="card-container" onclick="openModal('The Last of Us Part II', 'A jornada de Ellie.', 'vhII1qlcZ4E')">
-          <span class="rank-number">10</span>
-          <img src="https://m.media-amazon.com/images/I/71B73lI4BjL._AC_UF1000,1000_QL80_.jpg" class="poster-img" alt="Capa">
-        </div>
-      </div>
-      <button class="arrow-right" onclick="scrollRight()">›</button>
-    </div>
+  <div class="card-container">
+    <span class="rank-number">2</span>
+    <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" 
+         class="poster-img" 
+         data-title="Resident Evil Requiem" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="Lançamento Exclusivo." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">3</span>
+    <img src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" 
+         class="poster-img" 
+         data-title="Red Dead Redemption 2" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="A lenda do oeste." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">4</span>
+    <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1771886278/Captura_de_tela_2026-02-23_185713_cljm2d.png" 
+         class="poster-img" 
+         data-title="FIFA 26" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="A nova geração do futebol." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">5</span>
+    <img src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" 
+         class="poster-img" 
+         data-title="God of War Ragnarok" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="O fim do mundo nórdico." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">6</span>
+    <img src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" 
+         class="poster-img" 
+         data-title="Forza Horizon 6" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="Corridas em mundo aberto." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">7</span>
+    <img src="https://m.media-amazon.com/images/M/MV5BODIwYWZmYWMtYTliNC00YWQ5LTg5ZmEtNTZhNmUxNjdiMzNiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" 
+         class="poster-img" 
+         data-title="Uncharted: Legacy of Thieves" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="Aventuras de Nathan Drake." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">8</span>
+    <img src="https://bdjogos.com.br/capas/24175-call-of-duty-black-ops-6-capa-1.webp" 
+         class="poster-img" 
+         data-title="Call of Duty: MW2 Remastered" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="Campanha épica de tiro." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">9</span>
+    <img src="https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_MarvelsSpiderManDigitalDeluxeEdition_InsomniacGamesNixxesSoftware_Editions_S2_1200x1600-148e0014e79aa7c2cb23ae2414b11a16" 
+         class="poster-img" 
+         data-title="Spider-Man 2" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="Peter e Miles contra Venom." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+  <div class="card-container">
+    <span class="rank-number">10</span>
+    <img src="https://m.media-amazon.com/images/I/71B73lI4BjL._AC_UF1000,1000_QL80_.jpg" 
+         class="poster-img" 
+         data-title="The Last of Us Part II" 
+         data-logo="LINK_DO_LOGO_AQUI"
+         data-desc="A jornada de Ellie." 
+         data-video="LINK_DO_CLOUDINARY_AQUI">
+  </div>
+
+</div>
+       <button onclick="scrollTop10Right()">⮞</button>
+</div>
     
 <div class="floating-btn-container">
-  <a href="https://gameflix2.github.io/escolhaseupack/" target="_blank" style="text-decoration: none;">
+  <a href="https://gameflix2.github.io/ESCOLHA-SEU-PACK/" target="_blank" style="text-decoration: none;">
     <button class="netflix-btn">VEJA NOSSOS PLANOS AQUI</button>
   </a>
   </a>
 </div>
     </div>
 
-<div class="row">
-  <h2>TOP 20 DOS LENDARIOS MAIS BAIXADOS DA GAMEFLIX</h2>
-  <div class="games-scroll">
+     <h2>TOP 20 DOS LENDARIOS MAIS BAIXADOS DA GAMEFLIX</h2>
+<div class="top-10-container">
+ 
+
+  <!-- BOTÃO ESQUERDA -->
+  <button onclick="scrollTop20Left()">❮</button>
+
+  <!-- LISTA -->
+ <div class="games-scroll" id="top20">
+    
     <img class="game-card" src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png
 " alt="RE 9 REQUIM" onclick="openWppModal()">
     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" alt="Red Dead Redemption 2" onclick="openWppModal()">
@@ -250,12 +313,19 @@
      <img class="game-card" src="https://sm.ign.com/ign_pt/gallery/d/dark-souls/dark-souls-remastered-box-art_pr4m.jpg" alt="DS Remastered" onclick="openWppModal()">
     <img class="game-card" src="https://cdn1.epicgames.com/offer/8b2d6cf2b45b41f1abe91bc5b7c1e8f9/EGS_UNCHARTEDLegacyofThievesCollection_NaughtyDogLLC_S2_1200x1600-9deaa177d8716bde5478cdd75d850c9c" alt="Uncharted" onclick="openWppModal()">
  
-  </div>
+  </div>  
+   <!-- BOTÃO DIREITA -->
+  <button onclick="scrollTop20Right()">❯</button>
 </div>
 
-  <div class="row">
+ <div class="row">
   <h2>Ação e Aventura (Mundo Aberto)</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" alt="Red Dead Redemption 2" onclick="openWppModal()">
     <img class="game-card" src="https://cdn1.epicgames.com/offer/8b2d6cf2b45b41f1abe91bc5b7c1e8f9/EGS_UNCHARTEDLegacyofThievesCollection_NaughtyDogLLC_S2_1200x1600-9deaa177d8716bde5478cdd75d850c9c" alt="Uncharted" onclick="openWppModal()">
     <img class="game-card" src="https://assets-prd.ignimgs.com/2022/05/27/9781506732022-1653620982308.jpg" alt="GTA Vice City" onclick="openWppModal()">
@@ -275,11 +345,19 @@
     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/d/d3/Grand_Theft_Auto_San_Andreas_capa.png" alt="GTA San Andreas" onclick="openWppModal()">
     <img class="game-card" src="https://www.europanet.com.br/upload/id_produto/60_____/6000201g.jpg" alt="Hogwarts Legacy" onclick="openWppModal()">
   </div>
+
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+
+  </div>
 </div>
 
 <div class="row">
   <h2>Franquia Call of Duty</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
     <img class="game-card" src="https://bdjogos.com.br/capas/24175-call-of-duty-black-ops-6-capa-1.webp" alt="CoD HQ" onclick="openWppModal()">
     <img class="game-card" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjG5gD2EPSegoWpyI0LAvVz1rzUV-MKZRmdDJXWuuCZLweBOAyrkpYNlxQ7FGomhRI6-IUA-IpPTxQh2iaYQNJceG03XR8puhMXRIfAluevOg9swrtBDItBQ_E1wPHcrxPz2Eovkktf03LupJPzy9_T6xJtIt79Xhz7LisCBS5aWtlbwiWYmurF1ckSJF2i/s16000/portalfps-call-of-duty-modern-warfare-iii-wallpaper.jpg" alt="MW III" onclick="openWppModal()">
     <img class="game-card" src="https://m.media-amazon.com/images/I/81mUtFXhFCL.jpg" alt="MW II" onclick="openWppModal()">
@@ -290,9 +368,11 @@
     <img class="game-card" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjShfiHr6QsUdVkqkBfeIaVf0uWzcs6cX4zYwFJMNrs8KwxLb63dP0d_w3VoF8jd0cASElB8Xkqun8zpGNyDzE4gE3M-Dcg0_c3HD070hlwAvMhmx9WHGoAs47c-C0l4PAyQlZ1m9tUeid-/s1600/CALL-OF-DUTY-WWII-1080P-Wallpaper-1.jpg" alt="CoD WWII" onclick="openWppModal()">
     <img class="game-card" src="https://cdn.europosters.eu/image/1300/15042.jpg" alt="Ghosts" onclick="openWppModal()">
     <img class="game-card" src="https://store-images.s-microsoft.com/image/apps.703.13739535057760905.34778648-088c-45a3-9d45-1117ca041901.c4d90513-3be4-4a22-9cd6-85a7ffa8df7f" alt="World at War" onclick="openWppModal()">
+    </div>
+
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
   </div>
 </div>
-
 <div class="row">
   <h2>Franquia Assassin's Creed</h2>
   <div class="games-scroll">
@@ -308,7 +388,13 @@
 
 <div class="row">
   <h2>Terror e Sobrevivência</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
+      <!-- seus jogos -->
+    
     <img class="game-card" src="https://tm.ibxk.com.br/2021/05/05/05040759331000.jpg" alt="RE Village" onclick="openWppModal()">
     <img class="game-card" src="https://sm.ign.com/ign_br/cover/r/resident-e/resident-evil-7-biohazard_ubst.jpg" alt="RE 7" onclick="openWppModal()">
     <img class="game-card" src="https://cdn.mobygames.com/covers/2299574-resident-evil-6-xbox-one-front-cover.jpg" alt="RE 6" onclick="openWppModal()">
@@ -323,11 +409,20 @@
     <img class="game-card" src="https://cdn1.epicgames.com/offer/7713e3fa4b234e0d8f553044205d53b6/EGS_TheLastofUsPartIIRemastered_NaughtyDogLLCNixxesSoftwareIronGalaxy_S2_1200x1600-2e13755a6b3fec2ee9dbcc231a1cf39c" alt="TLoU II" onclick="openWppModal()">
     <img class="game-card" src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2835530/54a47a9c7f91ae79f5c131d75df9d0e2feb9133e/capsule_616x353.jpg?t=1771657999" alt="Backrooms" onclick="openWppModal()">
   </div>
+
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
 </div>
 
 <div class="row">
   <h2>Soulslike e RPG de Ação</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
+      <!-- seus jogos -->
+  
     <img class="game-card" src="https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg" alt="Elden Ring" onclick="openWppModal()">
     <img class="game-card" src="https://hobbygames.ru/image/enaza/19184698/box2.jpg.jpg" alt="Wukong" onclick="openWppModal()">
     <img class="game-card" src="https://img.elo7.com.br/product/zoom/4C5B3FA/quadro-decorativo-game-lies-of-p-rpg-com-moldura-a3-lies-of-p.jpg" alt="Lies of P" onclick="openWppModal()">
@@ -338,12 +433,21 @@
     <img class="game-card" src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" alt="Cyberpunk" onclick="openWppModal()">
     <img class="game-card" src="https://cdn1.epicgames.com/offer/c8738a4d1ead40368eab9688b3c7d737/EGS_SkyrimSpecialEdition_BethesdaGameStudios_S2_1200x1600-ae5d13f6510e81460fe80aa1ca19cf4c" alt="Skyrim SE" onclick="openWppModal()">
     <img class="game-card" src="https://images3.alphacoders.com/117/thumb-1920-117095.jpg" alt="Skyrim" onclick="openWppModal()">
+    </div>
+
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
   </div>
 </div>
 
 <div class="row">
   <h2>Corrida e Esportes</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
+      <!-- seus jogos -->
+   
     <img class="game-card" src="https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/3mjMyRiJaq8lw1EFWiTCUJRV.png" alt="FIFA 23" onclick="openWppModal()">
     <img class="game-card" src="https://azitech.com.br/wp-content/uploads/2024/08/Forza-Horizon-6-lancamento.jpg" alt="FH 5" onclick="openWppModal()">
     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/d/dc/Capa_de_Forza_Horizon_5.jpg" alt="Farming Simulator 25" onclick="openWppModal()">
@@ -356,12 +460,21 @@
     <img class="game-card" src="https://e.snmc.io/lk/f/x/2f5dbf23974d6391c11c7b5b2fce6bb0/9667231" alt="Assetto Corsa" onclick="openWppModal()">
     <img class="game-card" src="https://sm.ign.com/ign_br/cover/f/farming-si/farming-simulator-25_p1nu.jpg" alt="FIFA 23" onclick="openWppModal()">
 
+   </div>
+
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
   </div>
 </div>
 
 <div class="row">
   <h2>Luta</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
+      <!-- seus jogos -->
+    
     <img class="game-card" src="https://m.media-amazon.com/images/I/71kj4+Y5bHL._AC_UF1000,1000_QL80_.jpg" alt="MK 1" onclick="openWppModal()">
     <img class="game-card" src="https://pixelstore.cl/cdn/shop/files/Disenosintitulo_25.png" alt="MK 11" onclick="openWppModal()">
     <img class="game-card" src="https://images.gog.com/3272c0976e5651c0629daf5eab1ac4b2c49d7154b0a316886a1c7fa8b26af702_glx_vertical_cover.webp?namespace=gamesdb" alt="MK X" onclick="openWppModal()">
@@ -372,11 +485,19 @@
     <img class="game-card" src="http://cdn.awsli.com.br/2500x2500/22/22652/produto/295227042/dragon-ball-z-kakarot-legendary-edition-cover-vxuco0ery4.png" alt="Dragon Ball Z" onclick="openWppModal()">
     <img class="game-card" src="https://meups.com.br/wp-content/uploads/2023/09/Israel-Mobolaji-Temitayo-Odunayo-Oluwafemi-Owolabi-Adesanya-UFC.jpeg" alt="UFC" onclick="openWppModal()">
   </div>
-</div>
 
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
+</div>
 <div class="row">
   <h2>Outros Títulos (FPS, LEGO, Stealth, etc.)</h2>
-  <div class="games-scroll">
+
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+
+    <div class="games-scroll">
+      <!-- seus jogos -->
+   
     <img class="game-card" src="https://meups.com.br/wp-content/uploads/2025/10/Battlefield-6-REVIEW-PS5-scaled.jpg" alt="BF V" onclick="openWppModal()">
     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/8/84/Battlefield_4_capa.png" alt="BF 4" onclick="openWppModal()">
     <img class="game-card" src="https://upload.wikimedia.org/wikipedia/pt/1/1e/Hitman_2016_capa.png" alt="Hitman" onclick="openWppModal()">
@@ -395,12 +516,16 @@
     <img class="game-card" src="https://img.elo7.com.br/product/685x685/2797F06/capa-pirulito-plants-vs-zombies-capa-para-pirulito.jpg" alt="PvZ" onclick="openWppModal()">
     <img class="game-card" src="https://images.g2a.com/360x600/1x1x1/the-sims-2-legacy-collection-p10000509694/f0cedf020a3f4f29af84c3cb" alt="The Sims 2" onclick="openWppModal()">
   </div>
+
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
 </div>
+
 <div class="faixa-destaque" style="width: 100%; margin-top: 20px;">
 TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
 
 <div class="floating-btn-container">
-  <a href="https://gameflix2.github.io/escolhaseupack/" target="_blank" style="text-decoration: none;">
+  <a href="https://gameflix2.github.io/ESCOLHA-SEU-PACK/" target="_blank" style="text-decoration: none;">
     <button class="netflix-btn">VEJA NOSSOS PLANOS AQUI</button>
   </a>
 </div>
