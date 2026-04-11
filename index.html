@@ -56,26 +56,34 @@
 </div>
 
   <header class="pinning-header" id="header">
-    <div class="main-header"> 
-      <a href="#" class="logo">GAMEFLIX</a>
-      <ul class="nav-links">
-        <li><a href="#">PROMOCAO</a></li>
-        <li><a href="#">TOP 10</a></li>
-        <li><a href="#">TOP 20</a></li>
-        <li><a href="#">SUPORTE</a></li>
-        <li><a href="#">PLANOS</a></li>
-        <li><a href="#">DUVIDAS</a></li>
-      </ul>
-      <div class="header-actions">
-        <div class="search-box">
-          <input type="text" id="game-search" placeholder="Buscar no Premium...">
-          <button style="background:transparent; border:none; color:white; cursor:pointer;">Pesquise aqui...
+  <div class="main-header"> 
+    <a href="#" class="logo">GAMEFLIX</a>
+    
+    <ul class="nav-links">
+      <li><a href="#">PROMOCAO</a></li>
+      <li><a href="#">TOP 10</a></li>
+      <li><a href="#">TOP 20</a></li>
+      <li><a href="#">SUPORTE</a></li>
+      <li><a href="#">PLANOS</a></li>
+      <li><a href="#">DUVIDAS</a></li>
+    </ul>
+
+    <div class="header-actions">
+      <div class="search-wrapper">
+        <span class="search-text">Pesquise aqui...</span>
+        
+        <div class="search-container">
+          <div class="search-box">
+            <input type="text" id="game-search" placeholder="Títulos, personagens...">
+            
+          </div>
         </div>
-        <button style="font-size: 20px; background:transparent; border:none; color:white;"></button>
-        <img class="profile" src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1775707638/l_ogo-removebg-preview_wfpn6h.png" alt="Perfil">
       </div>
+
+      <img class="profile" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af7dfb2d-8cc1-45ab-9bab-6b0d0c655e58/dk4gec0-c85f129d-e2c8-43e1-a22a-7769897535eb.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjdkZmIyZC04Y2MxLTQ1YWAb-6YjBkMGM2NTVlNTgvZGs0Z2VjMC1jODVmMTI5ZC1lMmM4LTQzZTEtYTIyYS03NzY5ODk3NTM1ZWIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.xcIw_oCvxRqKtzfcbA2NnbAp3iOv7HYCaIDm2To1F7U" alt="Perfil">
     </div>
-  </header>
+  </div>
+</header>
 
   <section class="banner" id="main-banner">
     <video class="banner-video" autoplay muted loop playsinline id="banner-video">
@@ -1281,6 +1289,77 @@
 </div>
 
 <div class="row">
+  <h2>Franquia Far Cry</h2>
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+    <div class="games-scroll">
+
+     <img class="game-card" 
+           src="https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg" 
+           alt="FAR CRY 3" 
+           data-title="FAR CRY 3" 
+           data-desc="Descubra os segredos sombrios de uma ilha tropical onde a sanidade é um luxo e a sobrevivência é a única regra." 
+           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480259/farcry3_wi0ev1.mp4" 
+           data-logo="https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png" 
+           onclick="openWppModal()">
+
+     <img class="game-card" 
+           src="https://cdn1.epicgames.com/offer/cf87285950ba492bbdc370b9d265ea36/FC4_StorePortrait_1200x1600_1200x1600-7f366d878f5553dae499860243c537ee" 
+           alt="FAR CRY 4" 
+           data-title="FAR CRY 4" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+</div>
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
+</div>
+
+
+<div class="row">
   <h2>Franquia Assassin's Creed</h2>
   <div class="category-wrapper">
     <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
@@ -1356,6 +1435,7 @@
 </div>
 
 
+
 <div class="row">
   <h2>Outros Títulos (FPS, LEGO, Stealth, etc.)</h2>
   <div class="category-wrapper">
@@ -1378,7 +1458,7 @@
            data-title="Tom Clancy's Ghost Recon Wildlands" 
            data-desc="Crie uma equipe com até 3 amigos e aproveite a experiência definitiva de tiro militar." 
            data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775704718/GOST_RECON_fx55j0.mp4" 
-           data-logo="https://freepngimg.com/download/temp_webp/28163-8-tom-clancys-ghost-recon-logo-hd.webp" 
+           data-logo="https://cdn2.steamgriddb.com/logo/a3a8381281635a1926bd3ea09f29f4d9.png" 
            onclick="openWppModal()">
 
             <img class="game-card" 
@@ -1523,6 +1603,228 @@
     <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
   </div>
 </div>
+
+
+<div class="row">
+  <h2>CONFIGURE UMA NOVA CATEGORIA AQUI</h2>
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+    <div class="games-scroll">
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+</div>
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
+</div>
+
+
+
+
+
+<div class="row">
+  <h2>CONFIGURE UMA NOVA CATEGORIA AQUI</h2>
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+    <div class="games-scroll">
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+</div>
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
+</div>
+
+
+
+
+
+<div class="row">
+  <h2>CONFIGURE UMA NOVA CATEGORIA AQUI</h2>
+  <div class="category-wrapper">
+    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
+    <div class="games-scroll">
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+     <img class="game-card" 
+           src="https://img.freepik.com/vetores-premium/cuidado-perigo-aviso-atencao-fitas-da-policia-sinal-linha-linha-preta-e-amarela-listrada_126895-515.jpg" 
+           alt="NOME DO JOGO" 
+           data-title="NOME DO JOGO" 
+           data-desc="DESCRICAO" 
+           data-video="SEU_VIDEO_AQUI" 
+           data-logo="SUA LOGO" 
+           onclick="openWppModal()">
+
+
+</div>
+    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
+  </div>
+</div>
+
+
+
 
 <div class="faixa-destaque" style="width: 100%; margin-top: 20px;">
 TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
