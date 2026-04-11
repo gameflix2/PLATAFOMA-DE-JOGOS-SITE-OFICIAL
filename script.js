@@ -187,33 +187,65 @@ document.querySelectorAll('.free-game-trigger').forEach(card => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
-/* --- LÓGICA DE LOGIN --- */
+/* --- LÓGICA DE LOGIN COM VÍDEO E SOM AJUSTADA --- */
 const loginForm = document.getElementById('login-form');
 
 loginForm.addEventListener('submit', function(e) {
-  e.preventDefault(); // Impede a página de recarregar
+  e.preventDefault(); 
 
   const emailInput = document.getElementById('user-email').value;
   const passwordInput = document.getElementById('user-password').value;
 
-  // DEFINA AQUI O EMAIL E SENHA QUE VOCÊ QUER
   const emailCorreto = "testegratis@gameflix.com";
   const senhaCorreta = "a";
 
   if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
-    // Esconde a tela de login
+    // 1. Esconde a tela de login
     document.getElementById('login-screen').classList.add('hidden');
     
-    // Opcional: Inicia o vídeo do banner após entrar
+    // 2. Localiza os elementos
     const bannerVideo = document.getElementById("banner-video");
-    if(bannerVideo) bannerVideo.play().catch(()=>{});
+    const unmuteBtn = document.getElementById('btn-unmute');
+
+    if (bannerVideo) {
+      // Inicia o vídeo mudo (necessário para o autoplay funcionar)
+      bannerVideo.muted = true; 
+      bannerVideo.play().catch(err => console.log("Erro no autoplay:", err));
+
+      if (unmuteBtn) {
+        // Mostra o botão pulsante
+        unmuteBtn.style.display = 'block'; 
+
+        unmuteBtn.addEventListener('click', function() {
+          // AÇÃO PARA ATIVAR O SOM
+          bannerVideo.muted = false;       // Desativa o mudo
+          bannerVideo.volume = 0.7;        // Garante que o volume está alto
+          
+          // Recomeça o vídeo
+          bannerVideo.currentTime = 0;     
+          
+          // Tenta dar o play novamente agora com som
+          const playPromise = bannerVideo.play();
+          
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log("Som ativado com sucesso!");
+            }).catch(error => {
+              console.log("O navegador bloqueou o áudio:", error);
+            });
+          }
+
+          // Esconde o botão após o clique
+          unmuteBtn.style.display = 'none'; 
+        }, { once: true });
+      }
+    }
     
-    alert("Bem-vindo a melhor plataforma de games do Brasil!");
+    console.log("Bem-vindo ao GAMEFLIX!");
   } else {
     alert("Email ou senha incorretos. Tente novamente.");
   }
 });
-
 /* --- AJUSTE EXCLUSIVO PARA O POPUP WHATSAPP --- */
 function openWppModal() {
   const modalWpp = document.getElementById("wppModal");
@@ -240,34 +272,8 @@ window.addEventListener('click', function(event) {
     if (event.target === modalNetflix) closeModal();
 });
 
-/* --- SISTEMA DE CLIQUE UNIFICADO (RESOLVENDO CONFLITO) --- */
 
-// 1. Funções do Modal (Abre e Fecha)
-function openGamePage(title, videoSrc) {
-    const modal = document.getElementById('gamePageModal');
-    if(!modal) return;
-    document.getElementById('modalTitle').innerText = title;
-    
-    // Vídeo Padrão do Modal
-    document.getElementById('modalVideo').innerHTML = `
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoSrc}?autoplay=1&mute=1" 
-        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    `;
 
-    // BLOQUEIA O FUNDO
-    modal.style.display = 'flex';
-    document.body.classList.add('modal-open');
-}
-
-function closeGamePage() {
-    const modal = document.getElementById('gamePageModal');
-    if(modal) {
-        // DESBLOQUEIA O FUNDO
-        modal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-        document.getElementById('modalVideo').innerHTML = ""; 
-    }
-}
 
 /* --- NOVO GERENCIADOR DE CLIQUES PADRONIZADO --- */
 document.addEventListener('click', function(e) {
@@ -316,3 +322,34 @@ document.addEventListener('click', function(e) {
         return;
     }
 }, true);
+// sistema de busca
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('game-search');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const termoBusca = this.value.toLowerCase().trim();
+            // Pega todos os cards de jogos do site
+            const gameCards = document.querySelectorAll('.game-card, .card-container');
+
+            gameCards.forEach(card => {
+                // Ele busca o nome dentro do atributo 'data-title' ou no 'alt' da imagem
+                const imgElement = card.querySelector('img');
+                const nomeJogo = card.getAttribute('data-title')?.toLowerCase() || 
+                                 imgElement?.getAttribute('alt')?.toLowerCase() || "";
+
+                if (nomeJogo.includes(termoBusca)) {
+                    card.style.display = "block"; // Mostra se encontrar
+                    card.style.opacity = "1";
+                } else {
+                    card.style.display = "none";  // Esconde se não encontrar
+                }
+            });
+
+            // Opcional: Se a busca estiver vazia, mostra tudo de volta
+            if (termoBusca === "") {
+                gameCards.forEach(card => card.style.display = "block");
+            }
+        });
+    }
+});
