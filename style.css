@@ -70,8 +70,8 @@ body {
 }
 
 .header-actions img.profile {
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 50px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -1321,4 +1321,73 @@ body.modal-open { overflow: hidden; }
 .scroll-btn:hover::before {
   left: 150%;
   transition: 0.6s;
+}
+
+/* Efeito do Botão de Som Pulsante */
+.pulse-button {
+  display: none; /* Ele começa escondido e o JS mostra depois */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Garante que fique em cima de tudo */
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: #e50914; /* Vermelho padrão da sua marca */
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7);
+  animation: pulse-gameflix 1.5s infinite;
+}
+
+@keyframes pulse-gameflix {
+  0% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
+  70% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 20px rgba(229, 9, 20, 0); }
+  100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
+}
+
+/* Alinhamento lado a lado */
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espaço entre o texto e a barra */
+}
+
+/* Frase ao lado da barra */
+.search-text {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 1. Container para o brilho (SEU CÓDIGO MANTIDO) */
+.search-container {
+  display: inline-block;
+  filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.8));
+}
+
+/* 2. Barra cortada (SEU CÓDIGO MANTIDO) */
+.search-box {
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  background: #222; 
+  border-left: 5px solid #e50914; 
+  padding: 5px 20px;
+  display: flex;
+  align-items: center;
+  width: 200px; /* Ajuste a largura se necessário */
+}
+
+/* 3. Input (SEU CÓDIGO MANTIDO) */
+.search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  width: 100%;
 }
