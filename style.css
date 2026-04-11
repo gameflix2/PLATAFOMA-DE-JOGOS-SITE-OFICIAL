@@ -1350,29 +1350,31 @@ body.modal-open { overflow: hidden; }
   100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
 }
 
-/* Alinhamento lado a lado */
+/* Alinhamento da frase com a barra */
 .search-wrapper {
   display: flex;
   align-items: center;
-  gap: 15px; /* Espaço entre o texto e a barra */
+  gap: 15px;
 }
 
-/* Frase ao lado da barra */
+/* Frase "Pesquise aqui..." */
 .search-text {
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
+  white-space: nowrap; /* Impede que o texto quebre linha */
 }
 
-/* 1. Container para o brilho (SEU CÓDIGO MANTIDO) */
+/* 1. Container do Brilho (Glow) */
 .search-container {
   display: inline-block;
-  filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.8));
+  filter: drop-shadow(0 0 8px rgba(229, 9, 20, 0.6));
+  transition: filter 0.3s ease;
 }
 
-/* 2. Barra cortada (SEU CÓDIGO MANTIDO) */
+/* 2. A Barra Cyberpunk com efeito de LEQUE */
 .search-box {
   clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
   background: #222; 
@@ -1380,14 +1382,30 @@ body.modal-open { overflow: hidden; }
   padding: 5px 20px;
   display: flex;
   align-items: center;
-  width: 200px; /* Ajuste a largura se necessário */
+  
+  /* EFEITO LEQUE: Começa menor e expande */
+  width: 150px; 
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
 }
 
-/* 3. Input (SEU CÓDIGO MANTIDO) */
+/* Quando clica ou passa o mouse, a barra "abre" */
+.search-wrapper:hover .search-box,
+.search-box:focus-within {
+  width: 280px; /* Largura dela aberta */
+  background: #2a2a2a;
+}
+
+/* Aumenta o brilho quando abre */
+.search-wrapper:hover .search-container {
+  filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.9));
+}
+
+/* 3. Input */
 .search-box input {
   background: transparent;
   border: none;
   outline: none;
   color: white;
   width: 100%;
+  font-size: 14px;
 }
