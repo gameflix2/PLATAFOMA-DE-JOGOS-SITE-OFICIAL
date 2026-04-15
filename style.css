@@ -1409,3 +1409,154 @@ body.modal-open { overflow: hidden; }
   width: 100%;
   font-size: 14px;
 }
+
+/* ============================================
+   GAMEFLIX GAME DETAIL MODAL
+   ============================================ */
+.gd-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 99998;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  backdrop-filter: blur(6px);
+  padding: 60px 15px 40px;
+}
+.gd-overlay.active { display: flex; }
+
+.gd-container {
+  background: #141414;
+  width: 100%;
+  max-width: 860px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.07);
+  animation: gdSlideUp 0.45s cubic-bezier(0.25,1,0.5,1);
+}
+@keyframes gdSlideUp {
+  from { transform: translateY(60px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.gd-close {
+  position: absolute;
+  top: 14px; right: 18px;
+  font-size: 20px;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  z-index: 10;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  transition: background 0.2s, color 0.2s;
+}
+.gd-close:hover { background: #e50914; color: #fff; }
+
+.gd-hero-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #000;
+}
+.gd-hero-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gd-hero-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, #141414 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+}
+.gd-logo-img {
+  position: absolute;
+  bottom: 24px; left: 28px;
+  max-width: 260px; max-height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.9));
+}
+
+.gd-body { padding: 28px 32px 36px; }
+
+.gd-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: 1px;
+}
+.gd-desc {
+  font-size: 15px;
+  color: #ccc;
+  line-height: 1.65;
+  margin: 0 0 28px;
+}
+
+.gd-section { margin-bottom: 30px; }
+.gd-section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: #fff;
+  border-left: 4px solid #e50914;
+  padding-left: 12px;
+  margin: 0 0 14px;
+  letter-spacing: 1px;
+}
+
+.gd-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+}
+.gd-carousel::-webkit-scrollbar { height: 4px; }
+.gd-carousel::-webkit-scrollbar-track { background: #222; border-radius: 2px; }
+.gd-carousel::-webkit-scrollbar-thumb { background: #e50914; border-radius: 2px; }
+.gd-carousel img {
+  height: 155px;
+  min-width: 260px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #2a2a2a;
+  transition: transform 0.3s, border-color 0.3s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.gd-carousel img:hover { transform: scale(1.04); border-color: #e50914; }
+
+.gd-actions { text-align: center; margin-top: 8px; }
+.gd-btn-buy {
+  display: inline-block;
+  padding: 15px 50px;
+  font-size: 18px;
+  font-weight: 900;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  color: #fff;
+  background: linear-gradient(90deg, #e50914, #ff3b3b);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 0 18px rgba(229,9,20,0.45);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+.gd-btn-buy:hover {
+  filter: brightness(1.15);
+  transform: scale(1.04);
+  box-shadow: 0 0 30px rgba(229,9,20,0.7);
+}
+
+@media (max-width: 600px) {
+  .gd-body { padding: 20px 18px 28px; }
+  .gd-title { font-size: 1.8rem; }
+  .gd-logo-img { max-width: 170px; bottom: 14px; left: 16px; }
+  .gd-carousel img { height: 120px; min-width: 200px; }
+  .gd-btn-buy { padding: 13px 30px; font-size: 15px; }
+}
