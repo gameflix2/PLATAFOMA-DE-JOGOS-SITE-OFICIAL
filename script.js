@@ -878,3 +878,21 @@ document.addEventListener('click', function(e) {
     }
   }
 }, true);
+  
+function openPacksModal() {
+  document.getElementById('packsModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+}
+
+function closePacksModal() {
+  document.getElementById('packsModal').style.display = 'none';
+  document.body.style.overflow = ''; // Libera o scroll
+}
+
+// Fechar se clicar fora do modal
+window.onclick = function(event) {
+  const modal = document.getElementById('packsModal');
+  if (event.target == modal) {
+    closePacksModal();
+  }
+}
