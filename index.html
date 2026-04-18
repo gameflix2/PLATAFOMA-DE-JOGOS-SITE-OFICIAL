@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio - Gameflix</title>
   
-<link rel="icon" type="image/png" href="https://www.pngall.com/wp-content/uploads/13/70-Discount-PNG-File.png>
+<link rel="icon" type="image/png" href="https://cdn.awsli.com.br/300x300/138/138431/produto/247791692/mac-4397-p1-2uo82k2e1g.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -60,23 +60,22 @@
     <a href="#" class="logo">GAMEFLIX</a>
     
     <ul class="nav-links">
-      <li><a href="#">EFERTAS EXCLUSIVAS</a></li>
-      <li><a href="javascript:void(0)" onclick="openPacksModal()">PACK'S</a></li>
-      <li><a href="#">LANÇAMENTOS</a></li>
-      <li><a href="#">COMO INSTALAR</a></li>
-      <li><a href="#">SORTEIOS</a></li>
-      <li><a href="#">DUVIDAS</a></li>
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('ofertas')">OFERTAS EXCLUSIVAS</a></li>
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('lancamentos')">LANÇAMENTOS</a></li>
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')">COMO INSTALAR</a></li>
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')">SORTEIOS</a></li>
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('duvidas')">DÚVIDAS</a></li>
     </ul>
 
     <div class="header-actions">
       <div class="search-wrapper">
         <span class="search-text">Pesquise aqui...</span>
         
-        <div class="search-container">
+        <div class="search-container" id="search-container">
           <div class="search-box">
-            <input type="text" id="game-search" placeholder="Títulos, personagens...">
-            
+            <input type="text" id="game-search" placeholder="Títulos, personagens..." autocomplete="off">
           </div>
+          <div class="search-results-dropdown" id="search-results-dropdown"></div>
         </div>
       </div>
 
@@ -95,7 +94,7 @@
   <p id="banner-desc">BF6 ocupa o top 1 da Gameflix como o jogo mais baixado da plataforma!</p>
   
   <a href="#" id="banner-link">
-    <button class="btn-play" id="btn-main-action" onclick="openGameDetailFromBanner(event)">ⓘ MAIS INFORMAÇÕES</button>
+    <button class="btn-play" id="btn-main-action">ⓘ MAIS INFORMAÇÕES</button>
   </a>
   
   <button class="btn-info"> + Minha Lista</button>
@@ -106,139 +105,90 @@
           <h2>JOGOS COM CONDIÇAO EXCLUSIVA PARA TESTAR A PLATAFORMA</h2>
     <div class="games-scroll">
     
-   <div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    
-    <img class="game-card free-game-trigger" 
-         src="https://www.fonomag.com.br/image/cache/data/eftr/Img_ftr_rp_427901-1160x1160.JPG?version=20250102153827" 
-         data-title="ELDEN RING" 
-         data-logo="https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png"
-         data-desc="Sobreviva em um mundo aberto deslumbrante..." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772073320/ELDEN_yfkx0p.mp4"
-         data-popup-banner="https://lakshyadigital.com/wp-content/uploads/2024/10/elden-ring-Banner.webp"
-         data-full-desc="O Anel Prata foi destruído. Levante-se, Maculado, e deixe a graça guiar você por um mundo vasto."
-         data-gallery="https://cdn.mos.cms.futurecdn.net/VUaxAKVKj3jCLb29EK6Vra.jpg,https://www.gematsu.com/wp-content/uploads/2021/08/Elden-Ring_2021_08-27-21_002.jpg,https://images.steamusercontent.com/ugc/2058741034012526282/0D8DB3EEAF0AD23078CE9C6C6CCAEA128A4778FA/,https://www.videogameschronicle.com/files/2021/06/04.jpg"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772073320/ELDEN_yfkx0p.mp4', 'https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png', 'Sobreviva em um mundo aberto...', '#', this)">
-</div>
+    <div class="game-container" style="position: relative; flex: 0 0 auto;">
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://www.fonomag.com.br/image/cache/data/eftr/Img_ftr_rp_427901-1160x1160.JPG?version=20250102153827" 
+             data-title="ELDEN RING" 
+             data-logo="https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png"
+             data-desc="Sobreviva em um mundo aberto deslumbrante, domine combates intensos e conquiste o Anel Prata." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772073320/ELDEN_yfkx0p.mp4">
+    </div>
 
     <div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg" 
-         data-title="Resident Evil 3" 
-         data-logo="https://www.residentevil.com/re3/assets/images/common/re3_logo.png"
-         data-desc="Encarne Jill Valentine e lute para escapar de Raccoon City e do implacável Nemesis." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772474147/RESIDENTE_EVIL_3_qqvli7.mp4"
-         data-popup-banner="https://www.nag.co.za/wp-content/uploads/2020/03/Resident-Evil-3-Remake-hero.png"
-         data-full-desc="Reviva o pesadelo de Raccoon City. Uma fuga desesperada contra a arma biológica definitiva: Nemesis."
-         data-gallery="https://c4.wallpaperflare.com/wallpaper/889/935/819/jill-valentine-resident-evil-3-hd-wallpaper-preview.jpg, https://images6.alphacoders.com/121/1219450.png, https://pic.clubic.com/v1/images/1993338/raw?fit=smartCrop&width=1200&height=675&hash=84394abc856b02c6634d3c71d029f79d61e46c53, https://gamelodge.com.br/wp-content/uploads/2020/04/RESIDENTE-EVIL-3-HUNTER-1024x576.jpg"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772474147/RESIDENTE_EVIL_3_qqvli7.mp4', 'https://www.residentevil.com/re3/assets/images/common/re3_logo.png', 'Encarne Jill Valentine...', '#', this)">
-</div>
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg" 
+             data-title="Resident Evil 3" 
+             data-logo="https://www.residentevil.com/re3/assets/images/common/re3_logo.png"
+             data-desc="Encarne Jill Valentine e lute para escapar de Raccoon City e do implacável Nemesis." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772474147/RESIDENTE_EVIL_3_qqvli7.mp4">
+    </div>
+
+    <div class="game-container" style="position: relative; flex: 0 0 auto;">
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg" 
+             data-title="far Cry 3" 
+             data-logo="https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png"
+             data-desc="Descubra os segredos sombrios de uma ilha tropical onde a sanidade é um luxo e a sobrevivência é a única regra." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480259/farcry3_wi0ev1.mp4">
+    </div>
+
+    <div class="game-container" style="position: relative; flex: 0 0 auto;">
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://wallpapers.com/images/featured/imagens-do-batman-arkham-asylum-22kjoifinq2vbfqv.jpg" 
+             data-title="Batman arkham" 
+             data-logo="https://cdn2.steamgriddb.com/logo_thumb/add218da6e6329fac8755ea78004dea1.png"
+             data-desc="Torne-se o Cavaleiro das Trevas. Mergulhe nas sombras de Gotham e enfrente o caos em uma noite onde os piores vilões assumem o controle." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775704602/ARKHAN_BATMAN_ircd5d.mp4">
+    </div>
+
+    <div class="game-container" style="position: relative; flex: 0 0 auto;">
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://images.squarespace-cdn.com/content/v1/58bedb0ab3db2bd0463e552b/1488928090199-81WOQR4N03UFM3MBW3OQ/BLOG_FARCRY_1280X788_001A.jpg" 
+             data-title="FarCry Primal" 
+             data-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png"
+             data-desc="Sobreviva à Idade da Pedra e domine feras selvagens." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1771613996/farcry_z2rivm.mp4" 
+             data-drive="https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ">
+    </div>
 
 <div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg" 
-         data-title="far Cry 3" 
-         data-logo="https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png"
-         data-desc="Descubra os segredos sombrios de uma ilha tropical onde a sanidade é um luxo." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480259/farcry3_wi0ev1.mp4"
-         data-popup-banner="https://images.launchbox-app.com//e72295d8-42f9-4c67-98ce-5d72ee79a554.jpg"
-         data-full-desc="Enfrente Vaas Montenegro em uma jornada insana pela sobrevivência no paraíso que se tornou um inferno."
-         data-gallery="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/220240/ss_6a4dec0b9653564b7be754286cef07a012c24fea.1920x1080.jpg?t=1752169206, 
-         https://hot.game/uploads/media/slide_game/0001/27/196ba16755ddc5d2cd8295f3425468b2809a5616.jpeg, 
-         https://10wallpaper.com/wallpaper/1280x960/1210/2012_Far_Cry_3_Game_HD_Wallpaper_51_1280x960.jpg,
-         https://s.hdnux.com/photos/16/72/11/3908164/4/1920x0.jpg"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480259/farcry3_wi0ev1.mp4', 'https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png', 'Descubra os segredos sombrios...', '#', this)">
-</div>
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png" 
+             data-title="Grand Theft Auto V" 
+             data-logo="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1775395124/pngimg.com_-_gta_PNG13_s7ewdi.png"
+             data-desc="Explore Los Santos e realize os maiores assaltos da história neste mundo aberto." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775396024/gta_bffxhd.mp4" 
+             data-drive="https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ">
+    </div>
 
-<div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://wallpapers.com/images/featured/imagens-do-batman-arkham-asylum-22kjoifinq2vbfqv.jpg" 
-         data-title="Batman arkham" 
-         data-logo="https://cdn2.steamgriddb.com/logo_thumb/add218da6e6329fac8755ea78004dea1.png"
-         data-desc="Torne-se o Cavaleiro das Trevas. Mergulhe nas sombras de Gotham." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775704602/ARKHAN_BATMAN_ircd5d.mp4"
-         data-popup-banner="https://images5.alphacoders.com/405/405861.jpg"
-         data-full-desc="Batman: Arkham Asylum coloca você no papel do herói mais famoso de Gotham em uma noite claustrofóbica no asilo."
-         data-gallery="https://www.hollywoodreporter.com/wp-content/uploads/2013/10/batman_arkham_origins_a_l.jpg?w=1440&h=810&crop=1, 
-         https://t2.tudocdn.net/84555?w=824&h=494, 
-         https://www.cnet.com/a/img/resize/ee96bb370fbaebc8c235de1b66a31ddc8b8bb8a3/hub/2013/10/24/a783e104-6798-11e3-846b-14feb5ca9861/BAO_Launch_LaceyTowersCaseFile.jpg?auto=webp&width=1200,
-          https://s2-techtudo.glbimg.com/q04L9MNNEJ32APEDEoLeqdyfm7s=/0x0:620x349/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/w/w/x4OcpBTfa18pBRn8nLYQ/2013-11-08-batman-arkham-origins-combate-capangas.jpg"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775704602/ARKHAN_BATMAN_ircd5d.mp4', 'https://cdn2.steamgriddb.com/logo_thumb/add218da6e6329fac8755ea78004dea1.png', 'Torne-se o Cavaleiro...', '#', this)">
-</div>
+    <div class="game-container" style="position: relative; flex: 0 0 auto;">
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://cms-assets.xboxservices.com/assets/b3/1b/b31bda8d-5ff9-48a8-a57b-2ea6287f4fef.jpg?n=Forza-Motorsport_GLP-Page-Hero-0_1083x1222_02.jpg" 
+             data-title="Forza Motorsport" 
+             data-logo="https://cdn2.steamgriddb.com/logo_thumb/5cc085288d7afc9d76f6aa846b7e5d5f.png"
+             data-desc="Não é apenas dirigir. É sobre a conexão entre homem, máquina e asfalto. A vitória começa na garagem" 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775450006/forza_wvbezf.mp4" 
+             data-drive="https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ">
+    </div>
 
-<div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://images.squarespace-cdn.com/content/v1/58bedb0ab3db2bd0463e552b/1488928090199-81WOQR4N03UFM3MBW3OQ/BLOG_FARCRY_1280X788_001A.jpg" 
-         data-title="FarCry Primal" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png"
-         data-desc="Sobreviva à Idade da Pedra e domine feras selvagens." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1771613996/farcry_z2rivm.mp4" 
-         data-drive="https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ"
-         data-popup-banner="https://images.hdqwalls.com/wallpapers/far-cry-primal-3.jpg"
-         data-full-desc="Lute para subir na cadeia alimentar. Fabrique armas e domine os predadores mais perigosos da história."
-         data-gallery="https://im.tiscali.cz/games/2015/10/07/557363-far-cry-primal-base_16x9.jpg.1200?1588285673.0,
-          https://www.digitaltrends.com/tachyon/2015/12/Far-Cry-Primal-Featured.jpg?fit=1500%2C1000, 
-          https://d1lss44hh2trtw.cloudfront.net/assets/article/2016/02/18/farcryprimalbasictipsguideheader_feature.jpg, 
-          https://gfn.am/en/games/media/images/screen_hR5F4JB.2e16d0ba.fill-992x558.format-webp.webpquality-50.webp"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1771613996/farcry_z2rivm.mp4', 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png', 'Sobreviva à Idade da Pedra...', 'https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ', this)">
-</div>
 
-<div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png" 
-         data-title="Grand Theft Auto V" 
-         data-logo="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1775395124/pngimg.com_-_gta_PNG13_s7ewdi.png"
-         data-desc="Explore Los Santos e realize os maiores assaltos da história." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775396024/gta_bffxhd.mp4" 
-         data-drive="https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ"
-         data-popup-banner="https://images.ctfassets.net/w5r1fvmogo3f/5KX4LastOvwAEeh32XAwxW/415b622e1ecf73730c3dfa97873bf1e0/blogheader_gta_5_banner.webp?fm=webp&q=90&fit=scale&w=1920"
-         data-full-desc="A história de três criminosos muito diferentes cujas vidas se entrelaçam em Los Santos."
-         data-gallery="https://64.media.tumblr.com/e703de8899687c7f31024aa43644e3e5/e62de8d16c390587-d4/s1280x1920/8eb1cbf89ef9c65058852691881047293f986415.jpg, 
-         https://64.media.tumblr.com/5b6d10f5383c5bda17024d66c6df00a0/e62de8d16c390587-10/s1280x1920/2b4a93a43c189a24bf3f81df7652335b3531bc24.jpg, 
-         https://images6.alphacoders.com/438/thumb-1920-438835.jpg, 
-         https://s2-techtudo.glbimg.com/4BsK81XS-uDJFRxWsDrcqxWCIpI=/0x0:1920x1080/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2025/c/L/gUBp4tTxSu4N2Zg4rWGg/imagem-2025-04-15-111830340.png"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775396024/gta_bffxhd.mp4', 'https://res.cloudinary.com/dlt1gqwnc/image/upload/v1775395124/pngimg.com_-_gta_PNG13_s7ewdi.png', 'Explore Los Santos...', 'https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ', this)">
-</div>
+    <div class="game-container" style="position: relative; flex: 0 0 auto;">
+        <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
+        <img class="game-card free-game-trigger" 
+             src="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a" 
+             data-title="Crash Bandicoot™" 
+             data-logo="https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png"
+             data-desc="A trilogia original que marcou época, agora em alta definição." 
+             data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480502/crash_srwj1b.mp4">
+    </div>
 
-<div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://cms-assets.xboxservices.com/assets/b3/1b/b31bda8d-5ff9-48a8-a57b-2ea6287f4fef.jpg?n=Forza-Motorsport_GLP-Page-Hero-0_1083x1222_02.jpg" 
-         data-title="Forza Motorsport" 
-         data-logo="https://cdn2.steamgriddb.com/logo_thumb/5cc085288d7afc9d76f6aa846b7e5d5f.png"
-         data-desc="Não é apenas dirigir. É sobre a conexão entre homem, máquina e asfalto." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775450006/forza_wvbezf.mp4" 
-         data-drive="https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ"
-         data-popup-banner="https://www.digitec.ch/Files/9/0/6/7/4/1/0/ForzaMotorsport7_PreviewScreenshot_PosingByTheCars_WM_3840x216021.jpeg"
-         data-full-desc="Supere a competição usando mais de 800 atualizações de desempenho na nova e divertida experiência de carreira."
-         data-gallery="https://cdn.autopapo.com.br/box/uploads/2023/06/16162547/forza-motorsport-2024-gameplay-1-732x488.jpg,
-          https://www.topgear.com/sites/default/files/2023/10/Forza_Motorsport-XboxGamesShowcase202_Kit-08-16x9_WM-2bbf75b77df98b48f4b1.jpg,
-          https://images.purexbox.com/2fdda2a62dd80/large.jpg,
-          https://www.comboinfinito.com.br/principal/wp-content/uploads/2023/10/Forza-Motorsport-4-1200x628-cropped.jpg"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1775450006/forza_wvbezf.mp4', 'https://cdn2.steamgriddb.com/logo_thumb/5cc085288d7afc9d76f6aa846b7e5d5f.png', 'Não é apenas dirigir...', 'https://drive.google.com/uc?export=download&id=1jCvhMNka9U0hJv2NqioXyS3xWGLbI9nQ', this)">
-</div>
-
-<div class="game-container" style="position: relative; flex: 0 0 auto;">
-    <span class="price-tag" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); z-index: 5; pointer-events: none;">R$ 14,90</span>
-    <img class="game-card free-game-trigger" 
-         src="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a" 
-         data-title="Crash Bandicoot™" 
-         data-logo="https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png"
-         data-desc="A trilogia original que marcou época, agora em alta definição." 
-         data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480502/crash_srwj1b.mp4"
-         data-popup-banner="https://sm.ign.com/ign_br/review/c/crash-band/crash-bandicoot-n-sane-trilogy-review_f6u4.jpg"
-         data-full-desc="Gire, pule e use as máscaras para salvar as Ilhas Wumpa das garras do Dr. Neo Cortex."
-         data-gallery="https://images4.alphacoders.com/849/thumb-1920-849500.jpg,
-         https://cdn.awsli.com.br/2693/2693981/produto/247592853/crash-bandicoot-sane-trilogy-xbox-one-midia-digital-11795c81-9spximlj76.jpg,
-          https://images8.alphacoders.com/860/thumb-1920-860205.jpg,
-          https://images5.alphacoders.com/860/thumb-1920-860125.jpg"
-         onclick="changeBanner('https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772480502/crash_srwj1b.mp4', 'https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png', 'A trilogia original...', '#', this)">
-</div>
 </div>
 
   <div class="top10-banner">
@@ -1896,29 +1846,237 @@ TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
     </div>
   </div>
 
-  <!-- ===== GAMEFLIX GAME DETAIL MODAL ===== -->
-  <div id="gameDetailModal" class="gd-overlay">
-    <div class="gd-container">
-      <span class="gd-close" onclick="closeGameDetail()">&#10005;</span>
-      <div class="gd-hero-wrap">
-        <img id="gdHeroImg" class="gd-hero-img" src="" alt="">
-        <div class="gd-hero-gradient"></div>
-        <img id="gdLogoImg" class="gd-logo-img" src="" alt="">
+<!-- ====== MODAIS DE CATEGORIA ESTILO NETFLIX ====== -->
+
+<!-- MODAL: OFERTAS EXCLUSIVAS -->
+<div class="cat-modal-overlay" id="modal-ofertas">
+  <div class="cat-modal-box cat-ofertas">
+    <button class="cat-modal-close" onclick="closeCategoryModal('ofertas')">✕</button>
+    <div class="cat-modal-header">
+      <span class="cat-modal-icon">🔥</span>
+      <div>
+        <h2 class="cat-modal-title">OFERTAS EXCLUSIVAS</h2>
+        <p class="cat-modal-subtitle">Só para membros GAMEFLIX • Tempo limitado</p>
       </div>
-      <div class="gd-body">
-        <h2 id="gdTitle" class="gd-title"></h2>
-        <p id="gdDesc" class="gd-desc"></p>
-        <div class="gd-section">
-          <h3 class="gd-section-title">&#128247; IMAGENS DO JOGO</h3>
-          <div id="gdCarousel" class="gd-carousel"></div>
+    </div>
+    <div class="cat-modal-body">
+      <div class="cat-offer-card">
+        <div class="cat-offer-badge">-70%</div>
+        <div class="cat-offer-content">
+          <h3>PACK GAMEFLIX STARTER</h3>
+          <p>Acesso completo à biblioteca + 3 downloads por mês</p>
+          <div class="cat-offer-price"><s>R$ 49,90</s> <strong>R$ 14,90/mês</strong></div>
+          <button class="cat-offer-btn" onclick="openWppModal(); closeCategoryModal('ofertas')">APROVEITAR AGORA</button>
         </div>
-        <div class="gd-actions">
-          <a id="gdActionBtn" href="https://gameflix2.github.io/ESCOLHA-SEU-PACK/" target="_blank" class="gd-btn-buy">&#9654; QUERO JOGAR AGORA</a>
+      </div>
+      <div class="cat-offer-card">
+        <div class="cat-offer-badge">-80%</div>
+        <div class="cat-offer-content">
+          <h3>PACK GAMEFLIX PRO</h3>
+          <p>Downloads ilimitados + acesso antecipado a lançamentos</p>
+          <div class="cat-offer-price"><s>R$ 89,90</s> <strong>R$ 17,90/mês</strong></div>
+          <button class="cat-offer-btn" onclick="openWppModal(); closeCategoryModal('ofertas')">APROVEITAR AGORA</button>
+        </div>
+      </div>
+      <div class="cat-offer-card cat-offer-highlight">
+        <div class="cat-offer-badge cat-badge-gold">TESTE</div>
+        <div class="cat-offer-content">
+          <h3>TESTE GRÁTIS 24H</h3>
+          <p>Experimente a plataforma sem pagar nada. Sem compromisso.</p>
+          <div class="cat-offer-price"><strong style="color:#ffd700; font-size:1.4rem">GRÁTIS</strong></div>
+          <button class="cat-offer-btn cat-btn-gold" onclick="openWppModal(); closeCategoryModal('ofertas')">COMEÇAR AGORA</button>
         </div>
       </div>
     </div>
+    <p class="cat-modal-note">⚡ Oferta de lançamento — válida por tempo limitado. Fale no WhatsApp para ativar.</p>
   </div>
-  <!-- ===== FIM GAMEFLIX GAME DETAIL MODAL ===== -->
+</div>
+
+<!-- MODAL: LANÇAMENTOS -->
+<div class="cat-modal-overlay" id="modal-lancamentos">
+  <div class="cat-modal-box cat-lancamentos">
+    <button class="cat-modal-close" onclick="closeCategoryModal('lancamentos')">✕</button>
+    <div class="cat-modal-header">
+      <span class="cat-modal-icon">🚀</span>
+      <div>
+        <h2 class="cat-modal-title">LANÇAMENTOS</h2>
+        <p class="cat-modal-subtitle">Os títulos mais quentes chegando na GAMEFLIX</p>
+      </div>
+    </div>
+    <div class="cat-modal-body">
+      <div class="cat-launch-grid">
+        <div class="cat-launch-item">
+          <img src="https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25" alt="BF6">
+          <div class="cat-launch-info">
+            <span class="cat-launch-tag">DISPONÍVEL</span>
+            <h4>Battlefield 6</h4>
+            <p>O FPS mais esperado do ano chegou!</p>
+          </div>
+        </div>
+        <div class="cat-launch-item">
+          <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" alt="RE Requiem">
+          <div class="cat-launch-info">
+            <span class="cat-launch-tag">DISPONÍVEL</span>
+            <h4>Resident Evil Requiem</h4>
+            <p>O terror voltou mais assustador que nunca.</p>
+          </div>
+        </div>
+        <div class="cat-launch-item">
+          <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1771886278/Captura_de_tela_2026-02-23_185713_cljm2d.png" alt="FIFA 26">
+          <div class="cat-launch-info">
+            <span class="cat-launch-tag cat-tag-soon">EM BREVE</span>
+            <h4>FIFA 26</h4>
+            <p>Nova geração do futebol chegando em breve.</p>
+          </div>
+        </div>
+        <div class="cat-launch-item">
+          <img src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" alt="GoW Ragnarok">
+          <div class="cat-launch-info">
+            <span class="cat-launch-tag">DISPONÍVEL</span>
+            <h4>God of War Ragnarök</h4>
+            <p>Pai e filho contra o impossível.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="cat-modal-note">🎮 Novos títulos adicionados toda semana. Seja membro e não perca nenhum lançamento!</p>
+  </div>
+</div>
+
+<!-- MODAL: COMO INSTALAR -->
+<div class="cat-modal-overlay" id="modal-instalar">
+  <div class="cat-modal-box cat-instalar">
+    <button class="cat-modal-close" onclick="closeCategoryModal('instalar')">✕</button>
+    <div class="cat-modal-header">
+      <span class="cat-modal-icon">⚙️</span>
+      <div>
+        <h2 class="cat-modal-title">COMO INSTALAR</h2>
+        <p class="cat-modal-subtitle">Passo a passo simples para jogar em minutos</p>
+      </div>
+    </div>
+    <div class="cat-modal-body">
+      <div class="cat-steps">
+        <div class="cat-step">
+          <div class="cat-step-num">01</div>
+          <div class="cat-step-info">
+            <h4>ESCOLHA SEU PLANO</h4>
+            <p>Acesse nossos planos e escolha o que melhor se encaixa no seu perfil. Temos opções a partir de R$ 14,90/mês.</p>
+          </div>
+        </div>
+        <div class="cat-step">
+          <div class="cat-step-num">02</div>
+          <div class="cat-step-info">
+            <h4>FAÇA O PAGAMENTO</h4>
+            <p>Pague via PIX, cartão de crédito ou boleto. O acesso é liberado em até 5 minutos após a confirmação.</p>
+          </div>
+        </div>
+        <div class="cat-step">
+          <div class="cat-step-num">03</div>
+          <div class="cat-step-info">
+            <h4>RECEBA SUAS CREDENCIAIS</h4>
+            <p>Você receberá email e senha de acesso diretamente no WhatsApp ou e-mail cadastrado.</p>
+          </div>
+        </div>
+        <div class="cat-step">
+          <div class="cat-step-num">04</div>
+          <div class="cat-step-info">
+            <h4>BAIXE E JOGUE</h4>
+            <p>Faça o login aqui no site, escolha seu jogo e clique em Download. Descompacte e jogue. Simples assim!</p>
+          </div>
+        </div>
+        <div class="cat-step">
+          <div class="cat-step-num">05</div>
+          <div class="cat-step-info">
+            <h4>PRECISA DE AJUDA?</h4>
+            <p>Nossa equipe está disponível 24h no WhatsApp para te ajudar com qualquer dúvida na instalação.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('instalar')">💬 FALAR COM SUPORTE</button>
+  </div>
+</div>
+
+<!-- MODAL: SORTEIOS -->
+<div class="cat-modal-overlay" id="modal-sorteios">
+  <div class="cat-modal-box cat-sorteios">
+    <button class="cat-modal-close" onclick="closeCategoryModal('sorteios')">✕</button>
+    <div class="cat-modal-header">
+      <span class="cat-modal-icon">🎁</span>
+      <div>
+        <h2 class="cat-modal-title">SORTEIOS</h2>
+        <p class="cat-modal-subtitle">Todo mês novos prêmios para membros GAMEFLIX</p>
+      </div>
+    </div>
+    <div class="cat-modal-body">
+      <div class="cat-raffle-hero">
+        <div class="cat-raffle-prize">
+          <div class="cat-raffle-icon">🎮</div>
+          <h3>SORTEIO DO MÊS</h3>
+          <h2>1 MÊS GRÁTIS<br><span>NA GAMEFLIX PRO</span></h2>
+          <div class="cat-raffle-countdown">
+            <div class="cat-countdown-item"><span id="raffle-days">--</span><small>DIAS</small></div>
+            <div class="cat-countdown-item"><span id="raffle-hours">--</span><small>HORAS</small></div>
+            <div class="cat-countdown-item"><span id="raffle-mins">--</span><small>MIN</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="cat-raffle-rules">
+        <h4>📋 COMO PARTICIPAR:</h4>
+        <ul>
+          <li>✅ Seja membro ativo da GAMEFLIX</li>
+          <li>✅ Siga o Instagram <strong>@gameflix_oficial</strong></li>
+          <li>✅ Marque 2 amigos nos comentários do post do sorteio</li>
+          <li>✅ O sorteio acontece todo dia 30 de cada mês ao vivo</li>
+        </ul>
+      </div>
+    </div>
+    <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('sorteios')">🎯 QUERO PARTICIPAR</button>
+  </div>
+</div>
+
+<!-- MODAL: DÚVIDAS -->
+<div class="cat-modal-overlay" id="modal-duvidas">
+  <div class="cat-modal-box cat-duvidas">
+    <button class="cat-modal-close" onclick="closeCategoryModal('duvidas')">✕</button>
+    <div class="cat-modal-header">
+      <span class="cat-modal-icon">❓</span>
+      <div>
+        <h2 class="cat-modal-title">DÚVIDAS FREQUENTES</h2>
+        <p class="cat-modal-subtitle">Respostas rápidas para o que você precisa saber</p>
+      </div>
+    </div>
+    <div class="cat-modal-body">
+      <div class="cat-faq">
+        <div class="cat-faq-item" onclick="toggleFaq(this)">
+          <div class="cat-faq-q">Os jogos são originais? <span class="faq-arrow">▼</span></div>
+          <div class="cat-faq-a">A GAMEFLIX oferece acesso a jogos via plataforma própria. Todos os títulos são testados e funcionam 100% no PC.</div>
+        </div>
+        <div class="cat-faq-item" onclick="toggleFaq(this)">
+          <div class="cat-faq-q">Precisa de internet para jogar? <span class="faq-arrow">▼</span></div>
+          <div class="cat-faq-a">Não! Após o download, a maioria dos jogos funciona 100% offline. Alguns títulos online requerem conexão.</div>
+        </div>
+        <div class="cat-faq-item" onclick="toggleFaq(this)">
+          <div class="cat-faq-q">Funciona em qualquer PC? <span class="faq-arrow">▼</span></div>
+          <div class="cat-faq-a">Funciona em PCs com Windows 10/11, 8GB RAM e processador i5 ou equivalente. Nosso suporte auxilia na instalação.</div>
+        </div>
+        <div class="cat-faq-item" onclick="toggleFaq(this)">
+          <div class="cat-faq-q">Posso cancelar quando quiser? <span class="faq-arrow">▼</span></div>
+          <div class="cat-faq-a">Sim! Não há fidelidade. Cancele quando quiser via WhatsApp sem nenhuma burocracia.</div>
+        </div>
+        <div class="cat-faq-item" onclick="toggleFaq(this)">
+          <div class="cat-faq-q">Como faço para baixar os jogos? <span class="faq-arrow">▼</span></div>
+          <div class="cat-faq-a">Após o login, clique no jogo desejado, selecione "Download", descompacte o arquivo e execute. Nosso suporte te guia no processo!</div>
+        </div>
+        <div class="cat-faq-item" onclick="toggleFaq(this)">
+          <div class="cat-faq-q">Tem suporte técnico? <span class="faq-arrow">▼</span></div>
+          <div class="cat-faq-a">Sim! Suporte 24h via WhatsApp para instalação, dúvidas e qualquer problema técnico.</div>
+        </div>
+      </div>
+    </div>
+    <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('duvidas')">💬 AINDA TEM DÚVIDAS? FALE CONOSCO</button>
+  </div>
+</div>
 
   <footer class="footer">
   <div class="footer-container">
@@ -1975,23 +2133,6 @@ TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
   </script>
 
 
-</div>
-<div id="packsModal" class="modal-overlay">
- <div class="modal-content packs-simple-container"> 
-  <span class="close-modal" onclick="closePacksModal()">&times;</span>
-  <h2 class="modal-title">PACK'S TRIPLE ELITE GAMEFLIX</h2>
-
-  <div class="pack-card-box">
-    <div class="pack-info"><h3>TRIPLE ELITE: OS INTOCÁVEIS</h3></div>
-    <div class="pack-cards">
-      <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" alt="Resident Evil Requiem">
-      <img src="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1771886278/Captura_de_tela_2026-02-23_185713_cljm2d.png" alt="FIFA 26">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" alt="Red Dead Redemption 2">
-    </div>
-    <div class="pack-info"><a href="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" class="gd-btn-buy">ADQUIRIR PACK</a>
-  </div>
-
-  
 </div>
 </body>
 </html>
