@@ -13,29 +13,37 @@ body {
   overflow-x: hidden;
 }
 
-/* --- HEADER --- */
+/* 1. Ajuste a sombra para ela ser curta e não descer na tela */
 .pinning-header {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, transparent);
+  /* O gradiente agora termina totalmente aos 70px, ficando uma faixa estreita */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.969) 0%, rgba(0, 0, 0, 0.794) 70px);
   transition: background 0.3s;
 }
 
+/* 2. O ajuste que você enviou para alinhar os itens */
 .main-header {
   display: flex;
   align-items: center;
-  padding: 15px 4%;
-  gap: 20px;
+  padding: 5px 2%; 
+  gap: 4px;
+  height: 60px; /* Defina uma altura fixa pequena para garantir o tamanho do quadro */
 }
 
-.logo {
-  color: var(--netflix-red);
-  font-size: 28px;
-  font-weight: bold;
-  text-decoration: none;
-  letter-spacing: -1px;
+/* 3. Garante que a logo (imagem ou texto) não force a altura para cima */
+.logo img {
+  height: 90px; /* Ajuste o tamanho da logo para caber na faixa estreita */
+  width: auto;
+}
+
+/* Ajuste para dispositivos móveis se necessário */
+@media (max-width: 768px) {
+  .logo img {
+    width: 90px;
+  }
 }
 
 .nav-links {
@@ -1322,34 +1330,48 @@ body.modal-open { overflow: hidden; }
   left: 150%;
   transition: 0.6s;
 }
-
-/* Efeito do Botão de Som Pulsante */
+/* Efeito do Botão de Som Estilo Original (Círculo Branco) */
 .pulse-button {
-  display: none; /* Ele começa escondido e o JS mostra depois */
+  display: none; /* Mantém o controle pelo JS */
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 85%;      /* Posiciona no canto inferior */
+  left: 94%;     /* Posiciona no canto direito */
   transform: translate(-50%, -50%);
-  z-index: 1000; /* Garante que fique em cima de tudo */
-  padding: 15px 30px;
-  font-size: 18px;
-  background-color: #e50914; /* Vermelho padrão da sua marca */
+  z-index: 1000;
+
+  /* Formato do Botão conforme a imagem */
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Fundo escuro sutil */
+  border: 2px solid #ffffff;           /* Borda branca idêntica à imagem */
+  border-radius: 50%;                  /* Círculo perfeito */
+  
   color: white;
-  border: none;
-  border-radius: 50px;
   cursor: pointer;
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 1px;
-  box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7);
-  animation: pulse-gameflix 1.5s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Ativa a animação de piscar branco */
+  animation: pulse-white-glow 2s infinite;
 }
 
-@keyframes pulse-gameflix {
-  0% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
-  70% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 20px rgba(229, 9, 20, 0); }
-  100% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
+/* Nova animação corrigida (Branca e Suave) */
+@keyframes pulse-white-glow {
+  0% { 
+    transform: translate(-50%, -50%) scale(1); 
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); 
+  }
+  70% { 
+    transform: translate(-50%, -50%) scale(1.1); 
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); 
+  }
+  100% { 
+    transform: translate(-50%, -50%) scale(1); 
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); 
+  }
 }
-
 /* Alinhamento da frase com a barra */
 .search-wrapper {
   display: flex;
@@ -1700,6 +1722,8 @@ body.modal-open { overflow: hidden; }
 .cat-offer-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(229,9,20,0.5); }
 .cat-btn-gold { background: linear-gradient(90deg, #ffd700, #ffaa00); color: #000; }
 .cat-btn-gold:hover { box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+
+
 
 /* --- LANÇAMENTOS --- */
 .cat-launch-grid {
