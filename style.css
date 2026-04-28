@@ -1646,9 +1646,9 @@ body.modal-open { overflow: hidden; }
 .cat-lancamentos .cat-modal-header { border-bottom-color: rgba(0,207,255,0.3); }
 .cat-lancamentos { box-shadow: 0 0 60px rgba(0,207,255,0.15); }
 
-.cat-instalar .cat-modal-title { color: #a3ff3d; }
-.cat-instalar .cat-modal-header { border-bottom-color: rgba(163,255,61,0.3); }
-.cat-instalar { box-shadow: 0 0 60px rgba(163,255,61,0.12); }
+.cat-instalar .cat-modal-title { color: #ff1616; }
+.cat-instalar .cat-modal-header { border-bottom-color: rgb(222, 5, 5); }
+.cat-instalar { box-shadow: 0 0 30px rgba(255, 29, 13, 0.257); }
 
 .cat-sorteios .cat-modal-title { color: #ffd700; }
 .cat-sorteios .cat-modal-header { border-bottom-color: rgba(255,215,0,0.3); }
@@ -1772,17 +1772,17 @@ body.modal-open { overflow: hidden; }
   gap: 20px;
   align-items: flex-start;
   padding: 18px;
-  background: rgba(163,255,61,0.04);
-  border: 1px solid rgba(163,255,61,0.1);
+  background: rgba(255, 129, 61, 0.04);
+  border: 1px solid rgb(171, 0, 0);
   border-radius: 10px;
   transition: border-color 0.3s;
 }
-.cat-step:hover { border-color: rgba(163,255,61,0.35); }
+.cat-step:hover { border-color: rgba(255, 116, 61, 0.35); }
 
 .cat-step-num {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2.8rem;
-  color: rgba(163,255,61,0.4);
+  color: rgba(255, 81, 0, 0.769);
   line-height: 1;
   flex-shrink: 0;
   width: 50px;
@@ -1794,9 +1794,32 @@ body.modal-open { overflow: hidden; }
   font-size: 1.1rem;
   letter-spacing: 2px;
   margin: 0 0 6px;
-  color: #a3ff3d;
+  color: #fe6c12;
 }
 .cat-step-info p { color: #999; font-size: 14px; margin: 0; line-height: 1.5; }
+/* 1. Alarga a caixa branca/preta do modal para os lados */
+.cat-modal-box.cat-instalar {
+    width: 100% !important;        /* Ocupa 95% da largura da tela */
+    max-width:  1200px !important;  /* Aumenta o limite máximo de largura */
+    padding: 20px !important;      /* Espaço interno para não grudar nas bordas */
+}
+
+/* 2. Configura o Grid para usar todo o novo espaço em uma linha só */
+@media (min-width: 768px) {
+    .gf-install-grid {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important; /* Força 5 colunas */
+        width: 100% !important;
+        gap: 20px !important; /* Espaço entre os cards */
+    }
+
+    /* Garante que o 5º card não tente ser maior que os outros */
+    .gf-install-card--full {
+        grid-column: span 1 !important;
+        border-left: 1px solid rgb(31, 231, 0) !important; /* Reseta o destaque lateral se quiser */
+    }
+}
+
 
 /* --- SORTEIOS --- */
 .cat-raffle-hero {
@@ -1955,4 +1978,358 @@ body.modal-open { overflow: hidden; }
   .cat-countdown-item { min-width: 55px; padding: 10px 12px; }
   .search-results-dropdown { width: 280px; right: -60px; }
   .cat-modal-title { font-size: 1.6rem; }
+}
+/* ================================================================
+   GAMEFLIX — CSS ISOLADO: UPGRADE MODAIS "COMO INSTALAR" E "SORTEIOS"
+   Cole este bloco no final do seu style.css (ou num <style> no HTML).
+   Todos os seletores usam prefixo "gf-" para não colidir com o resto.
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   FONTES ADICIONAIS (cole no <head> se ainda não tiver)
+   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+   ---------------------------------------------------------------- */
+
+/* ================================================================
+   SEÇÃO 1 — MODAL: COMO INSTALAR
+   Classes: .gf-install-grid, .gf-install-card, .gf-install-step-bg,
+            .gf-install-icon, .gf-install-card-title, .gf-install-card-desc
+   ================================================================ */
+
+/* Grid de 2 colunas (desktop: 4) */
+@media (min-width: 768px) {
+  .gf-install-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 15px; 
+
+    /* ALTERE/ADICIONE ESTES VALORES: */
+    width: 95%;           /* Faz o grid ocupar 95% da largura da tela/modal */
+    max-width: 1400px;    /* Aumenta o limite máximo de largura (era menor antes) */
+    margin: 0 auto;       /* Mantém centralizado enquanto alarga */
+  }
+
+  .gf-install-card--full {
+    grid-column: span 1; 
+  }
+}
+
+/* Card individual */
+.gf-install-card {
+  position: relative;
+  overflow: hidden;
+  background: rgba(20, 20, 20, 0.70);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 24px 20px 22px;
+  cursor: default;
+  transition: all 0.3s ease;
+}
+
+/* Hover: elevação + brilho vermelho na borda */
+.gf-install-card:hover {
+  transform: translateY(-5px);
+  border-color: #E50914;
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.30),
+              0 8px 30px rgba(0, 0, 0, 0.50);
+}
+
+/* Número decorativo ao fundo */
+.gf-install-step-bg {
+  position: absolute;
+  bottom: -10px;
+  right: 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -2px;
+}
+
+/* Ícone emoji acima do título */
+.gf-install-icon {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-style: normal;
+}
+
+/* Título do passo */
+.gf-install-card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+/* Descrição do passo */
+.gf-install-card-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #b3b3b3;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Card que ocupa as 2 colunas (passo 5) */
+.gf-install-card--full {
+  grid-column: 1 / -1;
+}
+
+/* Acento lateral vermelho no card completo */
+.gf-install-card--full {
+  border-left: 3px solid #00fff2;
+}
+
+/* Desktop: Todos os 5 cards em uma única linha */
+@media (min-width: 768px) {
+  .gf-install-grid {
+    display: grid;
+    /* Define 5 colunas de tamanhos iguais */
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 15px; /* Ajuste o espaçamento entre eles se necessário */
+  }
+
+  .gf-install-card--full {
+    /* Resetamos para que ele ocupe apenas 1 coluna como os outros */
+    grid-column: span 1; 
+  }
+}
+
+/* ================================================================
+   SEÇÃO 2 — MODAL: SORTEIOS
+   Classes: .gf-draw-container, .gf-draw-hero, .gf-draw-badge,
+            .gf-draw-badge-dot, .gf-draw-prize-*, .gf-draw-countdown*,
+            .gf-draw-rules, .gf-draw-cta
+   ================================================================ */
+
+/* Wrapper externo */
+.gf-draw-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Hero Card — largura total com gradiente escuro */
+.gf-draw-hero {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(30, 0, 0, 0.85) 0%,
+    rgba(20, 20, 20, 0.75) 50%,
+    rgba(229, 9, 20, 0.12) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 9, 20, 0.25);
+  border-radius: 14px;
+  padding: 32px 28px 28px;
+  text-align: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Brilho de fundo decorativo */
+.gf-draw-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(229, 9, 20, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.gf-draw-hero:hover {
+  transform: translateY(-3px);
+  border-color: #E50914;
+  box-shadow: 0 0 28px rgba(229, 9, 20, 0.25),
+              0 12px 40px rgba(0, 0, 0, 0.60);
+}
+
+/* Row do badge */
+.gf-draw-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+/* Badge "ATIVO" pulsante */
+.gf-draw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(229, 9, 20, 0.20);
+  border: 1px solid rgba(229, 9, 20, 0.50);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #E50914;
+  text-transform: uppercase;
+}
+
+/* Ponto pulsante dentro do badge */
+.gf-draw-badge-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #E50914;
+  animation: gf-pulse-dot 1.4s ease-in-out infinite;
+}
+
+@keyframes gf-pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Label ao lado do badge */
+.gf-draw-badge-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #b3b3b3;
+}
+
+/* Ícone do prêmio */
+.gf-draw-prize-icon {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+/* Título do prêmio */
+.gf-draw-prize-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: #ffd700;
+  margin: 0 0 6px;
+  line-height: 1.1;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.30);
+}
+
+/* Subtítulo */
+.gf-draw-prize-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #b3b3b3;
+  margin: 0 0 22px;
+}
+
+/* Countdown */
+.gf-draw-countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.gf-draw-countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.50);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 18px;
+  min-width: 64px;
+}
+
+.gf-draw-countdown-item span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.gf-draw-countdown-item small {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #b3b3b3;
+  margin-top: 4px;
+}
+
+.gf-draw-countdown-sep {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: #E50914;
+  line-height: 1;
+  margin-bottom: 14px; /* compensa o "small" abaixo do número */
+}
+
+/* Regras de participação */
+.gf-draw-rules {
+  background: rgba(20, 20, 20, 0.70);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: all 0.3s ease;
+}
+
+.gf-draw-rules:hover {
+  border-color: rgba(229, 9, 20, 0.30);
+}
+
+.gf-draw-rules-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1.5px;
+  color: #ffd700;
+  margin: 0 0 14px;
+}
+
+.gf-draw-rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.gf-draw-rules-list li {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #cccccc;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  line-height: 1.5;
+}
+
+.gf-draw-rules-list li:last-child {
+  border-bottom: none;
+}
+
+/* Botão CTA do sorteio — override de cor para branco no hover */
+.gf-draw-cta {
+  background: #E50914 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  transition: background 0.3s ease, color 0.3s ease !important;
+}
+
+.gf-draw-cta:hover {
+  background: #ffffff !important;
+  color: #E50914 !important;
+}
+
+/* ================================================================
+   RESPONSIVIDADE — Sorteio
+   ================================================================ */
+@media (max-width: 480px) {
+  .gf-draw-countdown-item {
+    min-width: 52px;
+    padding: 10px 12px;
+  }
+  .gf-draw-prize-title {
+    font-size: 1.5rem;
+  }
 }
