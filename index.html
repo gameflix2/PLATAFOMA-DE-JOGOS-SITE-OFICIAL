@@ -108,18 +108,20 @@
   
   <button class="btn-info"> + Minha Lista</button>
 
+</div>
+
   <button id="btn-unmute" style="
     display: none;
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 999;
     background: rgba(20,20,20,0.85);
     color: #fff;
     border: 2px solid #e50914;
     border-radius: 50px;
     padding: 14px 26px;
-    font-size: 15px;
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
@@ -128,7 +130,6 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 18px;
   ">🔊 ATIVAR SOM</button>
-</div>
   </section>
 
   <div class="row" style="margin-top: 80px;">
@@ -2196,10 +2197,16 @@ TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
   </div>
 </div>
 
-<!-- MODAL: COMO INSTALAR -->
+<!-- ============================================================
+     GAMEFLIX — MODAL: COMO INSTALAR (UPGRADE)
+     Substitua todo o bloco <div class="cat-modal-overlay" id="modal-instalar">
+     pelo código abaixo.
+     ============================================================ -->
+
 <div class="cat-modal-overlay" id="modal-instalar">
   <div class="cat-modal-box cat-instalar">
     <button class="cat-modal-close" onclick="closeCategoryModal('instalar')">✕</button>
+
     <div class="cat-modal-header">
       <span class="cat-modal-icon">⚙️</span>
       <div>
@@ -2207,53 +2214,64 @@ TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
         <p class="cat-modal-subtitle">Passo a passo simples para jogar em minutos</p>
       </div>
     </div>
+
     <div class="cat-modal-body">
-      <div class="cat-steps">
-        <div class="cat-step">
-          <div class="cat-step-num">01</div>
-          <div class="cat-step-info">
-            <h4>ESCOLHA SEU PLANO</h4>
-            <p>Acesse nossos planos e escolha o que melhor se encaixa no seu perfil. Temos opções a partir de R$ 14,90/mês.</p>
-          </div>
+      <!-- GRID DE CARDS DE INSTALAÇÃO -->
+      <div class="gf-install-grid">
+
+        <div class="gf-install-card">
+          <span class="gf-install-step-bg">01</span>
+          <i class="gf-install-icon">🎯</i>
+          <h3 class="gf-install-card-title">ESCOLHA SEU PLANO</h3>
+          <p class="gf-install-card-desc">Acesse nossos planos e escolha o ideal para você. Opções a partir de R$&nbsp;14,90/mês.</p>
         </div>
-        <div class="cat-step">
-          <div class="cat-step-num">02</div>
-          <div class="cat-step-info">
-            <h4>FAÇA O PAGAMENTO</h4>
-            <p>Pague via PIX, cartão de crédito ou boleto. O acesso é liberado em até 5 minutos após a confirmação.</p>
-          </div>
+
+        <div class="gf-install-card">
+          <span class="gf-install-step-bg">02</span>
+          <i class="gf-install-icon">💳</i>
+          <h3 class="gf-install-card-title">FAÇA O PAGAMENTO</h3>
+          <p class="gf-install-card-desc">PIX, cartão ou boleto. Acesso liberado em até 5 minutos após confirmação.</p>
         </div>
-        <div class="cat-step">
-          <div class="cat-step-num">03</div>
-          <div class="cat-step-info">
-            <h4>RECEBA SUAS CREDENCIAIS</h4>
-            <p>Você receberá email e senha de acesso diretamente no WhatsApp ou e-mail cadastrado.</p>
-          </div>
+
+        <div class="gf-install-card">
+          <span class="gf-install-step-bg">03</span>
+          <i class="gf-install-icon">🔑</i>
+          <h3 class="gf-install-card-title">RECEBA O ACESSO</h3>
+          <p class="gf-install-card-desc">Email e senha enviados direto no WhatsApp ou e-mail cadastrado.</p>
         </div>
-        <div class="cat-step">
-          <div class="cat-step-num">04</div>
-          <div class="cat-step-info">
-            <h4>BAIXE E JOGUE</h4>
-            <p>Faça o login aqui no site, escolha seu jogo e clique em Download. Descompacte e jogue. Simples assim!</p>
-          </div>
+
+        <div class="gf-install-card">
+          <span class="gf-install-step-bg">04</span>
+          <i class="gf-install-icon">🎮</i>
+          <h3 class="gf-install-card-title">BAIXE E JOGUE</h3>
+          <p class="gf-install-card-desc">Login no site, escolha o jogo, clique em Download. Descompacte e jogue. Simples assim!</p>
         </div>
-        <div class="cat-step">
-          <div class="cat-step-num">05</div>
-          <div class="cat-step-info">
-            <h4>PRECISA DE AJUDA?</h4>
-            <p>Nossa equipe está disponível 24h no WhatsApp para te ajudar com qualquer dúvida na instalação.</p>
-          </div>
+
+        <div class="gf-install-card gf-install-card--full">
+          <span class="gf-install-step-bg">05</span>
+          <i class="gf-install-icon">🛟</i>
+          <h3 class="gf-install-card-title">PRECISA DE AJUDA?</h3>
+          <p class="gf-install-card-desc">Nossa equipe está disponível 24h no WhatsApp para te ajudar com qualquer dúvida na instalação.</p>
         </div>
+
       </div>
     </div>
+
     <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('instalar')">💬 FALAR COM SUPORTE</button>
   </div>
 </div>
 
-<!-- MODAL: SORTEIOS -->
+
+<!-- ============================================================
+     GAMEFLIX — MODAL: SORTEIOS (UPGRADE)
+     Substitua todo o bloco <div class="cat-modal-overlay" id="modal-sorteios">
+     pelo código abaixo.
+     ============================================================ -->
+
 <div class="cat-modal-overlay" id="modal-sorteios">
   <div class="cat-modal-box cat-sorteios">
     <button class="cat-modal-close" onclick="closeCategoryModal('sorteios')">✕</button>
+
     <div class="cat-modal-header">
       <span class="cat-modal-icon">🎁</span>
       <div>
@@ -2261,35 +2279,67 @@ TODO SITE COM 70% DE DESCONTO - OFERTA DE LANÇAMENTO!</div>
         <p class="cat-modal-subtitle">Todo mês novos prêmios para membros GAMEFLIX</p>
       </div>
     </div>
-    <div class="cat-modal-body">
-      <div class="cat-raffle-hero">
-        <div class="cat-raffle-prize">
-          <div class="cat-raffle-icon">🎮</div>
-          <h3>SORTEIO DO MÊS</h3>
-          <h2>💠 R$ 1.000 NO PIX 💠<br><span>corre e participe voce tambem‼</span></h2>
-          <div class="cat-raffle-countdown">
-            <div class="cat-countdown-item"><span id="raffle-days">--</span><small>DIAS</small></div>
-            <div class="cat-countdown-item"><span id="raffle-hours">--</span><small>HORAS</small></div>
-            <div class="cat-countdown-item"><span id="raffle-mins">--</span><small>MIN</small></div>
-          </div>
-        </div>
-      </div>
-      <div class="cat-raffle-rules">
-        <h4>📋 COMO PARTICIPAR:</h4>
-        <ul>
 
-          <li>  <strong>PARA PARTICIPAR É MUITO SIMPLES!!</strong></li>
-         
-          <li>✅  BASTA CLICAR NO BOTAO ABAIXO (🎯 QUERO PARTICIPAR) e chamar no whatsapp </li>
-           <li>dizendo ''quero participar do sorteio de R$ 1.000'' que nossa equipe te dara as instrucoes.</li>
-          <li>✅ O sorteio acontece todo dia 30 de cada mês ao vivo. corre!!</li>
-          <li> ⬇️ <strong>CLICA NO BOTAO ABAIXO E VEM PARA GAMEFLIX</strong></li>
-        </ul>
-      </div>
-    </div>
-    <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('sorteios')">🎯 QUERO PARTICIPAR</button>
+    <div class="cat-modal-body">
+
+      <!-- HERO CARD DO SORTEIO -->
+      <div class="gf-draw-container">
+        <div class="gf-draw-hero">
+
+          <!-- Faixa de status ATIVO -->
+          <div class="gf-draw-badge-row">
+            <span class="gf-draw-badge">
+              <span class="gf-draw-badge-dot"></span>
+              ATIVO
+            </span>
+            <span class="gf-draw-badge-label">SORTEIO DO MÊS</span>
+          </div>
+
+          <!-- Prêmio principal -->
+          <div class="gf-draw-prize-icon">🏆</div>
+          <h2 class="gf-draw-prize-title">💠 R$ 1.000 NO PIX 💠</h2>
+          <p class="gf-draw-prize-sub">corre e participe você também‼</p>
+
+          <!-- Countdown -->
+          <div class="gf-draw-countdown">
+            <div class="gf-draw-countdown-item">
+              <span id="raffle-days">--</span>
+              <small>DIAS</small>
+            </div>
+            <div class="gf-draw-countdown-sep">:</div>
+            <div class="gf-draw-countdown-item">
+              <span id="raffle-hours">--</span>
+              <small>HORAS</small>
+            </div>
+            <div class="gf-draw-countdown-sep">:</div>
+            <div class="gf-draw-countdown-item">
+              <span id="raffle-mins">--</span>
+              <small>MIN</small>
+            </div>
+          </div>
+
+        </div><!-- /gf-draw-hero -->
+
+        <!-- Regras de participação -->
+        <div class="gf-draw-rules">
+          <h4 class="gf-draw-rules-title">📋 COMO PARTICIPAR:</h4>
+          <ul class="gf-draw-rules-list">
+            <li><strong>PARA PARTICIPAR É MUITO SIMPLES!!</strong></li>
+            <li>✅ Clique no botão abaixo e chame no WhatsApp dizendo <em>"quero participar do sorteio de R$&nbsp;1.000"</em>.</li>
+            <li>✅ O sorteio acontece todo dia 30 de cada mês, ao vivo.</li>
+            <li>⬇️ <strong>CLICA NO BOTÃO ABAIXO E VEM PARA GAMEFLIX</strong></li>
+          </ul>
+        </div>
+
+      </div><!-- /gf-draw-container -->
+
+    </div><!-- /cat-modal-body -->
+
+    <button class="cat-cta-btn gf-draw-cta" onclick="openWppModal(); closeCategoryModal('sorteios')">🎯 QUERO PARTICIPAR</button>
+
   </div>
 </div>
+
 
 <!-- MODAL: DÚVIDAS -->
 <div class="cat-modal-overlay" id="modal-duvidas">
