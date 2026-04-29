@@ -2333,3 +2333,15 @@ body.modal-open { overflow: hidden; }
     font-size: 1.5rem;
   }
 }
+ /* Isso faz o mouse ignorar o vídeo e focar apenas nos seus botões e textos */
+#banner-video {
+    pointer-events: none;
+    user-select: none;
+    object-fit: cover; /* Faz o vídeo preencher o espaço sem sobrar bordas pretas */
+}
+
+/* Garante que o container do banner não tenha barras de rolagem estranhas */
+.banner {
+    overflow: hidden;
+    position: relative;
+}
