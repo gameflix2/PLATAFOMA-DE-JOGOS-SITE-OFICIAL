@@ -332,16 +332,7 @@ const GAMES_DB = {
     logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png',
     preco: 'R$00,00',
     precoOriginal: 'R$99,90'
-  },
- 
-  'crash-bandicoot': {
-    titulo: 'Crash Bandicoot™',
-    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
-    
-    imagem: 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a',
-    logo: 'https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png',
-    preco: 'R$00,00',
-    precoOriginal: 'R$99,99'
+  
   },
   'battlefield-6': {
     titulo: 'Battlefield 6',
@@ -1197,14 +1188,7 @@ const GAMES_DB = {
     preco: 'R$15,00',
     precoOriginal: 'R$49,99'
   },
-  'crash-bandicoot-n-sane-trilogy': {
-    titulo: 'Crash Bandicoot N. Sane Trilogy',
-    subtitulo: 'PC GAMEFLIX',
-    imagem: 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a',
-    logo: 'https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png',
-    preco: 'R$30,00',
-    precoOriginal: 'R$99,99'
-  },
+
   'plants-vs-zombies': {
     titulo: 'Plants vs. Zombies',
     subtitulo: 'PC GAMEFLIX',
@@ -1247,20 +1231,20 @@ const GAMES_DB = {
   },
 };
 
-// Jogo padrão exibido quando id não existe ou não é passado
-const DEFAULT_GAME_ID = 'resident-evil-requiem';
-
 (function () {
   try {
-    var params  = new URLSearchParams(window.location.search);
-    var rawId   = (params.get('id') || '').trim();
-    var jogo    = GAMES_DB[rawId] || GAMES_DB[DEFAULT_GAME_ID];
+    var params = new URLSearchParams(window.location.search);
+    var rawId  = (params.get('id') || '').trim().toLowerCase();
+    var jogo   = GAMES_DB ;
 
-    // Atualiza título da aba
-    document.title = (jogo ? jogo.titulo + ' - ' : '') + 'Gameflix';
+    if (!jogo) {
+      console.log("Jogo não encontrado:", rawId);
+      return;
+    }
+
+    document.title = jogo.titulo + ' - Gameflix';
 
     document.addEventListener('DOMContentLoaded', function () {
-      if (!jogo) return; // segurança: nunca deve ocorrer, mas evita travamento
 
       // 1. Imagem da capa
       var imgEl = document.querySelector('#oferta-destaque img');
