@@ -499,7 +499,35 @@ loginForm.addEventListener('submit', function (e) {
   }
 });
 
-/* --- POPUP WHATSAPP --- */
+/* --- BOTÃO FECHAR LOGIN (X) — BYPASS OPCIONAL --- */
+(function () {
+  var closeBtn = document.getElementById('login-close-btn');
+  if (!closeBtn) return;
+
+  closeBtn.addEventListener('click', function () {
+    var loginScreen = document.getElementById('login-screen');
+    if (!loginScreen) return;
+
+    // Fade suave
+    loginScreen.classList.add('fade-out');
+
+    setTimeout(function () {
+      loginScreen.style.display = 'none';
+      loginScreen.classList.remove('fade-out');
+    }, 360);
+
+    // Replica comportamento pós-login: inicia vídeo e botão de som
+    var bannerVideo = document.getElementById('banner-video');
+    if (bannerVideo && bannerVideo.tagName === 'VIDEO') {
+      bannerVideo.muted = true;
+      bannerVideo.play().catch(function (err) { console.log('Autoplay:', err); });
+    }
+    if (typeof setupUnmuteButton === 'function') setupUnmuteButton();
+    if (typeof showUnmuteBtn === 'function') showUnmuteBtn();
+  });
+})();
+
+
 function openWppModal() {
   var modalWpp = document.getElementById("wppModal");
   if (modalWpp) {
@@ -707,3 +735,108 @@ document.getElementById('logo-back-to-top').addEventListener('click', function(e
   e.preventDefault();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+/* ============================================================
+   JOGOS EM PROMOÇÃO — CONFIGURAÇÃO ADMIN
+   ============================================================ */
+var promoGamesConfig = [
+  {
+    emPromocao: true,
+    id: 'elden-ring',
+    titulo: 'ELDEN RING',
+    imagem: 'https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg?n=Elden-Ring_GLP-Page-Hero-0_1083x1222_01.jpg',
+    precoOriginal: 'R$149,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'resident-evil-3',
+    titulo: 'Resident Evil 3',
+    imagem: 'https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg',
+    precoOriginal: 'R$99,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'far-cry-3',
+    titulo: 'Far Cry 3',
+    imagem: 'https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg',
+    precoOriginal: 'R$74,99',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+  id: 'need-for-speed-payback',
+  titulo: 'Need for Speed Payback',
+  imagem: 'https://images.steamusercontent.com/ugc/5109928331639408171/D260688DBD1EBFEF65BABF0D2E6956D8391E72B3/',
+  precoOriginal: 'R$89,99',
+  precoPromocao: 'GRÁTIS',
+  desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'far-cry-primal',
+    titulo: 'FarCry Primal',
+    imagem: 'https://images.squarespace-cdn.com/content/v1/58bedb0ab3db2bd0463e552b/1488928090199-81WOQR4N03UFM3MBW3OQ/BLOG_FARCRY_1280X788_001A.jpg',
+    precoOriginal: 'R$99,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'crash-bandicoot',
+    titulo: 'Crash Bandicoot™',
+    imagem: 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a',
+    precoOriginal: 'R$99,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  }
+];
+
+/* ============================================================
+   RENDERIZAÇÃO AUTOMÁTICA — não precisa editar abaixo
+   ============================================================ */
+function renderPromoGames() {
+  var grid = document.getElementById('promo-games-grid');
+  var emptyMsg = document.getElementById('promo-empty-msg');
+  if (!grid) return;
+
+  var ativos = promoGamesConfig.filter(function(g) { return g.emPromocao; });
+
+  if (ativos.length === 0) {
+    grid.style.display = 'none';
+    if (emptyMsg) emptyMsg.style.display = 'block';
+    return;
+  }
+
+  grid.style.display = '';
+  if (emptyMsg) emptyMsg.style.display = 'none';
+
+  grid.innerHTML = ativos.map(function(g) {
+    var infoLink = 'baixar.html?id=' + g.id;   // ← Aqui está a mudança principal
+    return '<a href="' + infoLink + '" target="_blank" rel="noopener noreferrer" class="promo-card" style="text-decoration:none;">'
+      + '<span class="promo-card-badge">-' + (g.desconto || '') + '</span>'
+      + '<img class="promo-card-img" src="' + g.imagem + '" alt="' + g.titulo + '" loading="lazy" onerror="this.style.opacity=\'0.3\'">'
+      + '<div class="promo-card-info">'
+      +   '<h3 class="promo-card-title">' + g.titulo + '</h3>'
+      +   '<div class="promo-card-prices">'
+      +     '<span class="promo-card-original">' + (g.precoOriginal || '') + '</span>'
+      +     '<span class="promo-card-promo">' + (g.precoPromocao || '') + '</span>'
+      +   '</div>'
+      +   '<span class="promo-card-btn">⬇️BAIXAR</span>'
+      + '</div>'
+      + '</a>';
+  }).join('');
+}
+
+/* Roda ao abrir o modal de promoções */
+(function() {
+  var _origOpen = window.openCategoryModal;
+  window.openCategoryModal = function(cat) {
+    if (cat === 'promocoes') renderPromoGames();
+    _origOpen(cat);
+  };
+})();
