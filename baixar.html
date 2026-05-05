@@ -317,7 +317,8 @@ const GAMES_DB = {
     logo: 'https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png',
     preco: 'R$00,00',
     precoOriginal: 'R$274,50',
-    download: 'https://drive.google.com/uc?id=1-bSTy2It_UdTPyfFhdUTxpCcnL5cQdQH&export=download'
+    download: 'https://drive.google.com/uc?id=1-bSTy2It_UdTPyfFhdUTxpCcnL5cQdQH&export=download',
+    videoInstalacao: 'https://youtu.be/8haXeAwKLOg?si=eqht_8LYcPQIafhN'
   },
   'resident-evil-3': {
     titulo: 'Resident Evil 3 REMAKE',
@@ -326,7 +327,8 @@ const GAMES_DB = {
     logo: 'https://www.residentevil.com/re3/assets/images/common/re3_logo.png',
     preco: 'R$00,00',
     precoOriginal: 'R$149,90',
-    download: 'https://drive.google.com/uc?id=1sIY8-R64wxFMmDd7G3QFHpiBz8McheRN&export=download'
+    download: 'https://drive.google.com/uc?id=1sIY8-R64wxFMmDd7G3QFHpiBz8McheRN&export=download',
+    videoInstalacao: 'https://youtu.be/8haXeAwKLOg?si=eqht_8LYcPQIafhN'
   },
   'far-cry-3': {
     titulo: 'far Cry 3',
@@ -335,7 +337,8 @@ const GAMES_DB = {
     logo: 'https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png',
     preco: 'R$00,00',
     precoOriginal: 'R$74,90',
-    download: 'https://drive.google.com/uc?id=1BVYaFWvUHGhOT9KFNA8p8-8MVXcaPRPZ&export=download'
+    download: 'https://drive.google.com/uc?id=1BVYaFWvUHGhOT9KFNA8p8-8MVXcaPRPZ&export=download',
+    videoInstalacao: 'https://youtu.be/8haXeAwKLOg?si=eqht_8LYcPQIafhN'
   },
   'need-for-speed-payback': {
     titulo: 'Need for Speed Payback',
@@ -344,7 +347,8 @@ const GAMES_DB = {
     logo: 'https://cdn2.steamgriddb.com/logo_thumb/5cc085288d7afc9d76f6aa846b7e5d5f.png',
     preco: 'R$00,00',
     precoOriginal: 'R$89,99',
-    download: 'https://drive.google.com/uc?id=18QVQaFGC1LoKZleJgc7Fwu2SNaWJaIzY&export=download'
+    download: 'https://drive.google.com/uc?id=18QVQaFGC1LoKZleJgc7Fwu2SNaWJaIzY&export=download',
+    videoInstalacao: 'https://youtu.be/8haXeAwKLOg?si=eqht_8LYcPQIafhN'
   },
   'far-cry-primal': {
     titulo: 'FarCry Primal',
@@ -353,7 +357,8 @@ const GAMES_DB = {
     logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png',
     preco: 'R$00,00',
     precoOriginal: 'R$149,99',
-    download: 'https://drive.google.com/uc?id=17mk2FGPbQbwk2L_IJb1f3uv1nEXN5WRI&export=download'
+    download: 'https://drive.google.com/uc?id=17mk2FGPbQbwk2L_IJb1f3uv1nEXN5WRI&export=download',
+    videoInstalacao: 'https://youtu.be/8haXeAwKLOg?si=eqht_8LYcPQIafhN'
   },
   'crash-bandicoot': {
     titulo: 'Crash Bandicoot™',
@@ -362,7 +367,8 @@ const GAMES_DB = {
     logo: 'https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png',
     preco: 'R$00,00',
     precoOriginal: 'R$219,90',
-    download: 'https://drive.google.com/uc?id=1ZigR4odGyTa6QBsYcwcxrNpCeFY2dXrV&export=download'
+    download: 'https://drive.google.com/uc?id=1ZigR4odGyTa6QBsYcwcxrNpCeFY2dXrV&export=download',
+    videoInstalacao: 'https://youtu.be/8haXeAwKLOg?si=eqht_8LYcPQIafhN'
   }
   
 };
@@ -444,6 +450,22 @@ const DEFAULT_GAME_ID = 'crash-bandicoot';
           btnBaixar.href = "#";
           btnBaixar.onclick = function() {
             alert("🔄 Download em preparação... Entre em contato no WhatsApp.");
+          };
+        }
+      }
+
+      // 6b. Link do vídeo de instalação
+      var btnVideo = document.getElementById('btn-video');
+      if (btnVideo) {
+        if (jogo.videoInstalacao) {
+          btnVideo.href = jogo.videoInstalacao;
+          btnVideo.target = '_blank'; // Abre em nova aba
+          btnVideo.rel = 'noopener noreferrer';
+        } else {
+          // Se esquecer de colocar o link no banco de dados, mostra esse aviso
+          btnVideo.href = "javascript:void(0)";
+          btnVideo.onclick = function() {
+            alert("🔄 O vídeo de instalação deste jogo logo estará disponível.");
           };
         }
       }
@@ -546,7 +568,7 @@ const DEFAULT_GAME_ID = 'crash-bandicoot';
 <a id="btn-baixar" href="javascript:void(0)" class="btn-laranja w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
     <i class="fas fa-download mr-2"></i>BAIXAR AGORA
 </a>
-<a href="https://gameflix2.github.io/CHECKOUT-GAMEFLIX--PAY/" class="btn-vermelho w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
+<a id="btn-video" href="javascript:void(0)" class="btn-vermelho w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
     <i class="fas fa-play-circle mr-2"></i>VIDEO DE INSTALAÇÃO
 </a>
 
