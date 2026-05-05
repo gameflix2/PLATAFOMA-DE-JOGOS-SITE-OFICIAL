@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameflix - Jogos Originais com até 90% OFF</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --netflix-red: #E50914;
+        --netflix-red-hover: #FF6600;
+        --netflix-black: #141414;
+        --netflix-dark: #000000;
+        --netflix-gray: #181818;
+        --netflix-text: #e5e5e5;
+        --netflix-text-muted: #808080;
+    }
+
+    * {
+        scroll-behavior: smooth;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+    font-family: 'Inter', sans-serif;
+    background: #000000;  /* troca o var(--netflix-black) por #000000 direto */
+    color: var(--netflix-text);
+    overflow-x: hidden;
+}
+
+    h1, h2, h3,.font-gamer {
+        font-family: 'Bebas Neue', sans-serif;
+        letter-spacing: 1px;
+        line-height: 1.1;
+    }
+
+   .gradient-text {
+        color: var(--netflix-red);
+        background: none;
+        -webkit-text-fill-color: var(--netflix-red);
+    }
+
+   .gradient-border {
+        background: #000000;
+        border: 1px solid #2F2F2F;
+    }
+
+   .gradient-border::before {
+        display: none;
+    }
+
+   .glass {
+      background: #000000;
+        border: 1px solid #2F2F2F;
+    }
+
+   .btn-neon {
+        background: var(--netflix-red);
+        color: white;
+        font-weight: 600;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .btn-laranja {
+    background: linear-gradient(to right, #FF8800, #FF4500);
+}
+.btn-laranja:hover, .btn-laranja:active {
+    background: linear-gradient(to right, #FFAA00, #FF5500);
+}
+
+.btn-vermelho {
+    background: linear-gradient(to right, #E50914, #B00000);
+}
+.btn-vermelho:hover, .btn-vermelho:active {
+    background: linear-gradient(to right, #FF1A1A, #C40000);
+}
+
+.btn-whatsapp {
+    background: linear-gradient(to right, #25D366, #128C7E);
+}
+.btn-whatsapp:hover, .btn-whatsapp:active {
+    background: linear-gradient(to right, #32E077, #1A9C8A);
+}
+
+   .btn-neon:hover,.btn-neon:active {
+        background: var(--netflix-red-hover);
+    }
+
+   .btn-neon::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        z-index: -1;
+    }
+
+   .btn-neon:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+   .glow-green,.glow-purple {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+   .netflix-header {
+        background: linear-gradient(180deg, rgba(0,0,0,.7) 10%, transparent);
+        transition: background 0.3s ease;
+    }
+
+   .netflix-header.scrolled {
+        background: var(--netflix-black);
+    }
+
+   .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        max-width: 320px;
+        height: 100vh;
+        background: var(--netflix-black);
+        transition: right 0.3s ease;
+        z-index: 9999;
+        padding: 80px 24px 24px;
+    }
+
+   .mobile-menu.active {
+        right: 0;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+    }
+
+   .mobile-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 9998;
+    }
+
+   .mobile-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+   .netflix-badge {
+        background: var(--netflix-red);
+        color: white;
+        font-weight: 700;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 2px;
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 10;
+    }
+
+    @media (max-width: 640px) {
+       .netflix-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+        }
+    }
+
+   .netflix-card {
+        background: #000000;
+        border-radius: 4px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid #2F2F2F;
+    }
+
+    @media (hover: hover) {
+       .netflix-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+       .netflix-card:hover img {
+            transform: scale(1.1);
+        }
+    }
+
+    @media (hover: none) {
+       .netflix-card:active {
+            transform: scale(0.98);
+        }
+    }
+
+   .netflix-card img {
+        transition: all 0.3s ease;
+        width: 100%;
+        height: auto;
+    }
+
+   .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+   .animate-pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(229, 9, 20, 0.4); }
+        50% { box-shadow: 0 0 40px rgba(229, 9, 20, 0.8), 0 0 60px rgba(229, 9, 20, 0.4); }
+    }
+
+   .grid-bg {
+        background: none;
+    }
+
+   .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+   .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+   .faq-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0; /* Começa invisível */
+    transform: translateY(-10px); /* Leve deslocamento para cima */
+    transition: 
+        max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+.faq-item.active .faq-content {
+    max-height: 500px; /* Valor alto o suficiente para o texto */
+    opacity: 1; /* Fica visível */
+    transform: translateY(0); /* Volta para a posição original */
+    padding-bottom: 1.5rem; /* Espaçamento interno extra ao abrir */
+}
+
+/* Deixa a seta com um giro mais elegante */
+.faq-item .fa-chevron-down {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+    @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+    }
+
+   .shimmer {
+        animation: shimmer 3s infinite;
+        background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+        background-size: 1000px 100%;
+    }
+    /* Reduz a base de cálculo do tamanho de tudo no site */
+html {
+    font-size: 12px; /* Diminuir de 16px (padrão) para 14px remove o aspecto de "zoom" */
+}
+
+/* Reduz o espaçamento exagerado entre as seções */
+section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+
+/* Ajusta a imagem para não ficar gigantesca no PC */
+#oferta-destaque img {
+    max-height: 450px;
+    width: auto;
+    margin: 0 auto;
+}
+</style>
+
+<script>
+// ============================================================
+// GAMEFLIX - SISTEMA DE CONTEÚDO DINÂMICO v2
+// Banco com todos os jogos do site. Lê ?id= e substitui na página.
+// ============================================================
+
+// Função slug compartilhada (mesma lógica do script.js)
+function toGameSlug(title) {
+  return title.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+const GAMES_DB = {
+  'elden-ring': {
+    titulo: 'ELDEN RING',
+    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
+    imagem: 'https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg?n=Elden-Ring_GLP-Page-Hero-0_1083x1222_01.jpg',
+    logo: 'https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png',
+    preco: 'R$00,00',
+    precoOriginal: 'R$274,50',
+    download: 'https://drive.google.com/uc?id=1-bSTy2It_UdTPyfFhdUTxpCcnL5cQdQH&export=download'
+  },
+  'resident-evil-3': {
+    titulo: 'Resident Evil 3 REMAKE',
+    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
+    imagem: 'https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg',
+    logo: 'https://www.residentevil.com/re3/assets/images/common/re3_logo.png',
+    preco: 'R$00,00',
+    precoOriginal: 'R$149,90',
+    download: 'https://drive.google.com/uc?id=1sIY8-R64wxFMmDd7G3QFHpiBz8McheRN&export=download'
+  },
+  'far-cry-3': {
+    titulo: 'far Cry 3',
+    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
+    imagem: 'https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg',
+    logo: 'https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png',
+    preco: 'R$00,00',
+    precoOriginal: 'R$74,90',
+    download: 'https://drive.google.com/uc?id=1BVYaFWvUHGhOT9KFNA8p8-8MVXcaPRPZ&export=download'
+  },
+  'need-for-speed-payback': {
+    titulo: 'Need for Speed Payback',
+    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
+    imagem: 'https://images.steamusercontent.com/ugc/5109928331639408171/D260688DBD1EBFEF65BABF0D2E6956D8391E72B3/',
+    logo: 'https://cdn2.steamgriddb.com/logo_thumb/5cc085288d7afc9d76f6aa846b7e5d5f.png',
+    preco: 'R$00,00',
+    precoOriginal: 'R$89,99',
+    download: 'https://drive.google.com/uc?id=18QVQaFGC1LoKZleJgc7Fwu2SNaWJaIzY&export=download'
+  },
+  'far-cry-primal': {
+    titulo: 'FarCry Primal',
+    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
+    imagem: 'https://images.squarespace-cdn.com/content/v1/58bedb0ab3db2bd0463e552b/1488928090199-81WOQR4N03UFM3MBW3OQ/BLOG_FARCRY_1280X788_001A.jpg',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png',
+    preco: 'R$00,00',
+    precoOriginal: 'R$149,99',
+    download: 'https://drive.google.com/uc?id=17mk2FGPbQbwk2L_IJb1f3uv1nEXN5WRI&export=download'
+  },
+  'crash-bandicoot': {
+    titulo: 'Crash Bandicoot™',
+    subtitulo: '100% GRÁTIS - Só na GAMEFLIX',
+    imagem: 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a',
+    logo: 'https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png',
+    preco: 'R$00,00',
+    precoOriginal: 'R$219,90',
+    download: 'https://drive.google.com/uc?id=1ZigR4odGyTa6QBsYcwcxrNpCeFY2dXrV&export=download'
+  }
+  
+};
+
+// Jogo padrão exibido quando id não existe ou não é passado
+const DEFAULT_GAME_ID = 'crash-bandicoot';
+
+(function () {
+  try {
+    var params  = new URLSearchParams(window.location.search);
+    var rawId   = (params.get('id') || '').trim();
+    var jogo    = GAMES_DB[rawId] || GAMES_DB[DEFAULT_GAME_ID];
+
+    // Atualiza título da aba
+    document.title = (jogo ? jogo.titulo + ' - ' : '') + 'Gameflix';
+
+    function aplicarJogo() {
+      if (!jogo) return; // segurança: nunca deve ocorrer, mas evita travamento
+
+      // 1. Imagem da capa
+      var imgEl = document.querySelector('#oferta-destaque img');
+      if (imgEl) { imgEl.src = jogo.imagem; imgEl.alt = jogo.titulo; }
+
+      // 2. Título h3
+      var h3 = document.querySelector('#oferta-destaque h3');
+      if (h3) h3.textContent = jogo.titulo.toUpperCase();
+
+      // 3. Subtítulo (parágrafo vermelho logo abaixo do h3)
+      var sub = document.querySelector('#oferta-destaque h3 + p');
+      if (sub) sub.textContent = jogo.subtitulo;
+
+      // 4. Preços — seleciona os dois spans dentro do bloco .flex.items-baseline
+      var precoBlock = document.querySelector('#oferta-destaque .flex.items-baseline');
+      if (precoBlock) {
+        var spans = precoBlock.querySelectorAll('span');
+        spans.forEach(function(sp) {
+          if (sp.classList.contains('line-through')) {
+            sp.textContent = jogo.precoOriginal;
+          } else {
+            sp.textContent = jogo.preco;
+          }
+        });
+      }
+
+      // 4b. Economia = precoOriginal - preco
+      var economiaEl = document.getElementById('economia-valor');
+      if (economiaEl && jogo.precoOriginal && jogo.preco) {
+        function parseBRL(str) {
+          return parseFloat(str.replace('R$', '').replace('.', '').replace(',', '.'));
+        }
+        var orig = parseBRL(jogo.precoOriginal);
+        var desc = parseBRL(jogo.preco);
+        var economia = orig - desc;
+        economiaEl.textContent = 'R$' + economia.toFixed(2).replace('.', ',');
+      }
+
+      // 5. Descrição: insere como 1º item da lista de features
+      var featureList = document.querySelector('#oferta-destaque .space-y-3');
+      if (featureList && jogo.descricao) {
+        var old = featureList.querySelector('[data-game-desc]');
+        if (old) old.remove();
+        var descDiv = document.createElement('div');
+        descDiv.setAttribute('data-game-desc', '1');
+        descDiv.className = 'flex items-start gap-3';
+        descDiv.innerHTML = '<i class="fas fa-gamepad text-[#E50914] mt-1 flex-shrink-0"></i>'
+          + '<span style="font-style:italic;color:#ccc;line-height:1.5">' + jogo.descricao + '</span>';
+        featureList.insertBefore(descDiv, featureList.firstChild);
+      }
+
+            // 6. Link de download individual por jogo
+      var btnBaixar = document.getElementById('btn-baixar');
+      if (btnBaixar) {
+        if (jogo.download) {
+          btnBaixar.href = jogo.download;
+          btnBaixar.target = '_blank';
+          btnBaixar.rel = 'noopener noreferrer';
+          btnBaixar.style.display = 'flex'; // garante que aparece
+        } else {
+          btnBaixar.href = "#";
+          btnBaixar.onclick = function() {
+            alert("🔄 Download em preparação... Entre em contato no WhatsApp.");
+          };
+        }
+      }
+
+      // 7. Background sutil com overlay
+      var section = document.getElementById('oferta-destaque');
+      if (section && jogo.imagem) {
+        section.style.backgroundImage =
+          'linear-gradient(to bottom,rgba(0,0,0,0.93),rgba(0,0,0,0.97)),url(' + jogo.imagem + ')';
+        section.style.backgroundSize     = 'cover';
+        section.style.backgroundPosition = 'center top';
+        section.style.backgroundAttachment = 'fixed';
+      }
+    }
+
+    // Executa assim que o DOM estiver pronto (funciona em qualquer situação)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aplicarJogo);
+    } else {
+      aplicarJogo();
+    }
+
+  } catch(e) {
+    console.warn('GAMEFLIX dynamic content error:', e);
+  }
+})();
+</script>
+</head>
+<body class="antialiased">
+
+
+<!-- Featured Offer -->
+<section id="oferta-destaque" class="py-16 sm:py-24 relative">
+     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+       
+    <div class="absolute inset-0 bg-gradient-to-b from-[#000000]/90 to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div class="text-center mb-8 fade-in">
+            
+        </div>
+
+        <div class="gradient-border rounded-3xl p-1 max-w-5xl mx-auto fade-in">
+            <div class="bg-gradient-to-br from-gray-900 to-black rounded-3xl overflow-hidden">
+                <div class="grid md:grid-cols-2 gap-8 p-6 sm:p-10">
+                    <div class="relative">
+                        
+                        <div class="absolute -top-4 -left-4 bg-red-500 text-white px-4 py-1 rounded-lg font-black text-sm z-10 rotate-[-3deg]">
+                            100% OFF
+                        </div>
+                        <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" alt="Resident Evil Requiem" class="w-full h-full object-cover rounded-2xl">
+                   <div class="absolute bottom-4 left-4 glass px-3 py-1 rounded-lg">
+                            <span class="text-xs font-bold"><i class="fas fa-desktop mr-1"></i>PC GAMEFLIX</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <h3 class="font-gamer font-black text-2xl sm:text-3xl md:text-4xl mb-2">RESIDENT EVIL REQUIEM</h3>
+                        <p class="text-[#E50914] font-bold text-lg mb-6">DELUXE EDITION - PC GAMEFLIX</p>
+
+                        <div class="flex items-baseline gap-3 mb-6">
+                            <span class="text-gray-500 text-xl line-through">R$249,90</span>
+                            <span class="text-4xl sm:text-5xl font-black text-[#E50914]">R$49,90</span>
+                        </div>
+
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-[#E50914] mt-1"></i>
+                                <span>Passo 1 - Clique em BAIXAR AGORA</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-[#E50914] mt-1"></i>
+                                <span>Passo 2 - inicie o download</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-[#E50914] mt-1"></i>
+                                <span>Passo 3 - clique no botao VIDEO DE INSTALAÇÃO</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-[#E50914] mt-1"></i>
+                                <span>Passo 4 - Descompacte  e Instale o jogo</span>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-[#E50914] mt-1"></i>
+                                <span>Passo 5 - Jogue seu Jogo! ⚡</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400"></p>
+                                    <p class="font-black text-red-400"><i class="fas fa-balance-scale-left mr-2"></i>PREÇO STEAM</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-400">Economia de:</p>
+                                    <p id="economia-valor" class="font-black text-xl text-[#E50914]">R$200,00</p>
+                                </div>
+                            </div>
+                        </div>
+<a id="btn-baixar" href="javascript:void(0)" class="btn-laranja w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
+    <i class="fas fa-download mr-2"></i>BAIXAR AGORA
+</a>
+<a href="https://gameflix2.github.io/CHECKOUT-GAMEFLIX--PAY/" class="btn-vermelho w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
+    <i class="fas fa-play-circle mr-2"></i>VIDEO DE INSTALAÇÃO
+</a>
+
+                        
+                        
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+<!-- Final CTA Section -->
+<section id="ofertas" class="py-16 sm:py-24 relative">
+    
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+        <div class="fade-in">
+           <h2 class="text-4xl sm:text-5xl md:text-6xl font-black mb-6 leading-none">
+    FICOU COM ALGUMA 
+    <span class="gradient-text">DÚVIDA?</span>
+</h2>
+            <p class="text-xl sm:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+   <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+              <a href="#" onclick="openQrModal(); return false;" 
+   class="btn-whatsapp w-full sm:w-auto px-10 py-5 rounded-xl text-black font-black text-xl glow-green text-center flex items-center justify-center">
+    <i class="fab fa-whatsapp mr-2"></i>SUPORTE VIA WHATSAPP AQUI.
+</a> </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-6 sm:gap-8 text-sm">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-[#00ff88]"></i>
+                    <span>Jogos 100% Originais</span>
+                </div>
+               
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-[#00ff88]"></i>
+                    <span>Suporte WhatsApp</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    // Fade in on scroll animation
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+    
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    
+    // Accordion
+    document.querySelectorAll('.faq-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+            const faqItem = button.parentElement;
+            const wasActive = faqItem.classList.contains('active');
+            
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked FAQ if it wasn't active
+            if (!wasActive) {
+                faqItem.classList.add('active');
+            }
+        });
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const headerOffset = 80;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>
+<!-- MODAL QR CODE -->
+<div id="qrModal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden flex items-center justify-center z-[9999]">
+ <div class="bg-zinc-950 border border-green-600 rounded-3xl p-9 max-w-4xl mx-4 shadow-8xl">
+        
+        <!-- Botão Fechar -->
+        <button onclick="closeQrModal()" 
+                class="absolute -top-5 -right-5 bg-zinc-900 text-white w-12 h-12 rounded-2xl flex items-center justify-center text-3xl border border- /30 hover:bg- hover:text-black transition-all">
+            ✕
+        </button>
+
+            
+            <h2 class="text-4xl font-black text-white mb-2">SUPORTE GAMEFLIX / WHATSAPP</h2>
+            <p class="text-gray-400 text-lg mb-10">Escaneie o QR Code e tire suas dúvidas!</p>
+            
+            <div class="bg-white p-5 rounded-2xl inline-block mb-8">
+                <img id="qrImage" src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777354000/download_eghdsu.png" 
+                     alt="QR Code WhatsApp" class="w-64 h-64">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// Modal QR Code
+function openQrModal() {
+  document.getElementById('qrModal').classList.remove('hidden');
+  document.getElementById('qrModal').classList.add('flex');
+}
+
+function closeQrModal() {
+  document.getElementById('qrModal').classList.add('hidden');
+  document.getElementById('qrModal').classList.remove('flex');
+}
+
+// Fechar ao clicar fora do modal
+document.getElementById('qrModal').addEventListener('click', function(e) {
+  if (e.target.id === 'qrModal') {
+    closeQrModal();
+  }
+});
+</script>
+ </body>
+</html>
