@@ -1311,22 +1311,14 @@ const GAMES_DB = {
           + '<span style="font-style:italic;color:#ccc;line-height:1.5">' + jogo.descricao + '</span>';
         featureList.insertBefore(descDiv, featureList.firstChild);
       }
-
-      // 5b. Link de download individual
-      var btnBaixar = document.getElementById('btn-baixar');
-      if (btnBaixar) {
-        if (jogo.download) {
-          btnBaixar.href = jogo.download;
-          btnBaixar.target = '_blank';
-          btnBaixar.rel = 'noopener noreferrer';
-        } else {
-          btnBaixar.href = "javascript:void(0)";
-          btnBaixar.onclick = function() {
-            alert("🔄 Download em preparação... Entre em contato no WhatsApp.");
-          };
-        }
-      }
-
+// 5b. Link de download individual - Agora vai pro checkout
+var btnBaixar = document.getElementById('btn-baixar');
+if (btnBaixar) {
+    btnBaixar.href = "#";
+    btnBaixar.onclick = function() {
+        irParaCheckout();
+    };
+}
       // 5c. Link do vídeo de instalação em Acordeon
       var btnVideo = document.getElementById('btn-video');
       var videoContainer = document.getElementById('video-container');
@@ -1468,9 +1460,11 @@ const GAMES_DB = {
                             </div>
                         </div>
 
-                        <a id="btn-baixar" href="javascript:void(0)" class="btn-laranja w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
-                            <i class="fas fa-download mr-2"></i>BAIXAR AGORA
-                        </a>
+                        <a id="btn-baixar" href="#" 
+   onclick="irParaCheckout()" 
+   class="btn-laranja w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
+    <i class="fas fa-download mr-2"></i>BAIXAR AGORA
+</a>
                         <a id="btn-video" href="javascript:void(0)" class="btn-vermelho w-full py-4 rounded-xl text-lg font-black mb-3 text-center flex items-center justify-center">
                             <i class="fas fa-play-circle mr-2"></i>VÍDEO DE INSTALAÇÃO
                         </a>
@@ -1665,5 +1659,20 @@ const GAMES_DB = {
     });
 </script>
 
+<script>
+function irParaCheckout() {
+    const nomeElement = document.querySelector('#oferta-destaque h3');
+    const precoElement = document.querySelector('#oferta-destaque .flex.items-baseline span:not(.line-through)');
+    const imagemElement = document.querySelector('#oferta-destaque img');
+
+    const nome = nomeElement ? nomeElement.textContent.trim() : "Jogo Gameflix";
+    const valor = precoElement ? precoElement.textContent.replace('R$', '').replace(',', '.').trim() : "29,90";
+    const imagem = imagemElement ? imagemElement.src : "";
+
+    const url = `https://gameflix2.github.io/CHECKOUT-GAMEFLIX--PAY/?nome=${encodeURIComponent(nome)}&imagem=${encodeURIComponent(imagem)}&valor=${valor}`;
+
+    window.location.href = url;
+}
+</script>
 </body>
 </html>
