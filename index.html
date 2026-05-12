@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  
+  <script src="https://player.vimeo.com/api/player.js"></script>
  <script async src="https://www.googletagmanager.com/gtag/js?id=G-984C9PT9MG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -70,8 +70,8 @@
     </a>
     
     <ul class="nav-links">
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('ofertas')">-</a></li>
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('lancamentos')">Lançamentos</a></li>
+      
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('ofertas')">⇁ Melhores Ofertas ↽</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('promocoes')" class="nav-promocoes">⚡ JOGOS GRÁTIS ⚡</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')">Como instalar</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')">SORTEIOS</a></li>
@@ -97,7 +97,7 @@
 
   <section class="banner" id="main-banner">
     <video class="banner-video" autoplay muted loop playsinline id="banner-video">
-      <source src="8haXeAwKLOg" type="video/mp4">
+      <source src="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci" type="video/mp4">
     </video>
    <div class="banner-content">
   <img src="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png" id="banner-logo" alt="Logo do Jogo">
@@ -105,7 +105,7 @@
   <p id="banner-desc">BF6 ocupa o top 1 da Gameflix como o jogo mais baixado da plataforma!</p>
   
   <a href="info.html?id=battlefield-6" id="banner-link" target="_blank" rel="noopener noreferrer">
-    <button class="btn-play" id="btn-main-action">ⓘ MAIS INFORMAÇÕES</button>
+    <button class="btn-play" id="btn-main-action">ⓘ OBTER JOGO AGORA</button>
   </a>
   
   <button class="btn-info"> + Minha Lista</button>
@@ -156,7 +156,7 @@
          data-logo="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png"
          data-desc="O jogo mais baixado da plataforma! Destruição total, gráficos fotorrealistas e a franquia Battlefield no seu auge — BF6 ocupa o TOP 1 da GAMEFLIX." 
          data-link="https://wa.me/5553981045078?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="8haXeAwKLOg">
+         data-video="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci">
   </div>
 
   <div class="card-container">
@@ -341,7 +341,7 @@
          alt="BF V" 
          data-title="Battlefield V" 
          data-desc="Entre no maior conflito da humanidade com Battlefield V enquanto a série retorna às suas raízes na Segunda Guerra Mundial." 
-         data-video="8haXeAwKLOg" 
+         data-video="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci" 
          data-logo="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png"
          data-link="https://wa.me/5553981045078?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
          onclick="openWppModal()">
@@ -1613,7 +1613,7 @@
            onclick="openWppModal()">
 
       <img class="game-card" 
-           src="https://img.elo7.com.br/product/685x685/2797F06/capa-pirulito-plants-vs-zombies-capa-para-pirulito.jpg" 
+           src="https://cdn.kobo.com/book-images/6174c893-747b-449e-9794-fc9dcca86036/1200/1200/False/plants-vs-zombies-volume-3-bully-for-you.jpg" 
            alt="PvZ" 
            data-title="Plants vs. Zombies" 
            data-desc="Prepare-se para sujar suas plantas enquanto uma horda de zumbis divertidos invade sua casa." 
@@ -1676,76 +1676,49 @@
 <!-- ====== MODAIS DE CATEGORIA ESTILO NETFLIX ====== -->
 
 
-<!-- MODAL: LANÇAMENTOS -->
-<div class="cat-modal-overlay" id="modal-lancamentos">
-  <div class="cat-modal-box cat-lancamentos">
-    <button class="cat-modal-close" onclick="closeCategoryModal('lancamentos')">✕</button>
-    <div class="cat-modal-header">
-      <span class="cat-modal-icon">💎</span>
-      <div>
-        <h2 class="cat-modal-title">LANÇAMENTOS</h2>
-        <p class="cat-modal-subtitle">Os títulos mais quentes chegando na GAMEFLIX</p>
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║   GAMEFLIX — MODAL: MELHORES OFERTAS                            ║
+  ║                                                                  ║
+  ║   COMO INTEGRAR:                                                 ║
+  ║   1. Cole este bloco no index.html (antes do </body>)            ║
+  ║   2. Substitua o link do nav de "Lançamentos" por:               ║
+  ║      onclick="openCategoryModal('ofertas')"  e texto "Melhores Ofertas"
+  ║   3. Cole o CSS em style.css (ou no <head> via <style>)          ║
+  ║   4. Cole o JS em script.js (ou antes do </body>)                ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+
+<div class="cat-modal-overlay" id="modal-ofertas">
+  <div class="cat-modal-box gfo-modal-box">
+    <button class="cat-modal-close" onclick="closeCategoryModal('ofertas')">✕</button>
+
+    <!-- HEADER -->
+    <div class="gfo-header">
+      <div class="gfo-header-left">
+        <h2 class="gfo-title">MELHORES OFERTAS DA PLATAFORMA⚡</h2>
+        <span class="gfo-fire-badge">OS JOGOS MAIS BAIXADOS DA GAMEFLIX</span>
+        
+        <p class="gfo-subtitle">Jogos com condição exclusiva esta semana, APROVEITE!!</p>
+      </div>
+      <div class="gfo-header-right">
+        <div class="gfo-savings-pill">
+          <span class="gfo-savings-label">ECONOMIZE ATÉ</span>
+          <span class="gfo-savings-value">70%</span>
+        </div>
       </div>
     </div>
-    <div class="cat-modal-body">
 
-      
-
-      <div class="cat-launch-grid">
-        <div class="cat-launch-item">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Pragmata_cover.jpg" alt="pragmata">
-          <div class="cat-launch-info">
-            <span class="cat-launch-tag">DISPONÍVEL</span>
-            <h4>Pragmata</h4>
-            <p>Pragmata é um jogo de ação e aventura com elementos de ficção científica da Capcom.!</p>
-          </div>
-        </div>
-        
-        <div class="cat-launch-item">
-          <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" alt="RE Requiem">
-          <div class="cat-launch-info">
-            <span class="cat-launch-tag">DISPONÍVEL</span>
-            <h4>Resident Evil Requiem</h4>
-            <p>O terror voltou mais assustador que nunca.</p>
-          </div>
-        </div>
-        <div class="cat-launch-item">
-          <img src="https://www.notebookcheck.info/fileadmin/Notebooks/News/_nc5/image_2025-09-24_193459770.png" alt="Crimson Desert">
-          <div class="cat-launch-info">
-            <span class="cat-launch-tag">DISPONÍVEL</span>
-            <h4>Crimson Desert</h4>
-            <p>O mundo é seu para explorar como quiser e há muitos caminhos para você descobrir.</p>
-          </div>
-        </div>
-        <div class="cat-launch-item">
-          <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349189/Captura_de_tela_2026-02-23_185713_p4mvr5.png" alt="fifa26">
-          <div class="cat-launch-info">
-            <span class="cat-launch-tag">DISPONÍVEL</span>
-            <h4>FIFA 26</h4>
-            <p>Nova geração do futebol CHEGOU !</p>
-          </div>
-        </div>
-        <div class="cat-launch-item">
-          <img src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" alt="GoW Ragnarok">
-          <div class="cat-launch-info">
-            <span class="cat-launch-tag">DISPONÍVEL</span>
-            <h4>God of War Ragnarök</h4>
-            <p>Pai e filho contra o impossível.</p>
-          </div>
-        </div>
-        <div class="cat-launch-item">
-          <img src="https://azitech.com.br/wp-content/uploads/2024/08/Forza-Horizon-6-lancamento.jpg" alt="Forza_Horizon_6">
-          <div class="cat-launch-info">
-            <span class="cat-launch-tag cat-tag-soon">EM BREVE</span>
-            <h4>Forza Horizon 6</h4>
-            <p>Descubra as paisagens estonteantes do Japão em mais de 550 carros reais e se torne uma Lenda das corridas no Festival Horizon..</p>
-          </div>
-        </div>
-        
-       
+    <!-- GRID DE JOGOS -->
+    <div class="cat-modal-body gfo-body">
+      <div class="gfo-grid" id="gfo-games-grid">
+        <!-- Preenchido dinamicamente pelo JS -->
       </div>
     </div>
-    <p class="cat-modal-note">🎮 Novos títulos adicionados toda semana. Seja membro e não perca nenhum lançamento!</p>
+
+    <!-- CTA FOOTER -->
+    <button class="cat-cta-btn gfo-cta-btn" onclick="openWppModal(); closeCategoryModal('ofertas')">
+      ⚡ QUERO ESSE PACK COMPLETO POR R$ 199,00 ⚡ </button>
   </div>
 </div>
 
@@ -1901,8 +1874,8 @@
     <div class="cat-modal-header">
       <span class="cat-modal-icon"></span>
       <div>
-        <h2 class="cat-modal-title">JOGOS GRÁTIS GAMEFLIX</h2>
-        <p class="cat-modal-subtitle">Na Gameflix é assim, BAIXOU - INSTALOU - JOGOU!</p>
+        <h2 class="cat-modal-title">JOGOS GRÁTIS, EXCLUSIVO PARA TESTAR A GAMEFLIX!</h2>
+        <p class="cat-modal-subtitle">Na Gameflix é assim, BAIXOU - JOGOU!</p>
       </div>
     </div>
 
