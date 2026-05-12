@@ -7,25 +7,7 @@ function toGameSlug(title) {
     .replace(/^-|-$/g, '');
 }
 
-/* ============================================================
-   UTILITÁRIO: DETECTA TIPO DE VÍDEO (VIMEO, YOUTUBE OU CLOUDINARY/MP4)
-   Prioridade: Vimeo > YouTube > Cloudinary/MP4
-   ============================================================ */
-function isYouTubeId(src) {
-  if (!src) return false;
-  if (src.includes('cloudinary') || src.includes('http') || src.includes('//')) return false;
-  return /^[a-zA-Z0-9_-]{6,15}$/.test(src.trim());
-}
-
-function getYouTubeId(src) {
-  if (!src) return null;
-  if (src.includes('youtube.com/embed/')) return src.split('youtube.com/embed/')[1].split('?')[0];
-  if (src.includes('youtube.com/watch?v=')) return src.split('v=')[1].split('&')[0];
-  if (src.includes('youtu.be/')) return src.split('youtu.be/')[1].split('?')[0];
-  if (isYouTubeId(src)) return src.trim();
-  return null;
-}
-
+/* --- UTILITÁRIO: EXTRAI ID DO VIMEO --- */
 function getVimeoId(src) {
   if (!src) return null;
   if (src.includes('vimeo.com/')) {
@@ -36,91 +18,10 @@ function getVimeoId(src) {
 }
 
 /* ============================================================
-   YOUTUBE IFRAME API
+   VÍDEO DE BANNER (VIMEO EXCLUSIVO) E CONTROLE DE SOM
    ============================================================ */
-var ytPlayer = null;
-var ytPlayerReady = false;
+var vimeoPlayer = null;
 
-// Carrega a API do YouTube uma vez
-function loadYouTubeAPI() {
-  if (window.YT || document.getElementById('yt-api-script')) return;
-  var tag = document.createElement('script');
-  tag.id = 'yt-api-script';
-  tag.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(tag);
-}
-
-// Chamada automática pela API quando estiver pronta
-window.onYouTubeIframeAPIReady = function () {
-  ytPlayerReady = true;
-  // Se já tiver um iframe esperando, inicializa
-  if (window._pendingYtId) {
-    createYTPlayer(window._pendingYtId);
-    window._pendingYtId = null;
-  }
-};
-
-function createYTPlayer(ytId) {
-  // Destrói player anterior se existir
-  if (ytPlayer) {
-    try { ytPlayer.destroy(); } catch(e) {}
-    ytPlayer = null;
-  }
-
-  // Garante que o container existe
-  var container = document.getElementById('yt-player-container');
-  if (!container) return;
-
-  // Cria div alvo para o player
-  var playerDiv = document.createElement('div');
-  playerDiv.id = 'yt-actual-player';
-  playerDiv.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;';
-  container.innerHTML = '';
-  container.appendChild(playerDiv);
-
-  ytPlayer = new YT.Player('yt-actual-player', {
-    videoId: ytId,
-    width: '100%',
-    height: '100%',
-    playerVars: {
-      autoplay: 1,
-      mute: 1,
-      loop: 1,
-      playlist: ytId,
-      controls: 0,
-      rel: 0,
-      modestbranding: 1,
-      showinfo: 0,
-      iv_load_policy: 3,
-      disablekb: 1,
-      fs: 0,
-      cc_load_policy: 0,
-      playsinline: 1
-    },
-    events: {
-     onReady: function(e) {
-  var iframe = document.querySelector('#yt-player-container iframe');
-  if (iframe) {
-    iframe.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;border:none;pointer-events:none;';
-  }
-  e.target.mute();
-  e.target.playVideo();
-  showUnmuteBtn();
-},
-      onStateChange: function(e) {
-        // Garante loop
-        if (e.data === YT.PlayerState.ENDED) {
-          e.target.seekTo(0);
-          e.target.playVideo();
-        }
-      }
-    }
-  });
-}
-
-/* ============================================================
-   BOTÃO ATIVAR SOM
-   ============================================================ */
 function showUnmuteBtn() {
   var btn = document.getElementById('btn-unmute');
   if (btn) btn.style.display = 'block';
@@ -135,188 +36,71 @@ function setupUnmuteButton() {
   var btn = document.getElementById('btn-unmute');
   if (!btn) return;
 
-  // Remove listeners antigos clonando o botão
   var newBtn = btn.cloneNode(true);
   btn.parentNode.replaceChild(newBtn, btn);
 
   newBtn.addEventListener('click', function () {
-    var currentVideo = document.getElementById('banner-video');
-
-    // Se for Vimeo (iframe embedded)
-    if (currentVideo && currentVideo.dataset && currentVideo.dataset.embedType === 'vimeo') {
-      var vimeoIframe = currentVideo.querySelector('iframe');
-      if (vimeoIframe) {
-        // Vimeo background mode não suporta áudio pelo postMessage facilmente,
-        // então abrimos o vídeo no Vimeo em nova aba para ouvir o som
-        // (ou recarrega iframe sem muted)
-        var currentSrc = vimeoIframe.src;
-        vimeoIframe.src = currentSrc.replace('&muted=1', '').replace('muted=1&', '').replace('muted=1', '') + '&muted=0';
-      }
-      hideUnmuteBtn();
-      return;
-    }
-
-    // Se for YouTube (ytPlayer)
-    if (ytPlayer && typeof ytPlayer.unMute === 'function') {
-      ytPlayer.unMute();
-      ytPlayer.setVolume(70);
-      hideUnmuteBtn();
-      return;
-    }
-
-    // Se for Cloudinary (<video>)
-    if (currentVideo && currentVideo.tagName === 'VIDEO') {
-      currentVideo.pause();
-      currentVideo.muted = false;
-      currentVideo.volume = 0.7;
-      currentVideo.currentTime = 0;
-      var p = currentVideo.play();
-      if (p !== undefined) {
-        p.then(function() {
-          currentVideo.muted = false;
-          currentVideo.volume = 0.7;
-        }).catch(function(){});
-      }
+    if (vimeoPlayer) {
+      // Liga o som direto na página via API do Vimeo
+      vimeoPlayer.setVolume(0.7); 
       hideUnmuteBtn();
     }
   });
 }
 
-/* ============================================================
-   VIMEO: CRIA IFRAME DE VÍDEO NO BANNER
-   ============================================================ */
-function createVimeoEmbed(vimeoId) {
-  var container = document.getElementById('yt-player-container');
-  if (!container) return;
-  container.innerHTML = '<iframe '
-    + 'src="https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=1&loop=1&background=1&controls=0" '
-    + 'style="position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);border:none;pointer-events:none;" '
-    + 'frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>'
-    + '</iframe>';
-}
-
-/* ============================================================
-   BANNER: TROCA VÍDEO (Vimeo, YouTube ou Cloudinary/MP4)
-   Prioridade: Vimeo > YouTube > MP4
-   ============================================================ */
 function setBannerVideo(videoSrc) {
   var vimeoId = getVimeoId(videoSrc);
-  var ytId = !vimeoId ? getYouTubeId(videoSrc) : null;
   var section = document.getElementById('main-banner');
-  if (!section) return;
+  if (!section || !vimeoId) return;
 
-  var existing = document.getElementById('banner-video');
+  var existingWrapper = document.getElementById('banner-video');
 
-  // ── VIMEO ─────────────────────────────────────────────────
-  if (vimeoId) {
-    if (ytPlayer) { try { ytPlayer.destroy(); } catch(e) {} ytPlayer = null; }
-
-    if (!existing || existing.tagName !== 'DIV' || !existing.dataset.embedType) {
-      if (existing) {
-        var nx = existing.nextElementSibling;
-        if (nx && nx.dataset && nx.dataset.bannerOverlay) nx.remove();
-        existing.remove();
-      }
-      var wrapper = document.createElement('div');
-      wrapper.id = 'banner-video';
-      wrapper.dataset.embedType = 'vimeo';
-      wrapper.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:0;';
-      var playerContainer = document.createElement('div');
-      playerContainer.id = 'yt-player-container';
-      playerContainer.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);pointer-events:none;';
-      wrapper.appendChild(playerContainer);
-      section.insertBefore(wrapper, section.firstChild);
-      var overlay = document.createElement('div');
-      overlay.dataset.bannerOverlay = '1';
-      overlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:transparent;';
-      wrapper.insertAdjacentElement('afterend', overlay);
-    } else {
-      var playerContainer = document.getElementById('yt-player-container');
-    }
-
-    createVimeoEmbed(vimeoId);
-    setupUnmuteButton();
-    showUnmuteBtn();
-    return;
-  }
-
-  // ── YOUTUBE ───────────────────────────────────────────────
-  if (ytId) {
-    loadYouTubeAPI();
-
-    // Remove elemento anterior
-    if (existing) {
-      var nextEl = existing.nextElementSibling;
+  // Se o player ainda NÃO existe na página (primeiro carregamento)
+  if (!existingWrapper || existingWrapper.dataset.embedType !== 'vimeo') {
+    if (existingWrapper) {
+      var nextEl = existingWrapper.nextElementSibling;
       if (nextEl && nextEl.dataset && nextEl.dataset.bannerOverlay) nextEl.remove();
-      existing.remove();
+      existingWrapper.remove();
     }
 
-    // Wrapper com overflow:hidden para cortar controles do YouTube
     var wrapper = document.createElement('div');
     wrapper.id = 'banner-video';
+    wrapper.dataset.embedType = 'vimeo';
     wrapper.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:0;';
 
-    // Container interno que receberá o player da API
-    var playerContainer = document.createElement('div');
-    playerContainer.id = 'yt-player-container';
-    // Tamanho maior que 100% para esconder barras/logo do YouTube
-    playerContainer.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);pointer-events:none;';
+    // Cria o iframe do Vimeo
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=1&loop=1&background=1';
+    iframe.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);border:none;pointer-events:none;';
+    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
 
-    wrapper.appendChild(playerContainer);
+    wrapper.appendChild(iframe);
     section.insertBefore(wrapper, section.firstChild);
 
-    // Overlay para bloquear cliques no iframe
+    // Overlay transparente
     var overlay = document.createElement('div');
     overlay.dataset.bannerOverlay = '1';
     overlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:transparent;';
     wrapper.insertAdjacentElement('afterend', overlay);
 
-    // Cria o player
-    if (ytPlayerReady) {
-      createYTPlayer(ytId);
-    } else {
-      window._pendingYtId = ytId;
-    }
-
-    // Reconfigura botão de som para YouTube
-    setupUnmuteButton();
+    // Conecta a API do Vimeo ao Iframe recém criado
+    vimeoPlayer = new Vimeo.Player(iframe);
 
   } else {
-    // Cloudinary: tag <video>
-    // Destrói player YouTube se existir
-    if (ytPlayer) {
-      try { ytPlayer.destroy(); } catch(e) {}
-      ytPlayer = null;
+    // ⚡ AQUI ESTÁ O SEGREDO DO ZERO DELAY ⚡
+    // Se o player já existe, troca o vídeo instantaneamente
+    if (vimeoPlayer) {
+      vimeoPlayer.loadVideo(vimeoId).then(function() {
+        vimeoPlayer.setVolume(0); // Garante que entra mutado
+        vimeoPlayer.play();
+      }).catch(function(error) {
+        console.warn('Erro ao carregar vídeo instantâneo:', error);
+      });
     }
-
-    var videoEl = existing;
-
-    if (!videoEl || videoEl.tagName !== 'VIDEO') {
-      if (videoEl) {
-        var nextEl2 = videoEl.nextElementSibling;
-        if (nextEl2 && nextEl2.dataset && nextEl2.dataset.bannerOverlay) nextEl2.remove();
-        videoEl.remove();
-      }
-
-      videoEl = document.createElement('video');
-      videoEl.id = 'banner-video';
-      videoEl.className = 'banner-video';
-      videoEl.autoplay = true;
-      videoEl.muted = true;
-      videoEl.setAttribute('playsinline', '');
-      section.insertBefore(videoEl, section.firstChild);
-      registerBannerVideoEvents(videoEl);
-    }
-
-    videoEl.src = videoSrc;
-    videoEl.load();
-    videoEl.play().catch(function(){});
-    videoEl.muted = true;
-
-    // Reconfigura botão de som para Cloudinary
-    setupUnmuteButton();
-    showUnmuteBtn();
   }
+
+  setupUnmuteButton();
+  showUnmuteBtn();
 }
 
 /* --- SCROLL INTELIGENTE DO TOP 10 CORRIGIDO --- */
@@ -373,40 +157,22 @@ function registerBannerVideoEvents(videoEl) {
     videoEl.play().catch(function(){});
   });
 }
-
-/* --- CONTROLE DO VÍDEO DO BANNER INICIAL --- */
-window.addEventListener("DOMContentLoaded", function() {
-  loadYouTubeAPI();
-
-  var bannerVideo = document.getElementById("banner-video");
-  if (bannerVideo && bannerVideo.tagName === 'VIDEO') {
-    registerBannerVideoEvents(bannerVideo);
-  }
-
-  setupUnmuteButton();
-});
-
 /* --- LÓGICA DO MODAL DE VÍDEO (NETFLIX STYLE) --- */
 function openModal(title, desc, videoSrc) {
   var modal = document.getElementById("netflixModal");
   var modalContent = modal.querySelector(".modal-content");
   var iframe = document.getElementById("modalVideo");
-  var bannerVideo = document.getElementById("banner-video");
 
-  if (bannerVideo && bannerVideo.tagName === 'VIDEO') {
-    bannerVideo.pause();
-    bannerVideo.muted = true;
+  if (vimeoPlayer) {
+    vimeoPlayer.pause();
   }
 
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalDesc").textContent = desc;
 
-  var ytId = getYouTubeId(videoSrc);
   var vimeoId = getVimeoId(videoSrc);
   if (vimeoId) {
-    iframe.src = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=0&controls=1';
-  } else if (ytId) {
-    iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&mute=0&controls=1&rel=0';
+    iframe.src = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=0&controls=1&color=e50914';
   } else {
     iframe.src = videoSrc;
   }
@@ -419,15 +185,13 @@ function openModal(title, desc, videoSrc) {
 function closeModal() {
   var modal = document.getElementById("netflixModal");
   var iframe = document.getElementById("modalVideo");
-  var bannerVideo = document.getElementById("banner-video");
 
   iframe.src = "";
   modal.classList.remove("active");
   document.body.style.overflow = "";
 
-  if (bannerVideo && bannerVideo.tagName === 'VIDEO') {
-    bannerVideo.muted = true;
-    bannerVideo.play().catch(function(){});
+  if (vimeoPlayer) {
+    vimeoPlayer.play().catch(function(){});
   }
 }
 
@@ -446,7 +210,7 @@ function setBannerInfoLink(title) {
     downloadAnchor.onclick = null;
   }
   if (actionBtn) {
-    actionBtn.innerHTML = "ⓘ MAIS INFORMAÇÕES";
+    actionBtn.innerHTML = "ⓘ OBTER JOGO AGORA";
   }
 }
 
@@ -742,60 +506,68 @@ document.getElementById('logo-back-to-top').addEventListener('click', function(e
 var promoGamesConfig = [
   {
     emPromocao: true,
-    id: 'elden-ring',
-    titulo: 'ELDEN RING',
-    imagem: 'https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg?n=Elden-Ring_GLP-Page-Hero-0_1083x1222_01.jpg',
+    id: 'days-gone',
+    titulo: 'Days Gone',
+    imagem: 'https://res.cloudinary.com/dnponjtdn/image/upload/v1777349196/days-gone-remastered-2025--30418_bydcux.jpg',
     precoOriginal: 'R$149,90',
     precoPromocao: 'GRÁTIS',
     desconto: '100%'
   },
   {
     emPromocao: true,
-    id: 'resident-evil-3',
-    titulo: 'Resident Evil 3',
-    imagem: 'https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg',
+    id: 'assassins-creed-black-flag',
+    titulo: "Assassin's Creed Black Flag",
+    imagem: 'https://image.api.playstation.com/cdn/UP0001/CUSA00010_00/gRQIIOrW2ijiWUUnpmgUIwDv9L9UE4XV.png',
+    precoOriginal: 'R$89,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'far-cry-4',
+    titulo: 'Far Cry 4',
+    imagem: 'https://cdn1.epicgames.com/offer/cf87285950ba492bbdc370b9d265ea36/FC4_StorePortrait_1200x1600_1200x1600-7f366d878f5553dae499860243c537ee',
+    precoOriginal: 'R$79,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'need-for-speed-payback',
+    titulo: 'Need for Speed Payback',
+    imagem: 'https://images.steamusercontent.com/ugc/5109928331639408171/D260688DBD1EBFEF65BABF0D2E6956D8391E72B3/',
+    precoOriginal: 'R$89,99',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'mad-max',
+    titulo: 'Mad Max',
+    imagem: 'https://bdjogos.com.br/capas/5689-mad-max-capa-1.jpg',
+    precoOriginal: 'R$59,90',
+    precoPromocao: 'GRÁTIS',
+    desconto: '100%'
+  },
+  {
+    emPromocao: true,
+    id: 'mortal-kombat-x',
+    titulo: 'Mortal Kombat X',
+    imagem: 'https://images.gog.com/3272c0976e5651c0629daf5eab1ac4b2c49d7154b0a316886a1c7fa8b26af702_glx_vertical_cover.webp?namespace=gamesdb',
     precoOriginal: 'R$99,90',
     precoPromocao: 'GRÁTIS',
     desconto: '100%'
   },
   {
     emPromocao: true,
-    id: 'far-cry-3',
-    titulo: 'Far Cry 3',
-    imagem: 'https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg',
-    precoOriginal: 'R$74,99',
-    precoPromocao: 'GRÁTIS',
-    desconto: '100%'
-  },
-  {
-    emPromocao: true,
-  id: 'need-for-speed-payback',
-  titulo: 'Need for Speed Payback',
-  imagem: 'https://images.steamusercontent.com/ugc/5109928331639408171/D260688DBD1EBFEF65BABF0D2E6956D8391E72B3/',
-  precoOriginal: 'R$89,99',
-  precoPromocao: 'GRÁTIS',
-  desconto: '100%'
-  },
-  {
-    emPromocao: true,
-    id: 'far-cry-primal',
-    titulo: 'FarCry Primal',
-    imagem: 'https://images.squarespace-cdn.com/content/v1/58bedb0ab3db2bd0463e552b/1488928090199-81WOQR4N03UFM3MBW3OQ/BLOG_FARCRY_1280X788_001A.jpg',
-    precoOriginal: 'R$99,90',
-    precoPromocao: 'GRÁTIS',
-    desconto: '100%'
-  },
-  {
-    emPromocao: true,
-    id: 'crash-bandicoot',
-    titulo: 'Crash Bandicoot™',
-    imagem: 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a',
-    precoOriginal: 'R$99,90',
+    id: 'plants-vs-zombies',
+    titulo: 'Plants vs. Zombies',
+    imagem: 'https://cdn.kobo.com/book-images/6174c893-747b-449e-9794-fc9dcca86036/1200/1200/False/plants-vs-zombies-volume-3-bully-for-you.jpg',
+    precoOriginal: 'R$59,90',
     precoPromocao: 'GRÁTIS',
     desconto: '100%'
   }
 ];
-
 /* ============================================================
    RENDERIZAÇÃO AUTOMÁTICA — não precisa editar abaixo
    ============================================================ */
@@ -837,6 +609,343 @@ function renderPromoGames() {
   var _origOpen = window.openCategoryModal;
   window.openCategoryModal = function(cat) {
     if (cat === 'promocoes') renderPromoGames();
+    _origOpen(cat);
+  };
+})();
+
+/* ================================================================
+   GAMEFLIX — MELHORES OFERTAS (JavaScript) — VERSÃO CORRIGIDA
+   Cole este bloco no FINAL do seu script.js.
+
+   COMO O BOTÃO "OBTER AGORA" FUNCIONA:
+   - Abre info.html?id=SLUG em nova aba — exatamente a mesma página
+     de vendas que o usuário vê ao clicar em "OBTER JOGO AGORA" no banner.
+   - Preços e slugs extraídos diretamente do GAMES_DB do info.html.
+   - Trilogia Crash (sem slug próprio) redireciona ao WhatsApp.
+   ================================================================ */
+
+/* ── CATÁLOGO — IDs e preços 100% vindos do GAMES_DB de info.html ── */
+var ofertasConfig = [
+  {
+    /* slug: 'resident-evil-requiem'  |  info.html: R$49,90 / R$249,90 */
+    id: 'resident-evil-requiem',
+    titulo: 'Resident Evil Requiem',
+    imagem: 'https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png',
+    logo: 'https://cdn2.steamgriddb.com/logo/5b91726d21e05916d2eb308f2fd0444e.png',
+    desc: 'O terror voltou mais assustador do que nunca. Deluxe Edition.',
+    video: 'https://vimeo.com/1187563729?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,90',
+    desconto: '-70%',
+    hot: true
+  },
+  {
+    /* slug: 'god-of-war-ragnarok'  |  info.html: R$74,90 / R$249,90 */
+    id: 'god-of-war-ragnarok',
+    titulo: 'God of War Ragnarök',
+    imagem: 'https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$',
+    logo: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/92554480-bde6-4f5c-9861-7022237da1ce/dfk2top-494d7ab4-4d24-4455-bcda-402bf76378d6.png',
+    desc: 'Pai e filho contra o impossível. Atravesse os Nove Reinos.',
+    video: 'https://vimeo.com/1187555294?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,90',
+    desconto: '-70%',
+    hot: true
+  },
+  {
+    /* slug: 'red-dead-redemption-2'  |  info.html: R$89,90 / R$299,90 */
+    id: 'red-dead-redemption-2',
+    titulo: 'Red Dead Redemption 2',
+    imagem: 'https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Red_Dead_Redemption_2_Logo.png/1280px-Red_Dead_Redemption_2_Logo.png',
+    desc: 'A lenda do oeste. Lealdade, perda e redenção no pôr do sol mais épico.',
+    video: 'https://vimeo.com/1187556626?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,90',
+    desconto: '-70%',
+    hot: false
+  },
+  {
+    /* slug: 'crimson-desert'  |  info.html: R$89,97 / R$299,90 */
+    id: 'crimson-desert',
+    titulo: 'Crimson Desert',
+    imagem: 'https://www.notebookcheck.info/fileadmin/Notebooks/News/_nc5/image_2025-09-24_193459770.png',
+    logo: 'https://upload.wikimedia.org/wikipedia/fr/6/6c/Crimson_Desert_Logo.png',
+    desc: 'Mundo aberto colossal. Explore, conquiste e descubra cada segredo.',
+    video: 'https://vimeo.com/1187774922?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,97',
+    desconto: '-70%',
+    hot: false
+  },
+  {
+    /* slug: 'battlefield-6'  |  info.html: R$89,90 / R$299,90 */
+    id: 'battlefield-6',
+    titulo: 'Battlefield 6',
+    imagem: 'https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25',
+    logo: 'https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png',
+    desc: 'O mais baixado da Gameflix. Destruição total e gráficos fotorrealistas.',
+    video: 'https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,90',
+    desconto: '-70%',
+    hot: true
+  },
+  {
+    /* slug: 'cyberpunk-2077'  |  info.html: R$59,90 / R$199,90 */
+    id: 'cyberpunk-2077',
+    titulo: 'Cyberpunk 2077',
+    imagem: 'https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 199,90',
+    precoNovo: 'R$ 74,90',
+    desconto: '-62%',
+    hot: true
+  },
+   {
+  
+    id: 'the-last-of-us-ii',
+    titulo: 'The Last Of Us II',
+    imagem: 'https://m.media-amazon.com/images/M/MV5BODIwYWZmYWMtYTliNC00YWQ5LTg5ZmEtNTZhNmUxNjdiMzNiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 249,90',
+    precoNovo: 'R$ 74,90',
+    desconto: '-70%',
+    hot: true
+  }, 
+  {
+  
+    id: '     spider-man-2     ',
+    titulo: ' Spider Man 2  ',
+    imagem: '  https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_MarvelsSpiderManDigitalDeluxeEdition_InsomniacGamesNixxesSoftware_Editions_S2_1200x1600-148e0014e79aa7c2cb23ae2414b11a16 ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,90',
+    desconto: '-70%',
+    hot: true
+  }, 
+
+  {
+  
+    id: '    forza-horizon-6    ',
+    titulo: ' Forza Horizon 6',
+    imagem: '   https://azitech.com.br/wp-content/uploads/2024/08/Forza-Horizon-6-lancamento.jpg ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 549,90',
+    precoNovo: 'R$ 109,80',
+    desconto: '-80%',
+    hot: true
+  }, 
+
+  {
+  
+    id: '   black-myth-wukong  ',
+    titulo: ' Black Myth: Wukong  ',
+    imagem: '  https://hobbygames.ru/image/enaza/19184698/box2.jpg.jpg ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 299,90',
+    precoNovo: 'R$ 89,90',
+    desconto: '-70%',
+    hot: true
+  }, 
+
+
+  {
+  
+    id: '    elden-ring   ',
+    titulo: ' ELDEN RING  ',
+    imagem: '   https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg?n=Elden-Ring_GLP-Page-Hero-0_1083x1222_01.jpg  ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 279,90',
+    precoNovo: 'R$ 74,90',
+    desconto: '-73%',
+    hot: true
+  }, 
+
+
+
+  
+
+  {
+  
+    id: '    assassin-s-creed-origins    ',
+    titulo: '  Assassins Creed Origins   ',
+    imagem: '  https://cdn1.epicgames.com/offer/camellia/ACOrigins_STD_Store_Portrait_1200x1600_1200x1600-4a79f9f393f7a3a9e5be3a0ae581f3d5 ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 249,90',
+    precoNovo: 'R$ 74,97',
+    desconto: '-70%',
+    hot: true
+  }, 
+
+
+
+  {
+  
+    id: '      the-last-of-us-part-i  ',
+    titulo: 'The Last of Us Part I  ',
+    imagem: ' https://cdn1.epicgames.com/offer/0c40923dd1174a768f732a3b013dcff2/EGS_TheLastofUsPartIDigitalDeluxeEdition_NaughtyDogLLC_Editions_S2_1200x1600-6db4887c7913c5a43ae3a086de2ad29c ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 249,90',
+    precoNovo: 'R$ 74,90',
+    desconto: '-70%',
+    hot: true
+  }, 
+
+  
+  {
+  
+    id: '    ghost-of-tsushima    ',
+    titulo: ' Ghost of Tsushima   ',
+    imagem: '  https://cdn1.epicgames.com/offer/6e6aa039c73347b885803de65ac5d3db/EGS_GhostofTsushima_SuckerPunchProductions_S2_1200x1600-e23e02c1d70be7b528dba50860f87d39  ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 279,90',
+    precoNovo: 'R$ 83,90',
+    desconto: '-70%',
+    hot: true
+  }, 
+
+
+{
+  
+    id: '   resident-evil-4-remake    ',
+    titulo: '  Resident Evil 4 Remake  ',
+    imagem: '   https://upload.wikimedia.org/wikipedia/pt/3/30/Resident_Evil_4_%28remake%29.png  ',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
+    desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 169,90',
+    precoNovo: 'R$ 69,70',
+    desconto: '-59%',
+    hot: true
+  }, 
+
+
+
+
+
+
+  {
+    /* slug: 'far-cry-3'  |  info.html: R$22,90 / R$74,90 */
+    id: 'far-cry-3',
+    titulo: 'Far Cry 3',
+    imagem: 'https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg',
+    logo: '',
+    desc: 'Sobreviva ao paraíso selvagem. O atirador de mundo aberto que definiu uma geração.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 99,67',
+    precoNovo: 'R$ 44,85',
+    desconto: '-55%',
+    hot: false
+  },
+  {
+    /* slug: 'farcry-primal'  |  info.html: R$29,90 / R$99,90 */
+    id: 'farcry-primal',
+    titulo: 'Far Cry Primal',
+    imagem: 'https://upload.wikimedia.org/wikipedia/pt/b/be/Farcry_primal_box.jpg',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png',
+    desc: 'A era do gelo. Caçador ou presa — a lei é a sua.',
+    video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 87,90',
+    precoNovo: 'R$ 44,90',
+    desconto: '-49%',
+    hot: false
+  },
+  {
+    /* slug: 'resident-evil-3'  |  info.html: R$44,90 / R$149,90 */
+    id: 'resident-evil-3',
+    titulo: 'Resident Evil 3',
+    imagem: 'https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg',
+    logo: 'https://upload.wikimedia.org/wikipedia/fr/archive/b/b4/20221107130840%21Resident_Evil_3_Logo.png',
+    desc: 'Jill Valentine contra o implacável Nemesis. Fuga ou confronto?',
+    video: 'https://vimeo.com/1187557074?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 99,82',
+    precoNovo: 'R$ 54,90',
+    desconto: '-45%',
+    hot: false
+  },
+  {
+    /* Trilogia Crash — sem slug no GAMES_DB → redireciona ao WhatsApp */
+    id: 'crash-bandicoot',
+    titulo: ' Crash Bandicoot N. Sane Trilogy  ',
+    imagem: 'https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a',
+    logo: 'https://upload.wikimedia.org/wikipedia/fr/archive/b/b4/20221107130840%21Resident_Evil_3_Logo.png',
+    desc: 'Jill Valentine contra o implacável Nemesis. Fuga ou confronto?',
+    video: 'https://vimeo.com/1187557074?share=copy&fl=sv&fe=ci',
+    precoAntigo: 'R$ 199,00',
+    precoNovo: 'R$ 69,90',
+    desconto: '-65%',
+    hot: false
+  },
+];
+
+/* ── RENDERIZAÇÃO DO GRID ────────────────────────────────────────── */
+function renderOfertasGames() {
+  var grid = document.getElementById('gfo-games-grid');
+  if (!grid) return;
+
+  grid.innerHTML = ofertasConfig.map(function(g) {
+    var hotBadge = g.hot ? '' : '';
+
+    /*
+     * Destino do clique:
+     *   - Jogo com slug  → info.html?id=SLUG  (página de vendas real)
+     *   - Trilogia Crash → WhatsApp (não existe no GAMES_DB)
+     */
+    var href = g.id
+      ? 'info.html?id=' + g.id
+      : (g.wppLink || 'https://wa.me/5553981045078');
+
+    return (
+      '<div class="gfo-card">' +
+        '<div class="gfo-card-img-wrap">' +
+          hotBadge +
+          '<img src="' + g.imagem + '" alt="' + g.titulo + '" loading="lazy" onerror="this.style.opacity=\'0.25\'">' +
+          '<div class="gfo-card-img-overlay"></div>' +
+          '<span class="gfo-discount-badge">' + g.desconto + '</span>' +
+        '</div>' +
+        '<div class="gfo-card-info">' +
+          '<h3 class="gfo-card-title">' + g.titulo + '</h3>' +
+          '<div class="gfo-card-prices">' +
+            '<span class="gfo-price-old">' + g.precoAntigo + '</span>' +
+            '<span class="gfo-price-new">' + g.precoNovo + '</span>' +
+          '</div>' +
+          '<a class="gfo-get-btn" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
+            '⚡ Obter Agora' +
+          '</a>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+}
+
+/* ── HOOK NO openCategoryModal EXISTENTE ────────────────────────── */
+(function waitForModal() {
+  if (typeof window.openCategoryModal !== 'function') {
+    setTimeout(waitForModal, 80);
+    return;
+  }
+  var _origOpen = window.openCategoryModal;
+  window.openCategoryModal = function(cat) {
+    if (cat === 'ofertas') renderOfertasGames();
     _origOpen(cat);
   };
 })();
