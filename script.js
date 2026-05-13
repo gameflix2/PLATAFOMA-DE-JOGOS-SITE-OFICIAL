@@ -40,23 +40,39 @@ function setupUnmuteButton() {
   btn.parentNode.replaceChild(newBtn, btn);
 
   newBtn.addEventListener('click', function () {
-    if (vimeoPlayer) {
-      // Liga o som direto na página via API do Vimeo
-      vimeoPlayer.setVolume(0.7); 
-      hideUnmuteBtn();
+    var iframe = document.querySelector('#banner-video iframe');
+    if (iframe) {
+      var player = vimeoPlayer || new Vimeo.Player(iframe);
+      newBtn.style.display = 'none'; // Some IMEDIATAMENTE ao clicar
+      player.setVolume(1).then(function() {
+        return player.setCurrentTime(0);
+      }).then(function() {
+        return player.play();
+      }).then(function() {
+        player.off('ended');
+        player.on('ended', function() {
+          player.setVolume(0).then(function() {
+            player.setCurrentTime(0).then(function() {
+              player.play().catch(function(){});
+            });
+          });
+        });
+      }).catch(function(error) {
+        console.error("Erro ao ativar som:", error);
+        newBtn.style.display = 'block'; // Mostra de volta se falhar
+      });
     }
   });
 }
+var _bannerInitialized = false;
 
 function setBannerVideo(videoSrc) {
   var vimeoId = getVimeoId(videoSrc);
   var section = document.getElementById('main-banner');
   if (!section || !vimeoId) return;
 
-  var existingWrapper = document.getElementById('banner-video');
-
-  // Se o player ainda NÃO existe na página (primeiro carregamento)
-  if (!existingWrapper || existingWrapper.dataset.embedType !== 'vimeo') {
+  if (!_bannerInitialized) {
+    var existingWrapper = document.getElementById('banner-video');
     if (existingWrapper) {
       var nextEl = existingWrapper.nextElementSibling;
       if (nextEl && nextEl.dataset && nextEl.dataset.bannerOverlay) nextEl.remove();
@@ -68,33 +84,44 @@ function setBannerVideo(videoSrc) {
     wrapper.dataset.embedType = 'vimeo';
     wrapper.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:0;';
 
-    // Cria o iframe do Vimeo
     var iframe = document.createElement('iframe');
-    iframe.src = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=1&loop=1&background=1';
+    iframe.src = 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&muted=1&loop=0&background=1';
     iframe.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);border:none;pointer-events:none;';
     iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
 
     wrapper.appendChild(iframe);
     section.insertBefore(wrapper, section.firstChild);
 
-    // Overlay transparente
     var overlay = document.createElement('div');
     overlay.dataset.bannerOverlay = '1';
     overlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:transparent;';
     wrapper.insertAdjacentElement('afterend', overlay);
 
-    // Conecta a API do Vimeo ao Iframe recém criado
     vimeoPlayer = new Vimeo.Player(iframe);
+    vimeoPlayer.on('ended', function() {
+      vimeoPlayer.setVolume(0).then(function() {
+        vimeoPlayer.setCurrentTime(0).then(function() {
+          vimeoPlayer.play().catch(function(){});
+        });
+      });
+    });
+    _bannerInitialized = true;
 
   } else {
-    // ⚡ AQUI ESTÁ O SEGREDO DO ZERO DELAY ⚡
-    // Se o player já existe, troca o vídeo instantaneamente
     if (vimeoPlayer) {
       vimeoPlayer.loadVideo(vimeoId).then(function() {
-        vimeoPlayer.setVolume(0); // Garante que entra mutado
+        vimeoPlayer.setVolume(0);
         vimeoPlayer.play();
+        vimeoPlayer.off('ended');
+        vimeoPlayer.on('ended', function() {
+          vimeoPlayer.setVolume(0).then(function() {
+            vimeoPlayer.setCurrentTime(0).then(function() {
+              vimeoPlayer.play().catch(function(){});
+            });
+          });
+        });
       }).catch(function(error) {
-        console.warn('Erro ao carregar vídeo instantâneo:', error);
+        console.warn('Erro ao carregar vídeo:', error);
       });
     }
   }
@@ -231,65 +258,10 @@ document.querySelectorAll('.free-game-trigger').forEach(function(card) {
   });
 });
 
-/* --- LÓGICA DE LOGIN --- */
-var loginForm = document.getElementById('login-form');
-
-loginForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  var emailInput = document.getElementById('user-email').value;
-  var passwordInput = document.getElementById('user-password').value;
-
-  var emailCorreto = "testegratis@gameflix.com";
-  var senhaCorreta = "a";
-
-  if (emailInput === emailCorreto && passwordInput === senhaCorreta) {
-    var loginScreen = document.getElementById('login-screen');
-    loginScreen.style.display = 'none';
-
-    var bannerVideo = document.getElementById("banner-video");
-
-    if (bannerVideo && bannerVideo.tagName === 'VIDEO') {
-      bannerVideo.muted = true;
-      bannerVideo.play().catch(function(err) { console.log("Erro no autoplay:", err); });
-    }
-
-    setupUnmuteButton();
-    showUnmuteBtn();
-
-    console.log("Bem-vindo ao GAMEFLIX!");
-  } else {
-    alert("Email ou senha incorretos. Tente novamente.");
-  }
-});
-
-/* --- BOTÃO FECHAR LOGIN (X) — BYPASS OPCIONAL --- */
-(function () {
-  var closeBtn = document.getElementById('login-close-btn');
-  if (!closeBtn) return;
-
-  closeBtn.addEventListener('click', function () {
-    var loginScreen = document.getElementById('login-screen');
-    if (!loginScreen) return;
-
-    // Fade suave
-    loginScreen.classList.add('fade-out');
-
-    setTimeout(function () {
-      loginScreen.style.display = 'none';
-      loginScreen.classList.remove('fade-out');
-    }, 360);
-
-    // Replica comportamento pós-login: inicia vídeo e botão de som
-    var bannerVideo = document.getElementById('banner-video');
-    if (bannerVideo && bannerVideo.tagName === 'VIDEO') {
-      bannerVideo.muted = true;
-      bannerVideo.play().catch(function (err) { console.log('Autoplay:', err); });
-    }
-    if (typeof setupUnmuteButton === 'function') setupUnmuteButton();
-    if (typeof showUnmuteBtn === 'function') showUnmuteBtn();
-  });
-})();
+/* --- LÓGICA DE LOGIN ---
+   Substituída por auth.js (login obrigatório com nome + email + whatsapp).
+   Este bloco foi removido para evitar conflito.
+   ------------------------------------------------------------------ */
 
 
 function openWppModal() {
