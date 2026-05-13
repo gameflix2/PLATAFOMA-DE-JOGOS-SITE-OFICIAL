@@ -2878,3 +2878,47 @@ body.modal-open { overflow: hidden; }
   color: #fff !important;
   box-shadow: 0 0 2px #ff0000, 0 0 15px #ff3b3b, 0 0 20px #ff3b3b;
 }
+/* ============================================================
+   GAMEFLIX — AUTH: Estilos do novo login obrigatório
+   Adicionado sobre o CSS existente, sem alterar nada anterior.
+   ============================================================ */
+
+/* Mensagens de erro inline (estilo Gameflix/Netflix) */
+.gf-field-error {
+  display: none;
+  color: #e87c7c;
+  font-size: 13px;
+  margin-top: 4px;
+  padding-left: 4px;
+  animation: gf-fadeInDown 0.25s ease;
+}
+
+@keyframes gf-fadeInDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtítulo do login */
+#login-screen .login-box > p {
+  color: #999;
+  font-size: 14px;
+  margin: -10px 0 18px;
+  text-align: center;
+}
+
+/* Ajuste do checkbox "Salvar informações" */
+.remember-me label {
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* Input tel (WhatsApp) — mesma aparência dos outros */
+#user-whatsapp {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Logo dentro do login-header */
+.login-header .logo img {
+  display: block;
+}
