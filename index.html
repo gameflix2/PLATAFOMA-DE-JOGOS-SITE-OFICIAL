@@ -28,37 +28,72 @@
 </head>
 <body>
 
+<!-- ============================================================
+     GAMEFLIX — LOGIN OBRIGATÓRIO
+     Modificado para: Primeiro Nome + Email + WhatsApp
+     Botão X removido. Login é obrigatório.
+     Gerenciado por: auth.js
+     ============================================================ -->
 <div id="login-screen">
   <div class="login-header">
-    <a href="#" class="logo"></a>
+    <a href="#" class="logo">
+      <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349062/l_ogo-removebg-preview_yodvdt.png" alt="GAMEFLIX" style="height:36px;">
+    </a>
   </div>
-  
+
   <div class="login-box">
-    <button class="login-close-btn" id="login-close-btn" aria-label="Fechar login" title="Entrar sem login">✕</button>
-    <h1>Entrar</h1>
-    <form id="login-form">
+    <!-- Botão X REMOVIDO — login é obrigatório -->
+
+    <h1>    Faça seu Login na Gameflix!!</h1>
+    <p style="color:#999;font-size:11px;margin:-10px 0 18px;text-align:center;">Preencha seus dados CORRETAMENTE para acessar a plataforma pela Primeira vez!</p>
+
+    <form id="login-form" autocomplete="off">
+
+      <!-- Campo: Primeiro Nome -->
       <div class="input-group">
-        <input type="email" id="user-email" required placeholder="Email">
+        <input
+          type="text"
+          id="user-nome"
+          placeholder="Primeiro nome"
+          autocomplete="given-name"
+          maxlength="50">
+        <span class="gf-field-error" id="user-nome-error"></span>
       </div>
+
+      <!-- Campo: Email -->
       <div class="input-group">
-        <input type="password" id="user-password" required placeholder="Senha">
+        <input
+          type="email"
+          id="user-email"
+          placeholder="Email"
+          autocomplete="email">
+        <span class="gf-field-error" id="user-email-error"></span>
       </div>
-      <button type="submit" class="btn-login-submit">Entrar</button>
-      
+
+      <!-- Campo: WhatsApp (substitui Senha) -->
+      <div class="input-group">
+        <input
+          type="tel"
+          id="user-whatsapp"
+          placeholder="WhatsApp com DDD — ex: (51) 99999-9999"
+          autocomplete="tel"
+          maxlength="16">
+        <span class="gf-field-error" id="user-whatsapp-error"></span>
+      </div>
+
+      <button type="submit" class="btn-login-submit">Entrar na Gameflix</button>
+
       <div class="login-help">
         <div class="remember-me">
-          <input type="checkbox" id="remember">
-          <label for="remember">Lembre-se de mim</label>
+          <input type="checkbox" id="remember" checked>
+          <label for="remember">Salvar informações para próximos acessos</label>
         </div>
-        <a href="#">Precisa de ajuda?</a>
       </div>
     </form>
 
     <div class="login-footer-info">
-      <p>Novo por aqui? <a href="javascript:void(0)" onclick="openWppModal()" style="color: #e50914; font-weight: bold; text-decoration: none;">FAÇA UM TESTE GRATIS.</a></p>
-      <p class="captcha-text">
-        clique no botao para gerar um QRCODE 
-      </p>
+      <p>Quer saber mais? <a href="javascript:void(0)" onclick="openWppModal()" style="color:#e50914;font-weight:bold;text-decoration:none;">FALE CONOSCO NO WHATSAPP.</a></p>
+      <p class="captcha-text">Acesso 100% gratuito. Sem cartão de crédito.</p>
     </div>
   </div>
 </div>
@@ -96,9 +131,14 @@
 </header>
 
   <section class="banner" id="main-banner">
-    <video class="banner-video" autoplay muted loop playsinline id="banner-video">
-      <source src="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci" type="video/mp4">
-    </video>
+    <div id="banner-video" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:0;">
+  <iframe 
+    src="https://player.vimeo.com/video/1189613164?autoplay=1&muted=1&loop=1&background=1&badge=0&autopause=0&player_id=0&app_id=58479" 
+    style="position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);border:none;" 
+    allow="autoplay; fullscreen" 
+    title="Banner Video">
+  </iframe>
+</div>
    <div class="banner-content">
   <img src="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png" id="banner-logo" alt="Logo do Jogo">
   
@@ -338,8 +378,8 @@
 
     <img class="game-card" 
          src="https://meups.com.br/wp-content/uploads/2025/10/Battlefield-6-REVIEW-PS5-scaled.jpg" 
-         alt="BF V" 
-         data-title="Battlefield V" 
+         alt="BF VI" 
+         data-title="Battlefield VI" 
          data-desc="Entre no maior conflito da humanidade com Battlefield V enquanto a série retorna às suas raízes na Segunda Guerra Mundial." 
          data-video="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci" 
          data-logo="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png"
@@ -1971,5 +2011,12 @@
   </div>
 </footer>
   <script src="script.js"></script>
+  <!-- ============================================================
+       GAMEFLIX — MÓDULOS ADICIONAIS
+       Ordem importa: supabase → tracking → auth
+       ============================================================ -->
+  <script src="supabase.js"></script>   <!-- Integração Supabase (preparada) -->
+  <script src="tracking.js"></script>   <!-- Rastreamento de downloads e favoritos -->
+  <script src="auth.js"></script>       <!-- Sistema de autenticação obrigatória -->
 </body>
 </html>
