@@ -441,13 +441,16 @@ const DEFAULT_GAME_ID = 'crash-bandicoot';
       }
 
             // 6. Link de download individual por jogo
-      var btnBaixar = document.getElementById('btn-baixar');
+     var btnBaixar = document.getElementById('btn-baixar');
       if (btnBaixar) {
         if (jogo.download) {
           btnBaixar.href = jogo.download;
           btnBaixar.target = '_blank';
           btnBaixar.rel = 'noopener noreferrer';
-          btnBaixar.style.display = 'flex'; // garante que aparece
+          btnBaixar.style.display = 'flex';
+          btnBaixar.addEventListener('click', function() {
+            registrar_download_gratis(jogo.titulo);
+          });
         } else {
           btnBaixar.href = "#";
           btnBaixar.onclick = function() {
@@ -772,5 +775,8 @@ document.getElementById('qrModal').addEventListener('click', function(e) {
   }
 });
 </script>
+<script src="supabase.js"></script>
+<script src="tracking.js"></script>
+<script src="auth.js"></script>
  </body>
 </html>
