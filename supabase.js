@@ -19,8 +19,8 @@
 // var SUPABASE_URL      = 'https://SEU-PROJETO.supabase.co';
 // var SUPABASE_ANON_KEY = 'SUA_ANON_KEY_AQUI';
 
-var SUPABASE_URL      = 'https://letzzrubnceqcclfcfvg.supabase.co'; // substitua quando pronto
-var SUPABASE_ANON_KEY = 'sb_publishable_VkXqCBMIaHcWYfgIs_70Iw_-Yp56mTs';
+var SUPABASE_URL      = 'https://fhtpeacjxpcghykojgic.supabase.co'; // substitua quando pronto
+var SUPABASE_ANON_KEY = 'sb_publishable_Qd4KJSCiolqhCKtpALbqVg_QltuW0QL';
 /* ── HELPER: REQUISIÇÃO AO SUPABASE ──────────────────────── */
 /**
  * Faz uma chamada REST ao Supabase.
