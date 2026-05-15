@@ -206,12 +206,11 @@ function toGameSlug(title) {
 document.addEventListener('DOMContentLoaded', function() {
   /* Carrega favoritos do usuário logo ao iniciar */
   carregarFavoritos().then(function() {
-    /* Sincroniza com o jogo do banner inicial */
-    var bannerLogo = document.getElementById('banner-logo');
-    var nomeInicial = bannerLogo ? (bannerLogo.alt || '') : '';
-    sincronizarBotaoBanner(nomeInicial, bannerLogo ? bannerLogo.src : '');
+    var btn = document.getElementById('btn-favorito');
+    var nomeInicial = btn ? btn.getAttribute('data-jogo') : '';
+    var imgInicial = btn ? btn.getAttribute('data-img') : '';
+    sincronizarBotaoBanner(nomeInicial, imgInicial);
   });
-
   /* Clique no botão de favorito do banner */
   var btnFav = document.getElementById('btn-favorito');
   if (btnFav) {
@@ -269,11 +268,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     var _orig = setBannerInfoLink;
     window.setBannerInfoLink = function(title) {
-      _orig(title);
-      /* Pega imagem do banner atual para salvar no favorito */
-      var logoEl = document.getElementById('banner-logo');
-      var imgUrl = logoEl ? logoEl.src : '';
-      sincronizarBotaoBanner(title, imgUrl);
-    };
+  _orig(title);
+  /* Pega a capa do card clicado */
+  var cardImg = document.querySelector('.card-container .poster-img[data-title="' + title + '"], .game-card[data-title="' + title + '"]');
+  var imgUrl = cardImg ? cardImg.src : '';
+  sincronizarBotaoBanner(title, imgUrl);
+};
   })();
 });
