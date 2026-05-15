@@ -128,4 +128,5 @@ function supabaseRegistrarEvento(userEmail, eventType, gameName) {
     whatsapp:      usuario.whatsapp || null,
     created_at:    new Date().toISOString()
   };
-  retur
+  return supabaseRequest('events', payload, 'POST');
+}
