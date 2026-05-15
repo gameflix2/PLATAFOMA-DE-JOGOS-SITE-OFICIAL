@@ -111,6 +111,7 @@
       <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')">Como instalar</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')">SORTEIOS</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('duvidas')">Dúvidas / Suporte</a></li>
+      <li><a href="javascript:void(0)" id="nav-meus-favoritos" class="nav-favoritos">♥ Meus Favoritos</a></li>
     </ul>
 
     <div class="header-actions">
@@ -148,7 +149,9 @@
     <button class="btn-play" id="btn-main-action">ⓘ OBTER JOGO AGORA</button>
   </a>
   
-  <button class="btn-info"> + Minha Lista</button>
+  <button class="btn-info btn-favorito-banner" id="btn-favorito" data-jogo="" data-img="">
+  ♡ Minha Lista
+</button>
 
 </div>
 
@@ -2010,13 +2013,31 @@
     <p class="footer-country">GAMEFLIX Brasil</p>
   </div>
 </footer>
-  <script src="script.js"></script>
-  <!-- ============================================================
-       GAMEFLIX — MÓDULOS ADICIONAIS
-       Ordem importa: supabase → tracking → auth
-       ============================================================ -->
-  <script src="supabase.js"></script>   <!-- Integração Supabase (preparada) -->
-  <script src="tracking.js"></script>   <!-- Rastreamento de downloads e favoritos -->
-  <script src="auth.js"></script>       <!-- Sistema de autenticação obrigatória -->
+
+<!-- TOAST DE NOTIFICAÇÃO -->
+<div id="fav-toast"></div>
+
+<!-- MODAL MEUS FAVORITOS -->
+<div class="cat-modal-overlay" id="modal-favoritos">
+  <div class="fav-modal">
+    <div class="fav-modal-header">
+      <h2>♥ Meus Favoritos</h2>
+      <button class="fav-modal-close" onclick="fecharModalFavoritos()">✕</button>
+    </div>
+    <div class="favoritos-grid" id="favoritos-grid">
+      <div class="fav-empty">
+        <div class="fav-empty-icon">♡</div>
+        <p>Sua lista está vazia.</p>
+        <span>Clique em "Minha Lista" em qualquer jogo para salvar aqui.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="supabase.js"></script>
+<script src="tracking.js"></script>
+<script src="auth.js"></script>
+<script src="favoritos.js"></script>
 </body>
 </html>
