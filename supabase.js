@@ -119,11 +119,13 @@ return supabaseRequest('clientes', payload, 'PATCH', filtro);
  * Usado internamente por tracking.js.
  */
 function supabaseRegistrarEvento(userEmail, eventType, gameName) {
+  var usuario = JSON.parse(localStorage.getItem('gameflix_user') || '{}');
   var payload = {
-    user_email: userEmail,
-    event_type: eventType,
-    game_name:  gameName || null,
-    created_at: new Date().toISOString()
+    user_email:    userEmail,
+    event_type:    eventType,
+    game_name:     gameName || null,
+    primeiro_nome: usuario.primeiro_nome || null,
+    whatsapp:      usuario.whatsapp || null,
+    created_at:    new Date().toISOString()
   };
-  return supabaseRequest('events', payload, 'POST');
-}
+  retur
