@@ -16,12 +16,14 @@
   5. Remova os comentários das linhas abaixo
 */
 
+
+
+
 // var SUPABASE_URL      = 'https://SEU-PROJETO.supabase.co';
 // var SUPABASE_ANON_KEY = 'SUA_ANON_KEY_AQUI';
 
 var SUPABASE_URL      = 'https://fhtpeacjxpcghykojgic.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZodHBlYWNqeHBjZ2h5a29qZ2ljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3OTc4ODcsImV4cCI6MjA5NDM3Mzg4N30.s4zUoICN1agjMaiGj-d_YH92cFq-RO7kYZm0eGgpZ-o';
-/* ── HELPER: REQUISIÇÃO AO SUPABASE ──────────────────────── */
 /**
  * Faz uma chamada REST ao Supabase.
  * @param {string} tabela  - Nome da tabela
@@ -85,7 +87,7 @@ function supabaseRegistrarUsuario(dados) {
     created_at:    new Date().toISOString(),
     last_login:    new Date().toISOString()
   };
-  return supabaseRequest('users', payload, 'POST');
+return supabaseRequest('clientes', payload, 'POST');
 }
 
 /**
@@ -95,7 +97,7 @@ function supabaseRegistrarUsuario(dados) {
 function supabaseAtualizarLogin(email) {
   var payload = { last_login: new Date().toISOString() };
   var filtro  = '?email=eq.' + encodeURIComponent(email);
-  return supabaseRequest('users', payload, 'PATCH', filtro);
+return supabaseRequest('clientes', payload, 'PATCH', filtro);
 }
 
 /* ── TABELA: events ───────────────────────────────────────── */
