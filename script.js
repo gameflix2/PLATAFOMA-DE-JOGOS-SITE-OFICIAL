@@ -921,3 +921,15 @@ function renderOfertasGames() {
     _origOpen(cat);
   };
 })();
+function checkDevice() {
+  if (window.innerHeight > window.innerWidth) {
+    document.getElementById('content').classList.add('hidden');
+    document.getElementById('alert').classList.remove('hidden');
+  } else {
+    document.getElementById('content').classList.remove('hidden');
+    document.getElementById('alert').classList.add('hidden');
+  }
+}
+
+window.addEventListener('load', checkDevice);
+window.addEventListener('resize', checkDevice);
