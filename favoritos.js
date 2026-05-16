@@ -202,6 +202,46 @@ function toGameSlug(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+/* ── ORÇAMENTO VIA WHATSAPP ────────────────────────────────── */
+/**
+ * Abre o WhatsApp com uma mensagem personalizada contendo
+ * a lista de jogos favoritos do usuário.
+ * Número configurado: 5553981045078
+ */
+function abrirWhatsAppOrcamento() {
+  var usuario = getFavUsuario();
+
+  /* Garante que o cache está atualizado antes de montar a mensagem */
+  carregarFavoritos().then(function(lista) {
+    var nome = usuario ? usuario.primeiro_nome : '';
+    var saudacao = nome ? 'Olá, ' + nome + '! ' : 'Olá! ';
+
+    if (!lista || lista.length === 0) {
+      /* Sem favoritos: abre WhatsApp com mensagem genérica */
+      var msgVazia = encodeURIComponent(
+        saudacao + 'Gostaria de solicitar um orçamento personalizado na Gameflix.'
+      );
+      window.open('https://wa.me/5553981045078?text=' + msgVazia, '_blank');
+      return;
+    }
+
+    var listaFormatada = lista.map(function(jogo, i) {
+      return (i + 1) + '. ' + jogo;
+    }).join('\n');
+
+    var mensagem =
+      saudacao + 'gostaria de solicitar um orçamento personalizado. ' +
+      'Adicionei aos meus favoritos os jogos:\n\n' +
+      listaFormatada + '\n\n' +
+      'Aguardo o contato da equipe Gameflix! 🎮';
+
+    window.open(
+      'https://wa.me/5553981045078?text=' + encodeURIComponent(mensagem),
+      '_blank'
+    );
+  });
+}
+
 /* ── INIT ──────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', function() {
   /* Carrega favoritos do usuário logo ao iniciar */
