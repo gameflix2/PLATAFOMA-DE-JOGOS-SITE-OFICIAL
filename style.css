@@ -3180,3 +3180,23 @@ body.modal-open { overflow: hidden; }
     text-align: center;
   }
 }
+#volume-indicator {
+  position: absolute;
+  bottom: 280px;
+  right: 40px;
+  z-index: 10;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  background: rgba(20,20,20,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#volume-indicator svg {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
