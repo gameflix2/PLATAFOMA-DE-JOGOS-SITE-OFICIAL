@@ -43,7 +43,24 @@ function setupUnmuteButton() {
     var iframe = document.querySelector('#banner-video iframe');
     if (iframe) {
       var player = vimeoPlayer || new Vimeo.Player(iframe);
-      newBtn.style.display = 'none'; // Some IMEDIATAMENTE ao clicar
+      newBtn.style.display = 'none';
+      document.getElementById('icon-vol-on').style.display = 'block';
+      document.getElementById('icon-vol-off').style.display = 'none';
+
+      // Ativa o overlay IMEDIATAMENTE ao clicar no botão de som
+      var bannerOverlay = document.querySelector('[data-banner-overlay]');
+      if (bannerOverlay) {
+        bannerOverlay.style.pointerEvents = 'auto';
+        bannerOverlay.addEventListener('click', function() {
+          player.getVolume().then(function(vol) {
+            var novoVol = vol > 0 ? 0 : 1;
+            player.setVolume(novoVol);
+            document.getElementById('icon-vol-on').style.display = novoVol > 0 ? 'block' : 'none';
+            document.getElementById('icon-vol-off').style.display = novoVol > 0 ? 'none' : 'block';
+          });
+        });
+      }
+
       player.setVolume(1).then(function() {
         return player.setCurrentTime(0);
       }).then(function() {
@@ -52,6 +69,8 @@ function setupUnmuteButton() {
         player.off('ended');
         player.on('ended', function() {
           player.setVolume(0).then(function() {
+            document.getElementById('icon-vol-on').style.display = 'none';
+            document.getElementById('icon-vol-off').style.display = 'block';
             player.setCurrentTime(0).then(function() {
               player.play().catch(function(){});
             });
@@ -59,11 +78,12 @@ function setupUnmuteButton() {
         });
       }).catch(function(error) {
         console.error("Erro ao ativar som:", error);
-        newBtn.style.display = 'block'; // Mostra de volta se falhar
+        newBtn.style.display = 'block';
       });
     }
   });
 }
+
 var _bannerInitialized = false;
 
 function setBannerVideo(videoSrc) {
@@ -98,13 +118,14 @@ function setBannerVideo(videoSrc) {
     wrapper.insertAdjacentElement('afterend', overlay);
 
     vimeoPlayer = new Vimeo.Player(iframe);
-    vimeoPlayer.on('ended', function() {
-      vimeoPlayer.setVolume(0).then(function() {
-        vimeoPlayer.setCurrentTime(0).then(function() {
-          vimeoPlayer.play().catch(function(){});
-        });
-      });
+    vimeoPlayer.off('ended');
+vimeoPlayer.on('ended', function() {
+  vimeoPlayer.setVolume(0).then(function() {
+    vimeoPlayer.setCurrentTime(0).then(function() {
+      vimeoPlayer.play().catch(function(){});
     });
+  });
+});
     _bannerInitialized = true;
 
   } else {
