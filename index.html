@@ -109,9 +109,9 @@
       <li><a href="javascript:void(0)" onclick="openCategoryModal('ofertas')">⇁ Melhores Ofertas ↽</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('promocoes')" class="nav-promocoes">⚡ JOGOS GRÁTIS ⚡</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')">Como instalar</a></li>
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')">SORTEIOS</a></li>
+      <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')">Sorteios</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('duvidas')">Dúvidas / Suporte</a></li>
-      <li><a href="javascript:void(0)" id="nav-meus-favoritos" class="nav-favoritos">♥ Meus Favoritos</a></li>
+      <li><a href="javascript:void(0)" id="nav-meus-favoritos" class="nav-favoritos">🎔 MINHA LISTA DE FAVORITOS</a></li>
     </ul>
 
     <div class="header-actions">
@@ -131,7 +131,7 @@
   </div>
 </header>
 
-  <section class="banner" id="main-banner">
+<section class="banner" id="main-banner">
     <div id="banner-video" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:0;">
   <iframe 
     src="https://player.vimeo.com/video/1189613164?autoplay=1&muted=1&loop=1&background=1&badge=0&autopause=0&player_id=0&app_id=58479" 
@@ -140,9 +140,9 @@
     title="Banner Video">
   </iframe>
 </div>
+<div data-banner-overlay="1" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:transparent;pointer-events:none;"></div>
    <div class="banner-content">
   <img src="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png" id="banner-logo" alt="Logo do Jogo">
-  
   <p id="banner-desc">BF6 ocupa o top 1 da Gameflix como o jogo mais baixado da plataforma!</p>
   
   <a href="info.html?id=battlefield-6" id="banner-link" target="_blank" rel="noopener noreferrer">
@@ -175,6 +175,10 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 18px;
   ">🔊 ATIVAR SOM</button>
+  <div id="volume-indicator">
+  <svg id="icon-vol-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+  <svg id="icon-vol-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+</div>
   </section>
 
   
@@ -2021,11 +2025,11 @@
 <div class="cat-modal-overlay" id="modal-favoritos">
   <div class="fav-modal">
     <div class="fav-modal-header">
-      <h2>♥ Meus Favoritos</h2>
+      <h2>♥ Minha Lista de JOGOS Favoritos</h2>
       <div class="fav-modal-header-actions">
         <button class="fav-orcamento-btn" id="btn-orcamento-whatsapp" onclick="abrirWhatsAppOrcamento()" title="Solicitar orçamento com seus favoritos">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.136 1.535 5.875L0 24l6.305-1.506A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.368l-.36-.214-3.732.891.924-3.64-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
-          Solicitar Orçamento
+          Solicitar Orçamento Personalizado do seu COMBO ➟
         </button>
         <button class="fav-modal-close" onclick="fecharModalFavoritos()">✕</button>
       </div>
@@ -2082,6 +2086,5 @@
 <script src="tracking.js"></script>
 <script src="auth.js"></script>
 <script src="favoritos.js"></script>
- 
 </body>
 </html>
