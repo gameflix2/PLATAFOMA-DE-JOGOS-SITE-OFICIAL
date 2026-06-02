@@ -728,7 +728,7 @@ var ofertasConfig = [
   
     id: '    forza-horizon-6    ',
     titulo: ' Forza Horizon 6',
-    imagem: '   https://azitech.com.br/wp-content/uploads/2024/08/Forza-Horizon-6-lancamento.jpg ',
+    imagem: 'https://upload.wikimedia.org/wikipedia/pt/0/03/Forza_Horizon_6.jpg',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png',
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
