@@ -206,7 +206,7 @@ function toGameSlug(title) {
 /**
  * Abre o WhatsApp com uma mensagem personalizada contendo
  * a lista de jogos favoritos do usuário.
- * Número configurado: 5553981045078
+ * Número configurado: 559810219909
  */
 function abrirWhatsAppOrcamento() {
   var usuario = getFavUsuario();
@@ -221,7 +221,7 @@ function abrirWhatsAppOrcamento() {
       var msgVazia = encodeURIComponent(
         saudacao + 'Gostaria de solicitar um orçamento personalizado na Gameflix.'
       );
-      window.open('https://wa.me/5553981045078?text=' + msgVazia, '_blank');
+      window.open('https://wa.me/559810219909?text=' + msgVazia, '_blank');
       return;
     }
 
@@ -236,7 +236,7 @@ function abrirWhatsAppOrcamento() {
       'Aguardo o contato da equipe Gameflix! 🎮';
 
     window.open(
-      'https://wa.me/5553981045078?text=' + encodeURIComponent(mensagem),
+      'https://wa.me/559810219909?text=' + encodeURIComponent(mensagem),
       '_blank'
     );
   });
