@@ -905,7 +905,7 @@ function renderOfertasGames() {
      */
     var href = g.id
       ? 'info.html?id=' + g.id
-      : (g.wppLink || 'https://wa.me/5553981045078');
+      : (g.wppLink || 'https://wa.me/559810219909');
 
     return (
       '<div class="gfo-card">' +
