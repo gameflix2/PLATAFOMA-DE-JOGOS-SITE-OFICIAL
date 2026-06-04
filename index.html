@@ -28,7 +28,75 @@
 </head>
 <body>
 
+<!-- ============================================================
+     GAMEFLIX — LOGIN OBRIGATÓRIO
+     Modificado para: Primeiro Nome + Email + WhatsApp
+     Botão X removido. Login é obrigatório.
+     Gerenciado por: auth.js
+     ============================================================ -->
+<div id="login-screen">
+  <div class="login-header">
+    <a href="#" class="logo">
+      <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349062/l_ogo-removebg-preview_yodvdt.png" alt="GAMEFLIX" style="height:36px;">
+    </a>
+  </div>
 
+  <div class="login-box">
+    <!-- Botão X REMOVIDO — login é obrigatório -->
+
+    <h1>    Faça seu Login na Gameflix!!</h1>
+    <p style="color:#999;font-size:11px;margin:-10px 0 18px;text-align:center;">Preencha seus dados CORRETAMENTE para acessar a plataforma pela Primeira vez!</p>
+
+    <form id="login-form" autocomplete="off">
+
+      <!-- Campo: Primeiro Nome -->
+      <div class="input-group">
+        <input
+          type="text"
+          id="user-nome"
+          placeholder="Primeiro nome"
+          autocomplete="given-name"
+          maxlength="50">
+        <span class="gf-field-error" id="user-nome-error"></span>
+      </div>
+
+      <!-- Campo: Email -->
+      <div class="input-group">
+        <input
+          type="email"
+          id="user-email"
+          placeholder="Email"
+          autocomplete="email">
+        <span class="gf-field-error" id="user-email-error"></span>
+      </div>
+
+      <!-- Campo: WhatsApp (substitui Senha) -->
+      <div class="input-group">
+        <input
+          type="tel"
+          id="user-whatsapp"
+          placeholder="WhatsApp com DDD — ex: (51) 99999-9999"
+          autocomplete="tel"
+          maxlength="16">
+        <span class="gf-field-error" id="user-whatsapp-error"></span>
+      </div>
+
+      <button type="submit" class="btn-login-submit">Entrar na Gameflix</button>
+
+      <div class="login-help">
+        <div class="remember-me">
+          <input type="checkbox" id="remember" checked>
+          <label for="remember">Salvar informações para próximos acessos</label>
+        </div>
+      </div>
+    </form>
+
+    <div class="login-footer-info">
+      <p>Quer saber mais? <a href="javascript:void(0)" onclick="openWppModal()" style="color:#e50914;font-weight:bold;text-decoration:none;">FALE CONOSCO NO WHATSAPP.</a></p>
+      <p class="captcha-text">Acesso 100% gratuito. Sem cartão de crédito.</p>
+    </div>
+  </div>
+</div>
 
 <header class="pinning-header" id="header">
   <div class="main-header"> 
