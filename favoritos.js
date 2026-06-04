@@ -204,39 +204,32 @@ function toGameSlug(title) {
 
 /* ── ORÇAMENTO VIA WHATSAPP ────────────────────────────────── */
 /**
- * Abre o WhatsApp com uma mensagem personalizada contendo
- * a lista de jogos favoritos do usuário.
- * Número configurado: 559810219909
+ * Abre o WhatsApp com a lista do pack do usuário.
+ * Se o pack estiver vazio, envia todos os jogos do catálogo (ofertasConfig).
+ * Número: 5553981021909
  */
 function abrirWhatsAppOrcamento() {
-  var usuario = getFavUsuario();
-
   /* Garante que o cache está atualizado antes de montar a mensagem */
   carregarFavoritos().then(function(lista) {
-    var nome = usuario ? usuario.primeiro_nome : '';
-    var saudacao = nome ? 'Olá, ' + nome + '! ' : 'Olá! ';
+    var jogos = lista && lista.length > 0 ? lista : null;
 
-    if (!lista || lista.length === 0) {
-      /* Sem favoritos: abre WhatsApp com mensagem genérica */
-      var msgVazia = encodeURIComponent(
-        saudacao + 'Gostaria de solicitar um orçamento personalizado na Gameflix.'
-      );
-      window.open('https://wa.me/559810219909?text=' + msgVazia, '_blank');
-      return;
+    /* Se não tem nada no pack, usa todos os títulos do catálogo */
+    if (!jogos) {
+      if (typeof ofertasConfig !== 'undefined' && ofertasConfig.length > 0) {
+        jogos = ofertasConfig.map(function(g) { return (g.titulo || '').trim(); }).filter(Boolean);
+      } else {
+        jogos = [];
+      }
     }
 
-    var listaFormatada = lista.map(function(jogo, i) {
-      return (i + 1) + '. ' + jogo;
+    var listaFormatada = jogos.map(function(jogo) {
+      return jogo;
     }).join('\n');
 
-    var mensagem =
-      saudacao + 'gostaria de solicitar um orçamento personalizado. ' +
-      'Adicionei aos meus favoritos os jogos:\n\n' +
-      listaFormatada + '\n\n' +
-      'Aguardo o contato da equipe Gameflix! 🎮';
+    var mensagem = 'Gustavo, esse é o meu pack:\n' + listaFormatada;
 
     window.open(
-      'https://wa.me/559810219909?text=' + encodeURIComponent(mensagem),
+      'https://wa.me/5553981021909?text=' + encodeURIComponent(mensagem),
       '_blank'
     );
   });
