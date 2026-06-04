@@ -1,11 +1,10 @@
 /* ============================================================
    GAMEFLIX — FAVORITOS.JS
-   Sistema completo de favoritos integrado ao Supabase.
-   Persistência real por usuário via banco de dados.
+   Sistema de favoritos 100% local (localStorage).
+   Sem Supabase, sem API externa.
    ============================================================ */
 
-/* ── ESTADO LOCAL (cache para performance) ─────────────────── */
-var _favoritosCache = null; // array de game_names favoritados pelo usuário
+var FAV_KEY = 'gameflix_favoritos';
 
 /* ── HELPER: USUÁRIO LOGADO ────────────────────────────────── */
 function getFavUsuario() {
@@ -15,94 +14,67 @@ function getFavUsuario() {
   } catch (e) { return null; }
 }
 
-/* ── HELPER: REQUISIÇÃO SUPABASE (reutiliza a do supabase.js) ─ */
-function favSupabaseReq(metodo, filtro, corpo) {
-  var url = SUPABASE_URL + '/rest/v1/favoritos' + (filtro || '');
-  var headers = {
-    'Content-Type': 'application/json',
-    'apikey': SUPABASE_ANON_KEY,
-    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-    'Prefer': 'return=representation'
-  };
-  var opts = { method: metodo, headers: headers };
-  if (corpo) opts.body = JSON.stringify(corpo);
-  return fetch(url, opts).then(function(r) {
-    if (!r.ok && r.status !== 204) throw new Error('Favoritos API: ' + r.status);
-    return r.status === 204 ? [] : r.json().catch(function() { return []; });
-  });
+/* ── CARREGAR FAVORITOS DO LOCALSTORAGE ────────────────────── */
+function carregarFavoritos() {
+  try {
+    var raw = localStorage.getItem(FAV_KEY);
+    return Promise.resolve(raw ? JSON.parse(raw) : []);
+  } catch (e) {
+    return Promise.resolve([]);
+  }
 }
 
-/* ── CARREGAR FAVORITOS DO USUÁRIO ─────────────────────────── */
-function carregarFavoritos() {
-  var usuario = getFavUsuario();
-  if (!usuario) return Promise.resolve([]);
-
-  return favSupabaseReq('GET', '?user_email=eq.' + encodeURIComponent(usuario.email) + '&order=created_at.desc')
-    .then(function(rows) {
-      _favoritosCache = rows.map(function(r) { return r.game_name; });
-      return _favoritosCache;
-    })
-    .catch(function() { return []; });
+/* ── SALVAR FAVORITOS NO LOCALSTORAGE ──────────────────────── */
+function salvarFavoritos(lista) {
+  try {
+    localStorage.setItem(FAV_KEY, JSON.stringify(lista));
+  } catch (e) {
+    console.warn('[Favoritos] Erro ao salvar:', e);
+  }
 }
 
 /* ── VERIFICAR SE JÁ É FAVORITO ────────────────────────────── */
 function isFavorito(nomeJogo) {
-  if (!_favoritosCache) return false;
-  return _favoritosCache.indexOf(nomeJogo) !== -1;
+  try {
+    var raw = localStorage.getItem(FAV_KEY);
+    var lista = raw ? JSON.parse(raw) : [];
+    return lista.some(function(f) { return f.game_name === nomeJogo; });
+  } catch (e) { return false; }
 }
 
 /* ── ADICIONAR FAVORITO ────────────────────────────────────── */
 function adicionarFavorito(nomeJogo, imgUrl) {
-  var usuario = getFavUsuario();
-  if (!usuario) return Promise.resolve(false);
   if (isFavorito(nomeJogo)) return Promise.resolve(false);
 
-  var payload = {
-    user_email:    usuario.email,
-    primeiro_nome: usuario.primeiro_nome,
-    whatsapp:      usuario.whatsapp,
-    game_name:     nomeJogo,
-    game_img:      imgUrl || '',
-    created_at:    new Date().toISOString()
-  };
-
-  return favSupabaseReq('POST', '', payload)
-    .then(function() {
-      if (_favoritosCache) _favoritosCache.push(nomeJogo);
-      else _favoritosCache = [nomeJogo];
-      atualizarBotaoFavorito(nomeJogo, true);
-      renderizarMeusFavoritos();
-      mostrarToastFavorito(nomeJogo, true);
-      return true;
-    })
-    .catch(function(e) {
-      console.warn('[Favoritos] Erro ao adicionar:', e);
-      return false;
+  carregarFavoritos().then(function(lista) {
+    lista.unshift({
+      game_name: nomeJogo,
+      game_img: imgUrl || '',
+      created_at: new Date().toISOString()
     });
+    salvarFavoritos(lista);
+    atualizarBotaoFavorito(nomeJogo, true);
+    renderizarMeusFavoritos();
+    mostrarToastFavorito(nomeJogo, true);
+  });
+
+  return Promise.resolve(true);
 }
 
 /* ── REMOVER FAVORITO ──────────────────────────────────────── */
 function removerFavorito(nomeJogo) {
-  var usuario = getFavUsuario();
-  if (!usuario) return Promise.resolve(false);
+  carregarFavoritos().then(function(lista) {
+    var nova = lista.filter(function(f) { return f.game_name !== nomeJogo; });
+    salvarFavoritos(nova);
+    atualizarBotaoFavorito(nomeJogo, false);
+    renderizarMeusFavoritos();
+    mostrarToastFavorito(nomeJogo, false);
+  });
 
-  return favSupabaseReq('DELETE', '?user_email=eq.' + encodeURIComponent(usuario.email) + '&game_name=eq.' + encodeURIComponent(nomeJogo))
-    .then(function() {
-      if (_favoritosCache) {
-        _favoritosCache = _favoritosCache.filter(function(g) { return g !== nomeJogo; });
-      }
-      atualizarBotaoFavorito(nomeJogo, false);
-      renderizarMeusFavoritos();
-      mostrarToastFavorito(nomeJogo, false);
-      return true;
-    })
-    .catch(function(e) {
-      console.warn('[Favoritos] Erro ao remover:', e);
-      return false;
-    });
+  return Promise.resolve(true);
 }
 
-/* ── TOGGLE FAVORITO (adicionar ou remover) ────────────────── */
+/* ── TOGGLE FAVORITO ───────────────────────────────────────── */
 function toggleFavorito(nomeJogo, imgUrl) {
   if (isFavorito(nomeJogo)) {
     removerFavorito(nomeJogo);
@@ -122,7 +94,7 @@ function atualizarBotaoFavorito(nomeJogo, ativo) {
     btn.innerHTML = '♥ Adicionado';
     btn.classList.add('favorito-ativo');
   } else {
-    btn.innerHTML = '♡ Minha Lista';
+    btn.innerHTML = '♡ ADICIONAR JOGO AO PACK';
     btn.classList.remove('favorito-ativo');
   }
 }
@@ -138,7 +110,7 @@ function sincronizarBotaoBanner(nomeJogo, imgUrl) {
     btn.innerHTML = '♥ Adicionado';
     btn.classList.add('favorito-ativo');
   } else {
-    btn.innerHTML = '♡ Minha Lista';
+    btn.innerHTML = '♡ ADICIONAR JOGO AO PACK';
     btn.classList.remove('favorito-ativo');
   }
 }
@@ -148,8 +120,8 @@ function mostrarToastFavorito(nomeJogo, adicionado) {
   var toast = document.getElementById('fav-toast');
   if (!toast) return;
   toast.textContent = adicionado
-    ? '♥ "' + nomeJogo + '" adicionado aos favoritos!'
-    : '♡ "' + nomeJogo + '" removido dos favoritos.';
+    ? '♥ "' + nomeJogo + '" adicionado ao pack!'
+    : '♡ "' + nomeJogo + '" removido do pack.';
   toast.classList.add('show');
   clearTimeout(toast._timer);
   toast._timer = setTimeout(function() {
@@ -157,44 +129,42 @@ function mostrarToastFavorito(nomeJogo, adicionado) {
   }, 3000);
 }
 
-/* ── RENDERIZAR MODAL "MEUS FAVORITOS" ─────────────────────── */
+/* ── RENDERIZAR MODAL "MEU PACK" ───────────────────────────── */
 function renderizarMeusFavoritos() {
   var container = document.getElementById('favoritos-grid');
   if (!container) return;
 
-  carregarFavoritos().then(function() {
-    favSupabaseReq('GET', '?user_email=eq.' + encodeURIComponent((getFavUsuario() || {}).email || '') + '&order=created_at.desc')
-      .then(function(rows) {
-        if (!rows || rows.length === 0) {
-          container.innerHTML =
-            '<div class="fav-empty">' +
-              '<div class="fav-empty-icon">♡</div>' +
-              '<p>Sua lista está vazia.</p>' +
-              '<span>Clique em "Minha Lista" em qualquer jogo para salvar aqui.</span>' +
-            '</div>';
-          return;
-        }
+  carregarFavoritos().then(function(lista) {
+    if (!lista || lista.length === 0) {
+      container.innerHTML =
+        '<div class="fav-empty">' +
+          '<div class="fav-empty-icon">♡</div>' +
+          '<p>Seu pack está vazio.</p>' +
+          '<span>Clique em "Adicionar ao Pack" em qualquer jogo para salvar aqui.</span>' +
+        '</div>';
+      return;
+    }
 
-        container.innerHTML = rows.map(function(fav) {
-          var img = fav.game_img || 'https://via.placeholder.com/300x400?text=' + encodeURIComponent(fav.game_name);
-          return (
-            '<div class="fav-card" data-nome="' + fav.game_name + '">' +
-              '<div class="fav-card-img-wrap">' +
-                '<img src="' + img + '" alt="' + fav.game_name + '" loading="lazy">' +
-                '<div class="fav-card-overlay">' +
-                  '<button class="fav-remove-btn" onclick="removerFavorito(\'' + fav.game_name.replace(/'/g, "\\'") + '\')" title="Remover">✕</button>' +
-                  '<a href="info.html?id=' + toGameSlug(fav.game_name) + '" class="fav-obter-btn" target="_blank">⚡ Obter</a>' +
-                '</div>' +
-              '</div>' +
-              '<p class="fav-card-nome">' + fav.game_name + '</p>' +
-            '</div>'
-          );
-        }).join('');
-      });
+    container.innerHTML = lista.map(function(fav) {
+      var img = fav.game_img || 'https://via.placeholder.com/300x400?text=' + encodeURIComponent(fav.game_name);
+      var nomeEscapado = fav.game_name.replace(/'/g, "\\'");
+      return (
+        '<div class="fav-card" data-nome="' + fav.game_name + '">' +
+          '<div class="fav-card-img-wrap">' +
+            '<img src="' + img + '" alt="' + fav.game_name + '" loading="lazy">' +
+            '<div class="fav-card-overlay">' +
+              '<button class="fav-remove-btn" onclick="removerFavorito(\'' + nomeEscapado + '\')" title="Remover">✕</button>' +
+              '<a href="info.html?id=' + toGameSlug(fav.game_name) + '" class="fav-obter-btn" target="_blank">⚡ Obter</a>' +
+            '</div>' +
+          '</div>' +
+          '<p class="fav-card-nome">' + fav.game_name + '</p>' +
+        '</div>'
+      );
+    }).join('');
   });
 }
 
-/* ── HELPER: slug igual ao do script.js ────────────────────── */
+/* ── HELPER: SLUG ──────────────────────────────────────────── */
 function toGameSlug(title) {
   if (typeof window.toGameSlug === 'function' && window.toGameSlug !== toGameSlug) {
     return window.toGameSlug(title);
@@ -202,19 +172,15 @@ function toGameSlug(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
-/* ── ORÇAMENTO VIA WHATSAPP ────────────────────────────────── */
-/**
- * Abre o WhatsApp com a lista do pack do usuário.
- * Se o pack estiver vazio, envia todos os jogos do catálogo (ofertasConfig).
- * Número: 5553981021909
- */
+/* ── ENVIAR PACK VIA WHATSAPP ──────────────────────────────── */
 function abrirWhatsAppOrcamento() {
-  /* Garante que o cache está atualizado antes de montar a mensagem */
   carregarFavoritos().then(function(lista) {
-    var jogos = lista && lista.length > 0 ? lista : null;
+    var jogos;
 
-    /* Se não tem nada no pack, usa todos os títulos do catálogo */
-    if (!jogos) {
+    if (lista && lista.length > 0) {
+      jogos = lista.map(function(f) { return f.game_name; });
+    } else {
+      /* Pack vazio: envia todos os jogos do catálogo */
       if (typeof ofertasConfig !== 'undefined' && ofertasConfig.length > 0) {
         jogos = ofertasConfig.map(function(g) { return (g.titulo || '').trim(); }).filter(Boolean);
       } else {
@@ -222,11 +188,7 @@ function abrirWhatsAppOrcamento() {
       }
     }
 
-    var listaFormatada = jogos.map(function(jogo) {
-      return jogo;
-    }).join('\n');
-
-    var mensagem = 'Gustavo, esse é o meu pack:\n' + listaFormatada;
+    var mensagem = 'Gustavo, esse é o meu pack:\n' + jogos.join('\n');
 
     window.open(
       'https://wa.me/5553981021909?text=' + encodeURIComponent(mensagem),
@@ -237,17 +199,15 @@ function abrirWhatsAppOrcamento() {
 
 /* ── INIT ──────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', function() {
-  /* Carrega favoritos do usuário logo ao iniciar */
-  carregarFavoritos().then(function() {
-    var btn = document.getElementById('btn-favorito');
-    var nomeInicial = btn ? btn.getAttribute('data-jogo') : '';
-    var imgInicial = btn ? btn.getAttribute('data-img') : '';
-    sincronizarBotaoBanner(nomeInicial, imgInicial);
-  });
+  /* Sincroniza botão do banner ao carregar */
+  var btn = document.getElementById('btn-favorito');
+  var nomeInicial = btn ? btn.getAttribute('data-jogo') : '';
+  var imgInicial  = btn ? btn.getAttribute('data-img')  : '';
+  sincronizarBotaoBanner(nomeInicial, imgInicial);
+
   /* Clique no botão de favorito do banner */
-  var btnFav = document.getElementById('btn-favorito');
-  if (btnFav) {
-    btnFav.addEventListener('click', function() {
+  if (btn) {
+    btn.addEventListener('click', function() {
       var nome = this.getAttribute('data-jogo');
       var img  = this.getAttribute('data-img');
       if (!nome) return;
@@ -255,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  /* Abrir modal Meus Favoritos */
+  /* Abrir modal MEU PACK */
   var btnNav = document.getElementById('nav-meus-favoritos');
   if (btnNav) {
     btnNav.addEventListener('click', function(e) {
@@ -264,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  /* Fechar modal */
+  /* Fechar modal clicando fora */
   var modalOverlay = document.getElementById('modal-favoritos');
   if (modalOverlay) {
     modalOverlay.addEventListener('click', function(e) {
@@ -293,7 +253,6 @@ function fecharModalFavoritos() {
 }
 
 /* ── HOOK: QUANDO O BANNER MUDA DE JOGO ───────────────────── */
-/* Intercepta a função setBannerInfoLink do script.js */
 document.addEventListener('DOMContentLoaded', function() {
   (function waitForSetBanner() {
     if (typeof setBannerInfoLink !== 'function') {
@@ -301,11 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     var _orig = setBannerInfoLink;
     window.setBannerInfoLink = function(title) {
-  _orig(title);
-  /* Pega a capa do card clicado */
-  var cardImg = document.querySelector('.card-container .poster-img[data-title="' + title + '"], .game-card[data-title="' + title + '"]');
-  var imgUrl = cardImg ? cardImg.src : '';
-  sincronizarBotaoBanner(title, imgUrl);
-};
+      _orig(title);
+      var cardImg = document.querySelector('[data-title="' + title + '"]');
+      var imgUrl = cardImg ? cardImg.src : '';
+      sincronizarBotaoBanner(title, imgUrl);
+    };
   })();
 });
