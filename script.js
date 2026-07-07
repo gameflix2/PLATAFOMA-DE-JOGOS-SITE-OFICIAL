@@ -628,7 +628,7 @@ var ofertasConfig = [
     desc: 'O terror voltou mais assustador do que nunca. Deluxe Edition.',
     video: 'https://vimeo.com/1187563729?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-70%',
     hot: true
   },
@@ -641,7 +641,7 @@ var ofertasConfig = [
     desc: 'Pai e filho contra o impossível. Atravesse os Nove Reinos.',
     video: 'https://vimeo.com/1187555294?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-70%',
     hot: true
   },
@@ -654,7 +654,7 @@ var ofertasConfig = [
     desc: 'A lenda do oeste. Lealdade, perda e redenção no pôr do sol mais épico.',
     video: 'https://vimeo.com/1187556626?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-70%',
     hot: false
   },
@@ -667,7 +667,7 @@ var ofertasConfig = [
     desc: 'Mundo aberto colossal. Explore, conquiste e descubra cada segredo.',
     video: 'https://vimeo.com/1187774922?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,97',
+    precoNovo: 'R$ 29,97',
     desconto: '-70%',
     hot: false
   },
@@ -680,7 +680,7 @@ var ofertasConfig = [
     desc: 'O mais baixado da Gameflix. Destruição total e gráficos fotorrealistas.',
     video: 'https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-70%',
     hot: true
   },
@@ -693,7 +693,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 199,90',
-    precoNovo: 'R$ 74,90',
+    precoNovo: 'R$ 24,90',
     desconto: '-62%',
     hot: true
   },
@@ -706,7 +706,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 249,90',
-    precoNovo: 'R$ 74,90',
+    precoNovo: 'R$ 24,90',
     desconto: '-70%',
     hot: true
   }, 
@@ -719,7 +719,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-70%',
     hot: true
   }, 
@@ -733,7 +733,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 549,90',
-    precoNovo: 'R$ 109,80',
+    precoNovo: 'R$ 59,80',
     desconto: '-80%',
     hot: true
   }, 
@@ -747,7 +747,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 299,90',
-    precoNovo: 'R$ 89,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-70%',
     hot: true
   }, 
@@ -762,7 +762,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 279,90',
-    precoNovo: 'R$ 74,90',
+    precoNovo: 'R$ 24,90',
     desconto: '-73%',
     hot: true
   }, 
@@ -780,7 +780,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 249,90',
-    precoNovo: 'R$ 74,97',
+    precoNovo: 'R$ 24,97',
     desconto: '-70%',
     hot: true
   }, 
@@ -796,7 +796,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 249,90',
-    precoNovo: 'R$ 74,90',
+    precoNovo: 'R$ 24,90',
     desconto: '-70%',
     hot: true
   }, 
@@ -811,7 +811,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 279,90',
-    precoNovo: 'R$ 83,90',
+    precoNovo: 'R$ 23,90',
     desconto: '-70%',
     hot: true
   }, 
@@ -826,7 +826,7 @@ var ofertasConfig = [
     desc: 'RPG em mundo aberto em Night City. Edição completa com DLC Phantom Liberty.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 169,90',
-    precoNovo: 'R$ 69,70',
+    precoNovo: 'R$ 29,70',
     desconto: '-59%',
     hot: true
   }, 
@@ -845,7 +845,7 @@ var ofertasConfig = [
     desc: 'Sobreviva ao paraíso selvagem. O atirador de mundo aberto que definiu uma geração.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 99,67',
-    precoNovo: 'R$ 44,85',
+    precoNovo: 'R$ 24,85',
     desconto: '-55%',
     hot: false
   },
@@ -858,7 +858,7 @@ var ofertasConfig = [
     desc: 'A era do gelo. Caçador ou presa — a lei é a sua.',
     video: 'https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 87,90',
-    precoNovo: 'R$ 44,90',
+    precoNovo: 'R$ 24,90',
     desconto: '-49%',
     hot: false
   },
@@ -871,7 +871,7 @@ var ofertasConfig = [
     desc: 'Jill Valentine contra o implacável Nemesis. Fuga ou confronto?',
     video: 'https://vimeo.com/1187557074?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 99,82',
-    precoNovo: 'R$ 54,90',
+    precoNovo: 'R$ 24,90',
     desconto: '-45%',
     hot: false
   },
@@ -884,7 +884,7 @@ var ofertasConfig = [
     desc: 'Jill Valentine contra o implacável Nemesis. Fuga ou confronto?',
     video: 'https://vimeo.com/1187557074?share=copy&fl=sv&fe=ci',
     precoAntigo: 'R$ 199,00',
-    precoNovo: 'R$ 69,90',
+    precoNovo: 'R$ 29,90',
     desconto: '-65%',
     hot: false
   },
@@ -922,7 +922,7 @@ function renderOfertasGames() {
             '<span class="gfo-price-new">' + g.precoNovo + '</span>' +
           '</div>' +
           '<a class="gfo-get-btn" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
-            '⚡ Obter Agora' +
+              'COMPRAR AGORA' +
           '</a>' +
         '</div>' +
       '</div>'
