@@ -922,7 +922,7 @@ function renderOfertasGames() {
             '<span class="gfo-price-new">' + g.precoNovo + '</span>' +
           '</div>' +
           '<a class="gfo-get-btn" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
-              'COMPRAR AGORA' +
+              'COMPRAR PELO WHATSAPP' +
           '</a>' +
         '</div>' +
       '</div>'
