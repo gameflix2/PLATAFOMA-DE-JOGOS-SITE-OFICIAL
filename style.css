@@ -58,6 +58,7 @@ body {
   color: #e5e5e5;
   text-decoration: none;
   transition: color 0.3s;
+  font-family: 'Goldman', sans-serif;
 }
 
 .nav-links a:hover { color: var(--text-gray); }
@@ -335,7 +336,8 @@ body {
   width: 200%;
   height: 200%;
   background: linear-gradient(45deg, #ff0000, #ff3b3b, #ff0000, #ff3b3b);
-  animation: glow 2.5s linear infinite;
+  animation: glow 2.5s
+   linear infinite;
   filter: blur(15px);
   z-index: -1;
 }
@@ -2853,9 +2855,9 @@ body.modal-open { overflow: hidden; }
   z-index: 1;
   padding: 6px 14px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #e50914, #ff3b3b);
-  box-shadow: 0 0 5px #e50914, 0 0 10px #ff3b3b, 0 0 15px #ff3b3b;
-  animation: float 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #e5091444, #f30303);
+  
+  
   transition: 0.3s;
   text-decoration: none !important;
 }
@@ -2940,27 +2942,49 @@ body.modal-open { overflow: hidden; }
   transform: scale(1.04);
 }
 
+
+/* ── LINK "DÚVIDAS / SUPORTE" NA NAV ──────────────────────────── */
+.nav-links a[onclick*="duvidas"] {
+  display: inline-block;
+  color: #000000 !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e5091446, #ec0000);
+  transition: 0.3s;
+  text-decoration: none !important;
+}
+
+.nav-links a[onclick*="duvidas"]:hover {
+  transform: scale(1.1) !important;
+  color: #fff !important;
+}
+
+
+/* ── LINK "MEUS FAVORITOS" NA NAV ──────────────────────────── */
 /* ── LINK "MEUS FAVORITOS" NA NAV ──────────────────────────── */
 .nav-favoritos {
-  color: #e50914 !important;
+  display: inline-block;
+  color: #ffffff !important;
   font-weight: bold;
+  text-transform: uppercase;
   position: relative;
+  overflow: hidden;
+  z-index: 1;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e5091448, #ff0000);
+  transition: 0.3s;
+  text-decoration: none !important;
 }
 
-.nav-favoritos::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #e50914;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.nav-favoritos:hover::after {
-  transform: scaleX(1);
+.nav-favoritos:hover {
+  transform: scale(1.1) !important;
+  color: #fff !important;
 }
 
 /* ── TOAST ─────────────────────────────────────────────────── */
@@ -3160,6 +3184,338 @@ body.modal-open { overflow: hidden; }
   color: #555;
 }
 
+/* ── MODAL CONFIRMAÇÃO DO PACK (QR CODE) ──────────────────── */
+/* Estética premium, isolada em #modal-confirmacao-pack para não
+   afetar o modal de favoritos (que usa as mesmas classes base). */
+
+#modal-confirmacao-pack.cat-modal-overlay {
+  background: radial-gradient(circle at 50% 20%, rgba(229,9,20,0.10), rgba(0,0,0,0.92) 60%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+#modal-confirmacao-pack .confirma-pack-modal {
+  max-width: 580px;
+  position: relative;
+  background:
+    radial-gradient(140% 100% at 50% 0%, rgba(229,9,20,0.16) 0%, transparent 55%),
+    linear-gradient(160deg, #161616 0%, #0a0a0a 65%, #120404 100%);
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow:
+    0 0 0 1px rgba(229,9,20,0.18),
+    0 30px 70px -20px rgba(0,0,0,0.85),
+    0 0 90px -10px rgba(229,9,20,0.25);
+  overflow: hidden;
+  animation: confirmaPackModalIn 0.5s cubic-bezier(.19,1,.22,1);
+}
+
+@keyframes confirmaPackModalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(30px); filter: blur(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+/* Linha de brilho no topo, estilo "premium ticket" */
+#modal-confirmacao-pack .confirma-pack-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e50914, #ff5b5b, #e50914, transparent);
+  background-size: 200% 100%;
+  animation: confirmaPackShimmer 3.5s linear infinite;
+  z-index: 2;
+}
+
+@keyframes confirmaPackShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+#modal-confirmacao-pack .fav-modal-header {
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+}
+
+#modal-confirmacao-pack .fav-modal-header h2 {
+  font-size: 1.7rem;
+  letter-spacing: 2px;
+  background: linear-gradient(120deg, #fff 30%, #ff8a8a 60%, #e50914 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(229,9,20,0.25);
+}
+
+#modal-confirmacao-pack .fav-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #ccc;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.fav-modal-close:hover {
+  background: rgba(229, 9, 20, 0.18);
+  border-color: rgba(229, 9, 20, 0.5);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+#modal-confirmacao-pack .confirma-pack-body {
+  padding: 30px 28px 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+#modal-confirmacao-pack .confirma-pack-titulo {
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.35rem;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#modal-confirmacao-pack .confirma-pack-titulo::before,
+#modal-confirmacao-pack .confirma-pack-titulo::after {
+  content: '';
+  width: 26px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e50914);
+  border-radius: 2px;
+}
+
+#modal-confirmacao-pack .confirma-pack-titulo::after {
+  background: linear-gradient(90deg, #e50914, transparent);
+}
+
+/* Wrapper fixo do carrossel: só ele tem posição relativa para as
+   setas ficarem ancoradas nas capas, sem afetar o resto do popup. */
+#modal-confirmacao-pack .confirma-pack-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+#modal-confirmacao-pack .confirma-pack-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 18px 6px;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox: esconde a barra, navegação só pelas setas */
+}
+
+#modal-confirmacao-pack .confirma-pack-grid::-webkit-scrollbar {
+  display: none; /* Chrome/Safari: esconde a barra */
+}
+
+#modal-confirmacao-pack .confirma-pack-item {
+  flex: 0 0 auto;
+  width: 100px; /* ou o tamanho que você preferir */
+}
+
+#modal-confirmacao-pack .seta-esquerda,
+#modal-confirmacao-pack .seta-direita {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 5;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,10,10,0.75);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+#modal-confirmacao-pack .seta-esquerda:hover,
+#modal-confirmacao-pack .seta-direita:hover {
+  background: rgba(229,9,20,0.85);
+  border-color: rgba(229,9,20,0.9);
+  transform: translateY(-50%) scale(1.08);
+}
+
+#modal-confirmacao-pack .seta-esquerda:disabled,
+#modal-confirmacao-pack .seta-direita:disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+#modal-confirmacao-pack .seta-esquerda {
+  left: -4px;
+}
+
+#modal-confirmacao-pack .seta-direita {
+  right: -4px;
+}
+
+#modal-confirmacao-pack .confirma-pack-grid::-webkit-scrollbar {
+  width: 6px;
+}
+#modal-confirmacao-pack .confirma-pack-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+#modal-confirmacao-pack .confirma-pack-grid::-webkit-scrollbar-thumb {
+  background: rgba(229,9,20,0.4);
+  border-radius: 10px;
+}
+
+#modal-confirmacao-pack .confirma-pack-item {
+  aspect-ratio: 3/4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: confirmaPackItemIn 0.45s ease both;
+}
+
+#modal-confirmacao-pack .confirma-pack-item:hover {
+  transform: translateY(-3px) scale(1.05);
+  border-color: rgba(229,9,20,0.6);
+  box-shadow: 0 10px 24px rgba(229,9,20,0.25);
+  z-index: 2;
+}
+
+@keyframes confirmaPackItemIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#modal-confirmacao-pack .confirma-pack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#modal-confirmacao-pack .confirma-pack-instrucao {
+  color: #9a9a9a;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  margin-bottom: 20px;
+  max-width: 320px;
+}
+
+#modal-confirmacao-pack .confirma-pack-instrucao:nth-of-type(2) {
+  margin-top: -4px;
+  margin-bottom: 22px;
+  position: relative;
+  padding-top: 22px;
+}
+
+#modal-confirmacao-pack .confirma-pack-instrucao:nth-of-type(2)::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #666;
+  background: #0a0a0a;
+  padding: 0 10px;
+}
+
+#modal-confirmacao-pack .confirma-pack-instrucao:nth-of-type(2)::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+}
+
+#modal-confirmacao-pack .confirma-pack-qr-wrap {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 22px;
+  box-shadow:
+    0 0 0 1px rgba(229,9,20,0.15),
+    0 0 45px rgba(229,9,20,0.35),
+    0 12px 30px rgba(0,0,0,0.55);
+  animation: confirmaPackQrPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes confirmaPackQrPulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(229,9,20,0.15), 0 0 45px rgba(229,9,20,0.30), 0 12px 30px rgba(0,0,0,0.55); }
+  50%      { box-shadow: 0 0 0 1px rgba(229,9,20,0.3), 0 0 65px rgba(229,9,20,0.55), 0 12px 30px rgba(0,0,0,0.55); }
+}
+
+
+
+#modal-confirmacao-pack .confirma-pack-qr {
+  display: block;
+  width: 190px;
+  height: 190px;
+  border-radius: 8px;
+  position: relative;
+}
+
+#modal-confirmacao-pack .confirma-pack-btn {
+  justify-content: center;
+  width: 100%;
+  padding: 15px 16px;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 26px rgba(37,211,102,0.35), 0 0 0 1px rgba(255,255,255,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#modal-confirmacao-pack .confirma-pack-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: skewX(-20deg);
+  animation: confirmaPackBtnShine 2.6s ease-in-out infinite;
+}
+
+@keyframes confirmaPackBtnShine {
+  0%   { left: -60%; }
+  50%  { left: 130%; }
+  100% { left: 130%; }
+}
+
+#modal-confirmacao-pack .confirma-pack-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(37,211,102,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+}
+
 /* ── RESPONSIVO ────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .favoritos-grid {
@@ -3170,6 +3526,29 @@ body.modal-open { overflow: hidden; }
 
   .fav-modal-header {
     padding: 16px 20px;
+  }
+
+  #modal-confirmacao-pack .confirma-pack-modal {
+    max-width: 92vw;
+  }
+
+  #modal-confirmacao-pack .confirma-pack-qr {
+    width: 160px;
+    height: 160px;
+  }
+
+  #modal-confirmacao-pack .confirma-pack-carousel {
+    max-width: 100%;
+  }
+
+  #modal-confirmacao-pack .seta-esquerda,
+  #modal-confirmacao-pack .seta-direita {
+    width: 28px;
+    height: 28px;
+  }
+
+  #modal-confirmacao-pack .fav-modal-header h2 {
+    font-size: 1.4rem;
   }
 
   #fav-toast {
