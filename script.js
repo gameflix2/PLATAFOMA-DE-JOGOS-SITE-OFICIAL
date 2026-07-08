@@ -942,3 +942,41 @@ function renderOfertasGames() {
     _origOpen(cat);
   };
 })();
+
+/* ── CARROSSEL DE CAPAS DO MODAL "CONFIRMA PACK" ──────────────
+   O popup em si (confirma-pack-modal) tem tamanho fixo; apenas
+   a faixa de capas (.confirma-pack-grid) rola horizontalmente,
+   controlada pelas setas laterais. */
+(function initCarrosselConfirmaPack() {
+  var container = document.getElementById('confirma-pack-grid');
+  var setaEsquerda = document.getElementById('seta-pack-esquerda');
+  var setaDireita = document.getElementById('seta-pack-direita');
+
+  if (!container || !setaEsquerda || !setaDireita) return;
+
+  var PASSO = 150; // px por clique
+
+  function atualizarEstadoSetas() {
+    var maxScroll = container.scrollWidth - container.clientWidth;
+    setaEsquerda.disabled = container.scrollLeft <= 0;
+    setaDireita.disabled = container.scrollLeft >= maxScroll - 1;
+  }
+
+  setaEsquerda.addEventListener('click', function () {
+    container.scrollLeft -= PASSO;
+  });
+
+  setaDireita.addEventListener('click', function () {
+    container.scrollLeft += PASSO;
+  });
+
+  container.addEventListener('scroll', atualizarEstadoSetas);
+  window.addEventListener('resize', atualizarEstadoSetas);
+
+  // Reavalia sempre que o conteúdo do carrossel é redesenhado
+  // (favoritos.js re-renderiza #confirma-pack-grid a cada abertura do modal).
+  var observer = new MutationObserver(atualizarEstadoSetas);
+  observer.observe(container, { childList: true });
+
+  atualizarEstadoSetas();
+})();
