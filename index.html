@@ -17,6 +17,8 @@
 <link rel="icon" type="image/png" href="https://cdn.awsli.com.br/300x300/138/138431/produto/247791692/mac-4397-p1-2uo82k2e1g.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Goldman&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     @keyframes pulse-unmute {
@@ -40,11 +42,12 @@
       
       
       <li><a href="javascript:void(0)" onclick="openCategoryModal('promocoes')" class="nav-promocoes"></a></li>
+       <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')">  </a></li>
       
       <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')"꧁꧂</a></li>
       <li><a href="javascript:void(0)" onclick="openCategoryModal('duvidas')">Dúvidas / Suporte</a></li>
-      <li><a href="javascript:void(0)" id="nav-meus-favoritos" class="nav-favoritos">MEUS JOGOS PREFERIDOS</a></li>
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')"> - </a></li>
+      <li><a href="javascript:void(0)" id="nav-meus-favoritos" class="nav-favoritos"> MINHA SELEÇÃO DE JOGOS</a></li>
+     
       <li><a href="javascript:void(0)" onclick="openCategoryModal('ofertas')">JOGOS EM PROMOÇAO ESTA SEMANA </a></li>
     </ul>
 
@@ -1941,7 +1944,7 @@
     <div class="fav-modal-header">
       <h2>♥ Minha Lista de JOGOS Favoritos</h2>
       <div class="fav-modal-header-actions">
-        <button class="fav-orcamento-btn" id="btn-orcamento-whatsapp" onclick="abrirWhatsAppOrcamento()" title="Solicitar orçamento com seus favoritos">
+        <button class="fav-orcamento-btn" id="btn-orcamento-whatsapp" onclick="abrirTelaConfirmacaoPack()" title="Solicitar orçamento com seus favoritos">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.136 1.535 5.875L0 24l6.305-1.506A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.368l-.36-.214-3.732.891.924-3.64-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
           ENVIAR MEU PACK E LIBERAR TESTE ➟
         </button>
@@ -1991,6 +1994,41 @@
         <p>Sua lista está vazia.</p>
         <span>Clique em "Minha Lista" em qualquer jogo para salvar aqui.</span>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO DO PACK (QR CODE) -->
+<div class="cat-modal-overlay" id="modal-confirmacao-pack">
+  <div class="fav-modal confirma-pack-modal">
+    
+
+    <div class="confirma-pack-body">
+      <button class="fav-modal-close" onclick="fecharConfirmacaoPack()">✕</button>
+      <p class="confirma-pack-titulo">Confira os jogos escolhidos</p>
+
+      <div class="confirma-pack-carousel">
+        <button type="button" class="seta-esquerda" id="seta-pack-esquerda" aria-label="Ver jogos anteriores">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="confirma-pack-grid" id="confirma-pack-grid"></div>
+        <button type="button" class="seta-direita" id="seta-pack-direita" aria-label="Ver próximos jogos">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <p class="confirma-pack-instrucao">Escaneie o QR Code para solicitar os seus jogos no WHATSAPP.</p>
+
+      <div class="confirma-pack-qr-wrap">
+        <img id="confirma-pack-qr" class="confirma-pack-qr" alt="QR Code WhatsApp" src="">
+      </div>
+
+      <p class="confirma-pack-instrucao">Ou clique no botão abaixo para chamar no WhatsApp pelo PC.</p>
+
+      <button class="fav-orcamento-btn confirma-pack-btn" id="btn-confirmar-pack" onclick="confirmarEnvioPack()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.136 1.535 5.875L0 24l6.305-1.506A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.368l-.36-.214-3.732.891.924-3.64-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+        WhatsApp Web
+      </button>
     </div>
   </div>
 </div>
