@@ -197,6 +197,99 @@ function abrirWhatsAppOrcamento() {
   });
 }
 
+/* ============================================================
+   TELA DE CONFIRMAÇÃO DO PACK (QR CODE)
+   Substitui apenas o redirecionamento direto ao WhatsApp que
+   ocorria no clique do botão "Enviar meu pack e liberar teste".
+   Toda a lógica de favoritos acima permanece inalterada.
+   ============================================================ */
+
+var CONFIRMA_PACK_NUMERO = '5553981021909';
+
+/* ── MONTA A MENSAGEM DINÂMICA COM OS JOGOS ESCOLHIDOS ─────── */
+function montarMensagemPack(jogos) {
+  var linhas = jogos.map(function (nome) { return '- ' + nome; }).join('\n');
+  return 'Olá, Gameflix!\n\nOs meus jogos escolhidos são:\n\n' + linhas + '\n\nObrigado!';
+}
+
+/* ── MONTA A URL DO WHATSAPP COM A MENSAGEM PRONTA ─────────── */
+function montarLinkWhatsAppPack(jogos) {
+  var mensagem = montarMensagemPack(jogos);
+  return 'https://wa.me/' + CONFIRMA_PACK_NUMERO + '?text=' + encodeURIComponent(mensagem);
+}
+
+/* ── ABRE A TELA DE CONFIRMAÇÃO ────────────────────────────── */
+function abrirTelaConfirmacaoPack() {
+  carregarFavoritos().then(function (lista) {
+    var jogos;
+
+    if (lista && lista.length > 0) {
+      jogos = lista.map(function (f) { return f.game_name; });
+    } else if (typeof ofertasConfig !== 'undefined' && ofertasConfig.length > 0) {
+      jogos = ofertasConfig.map(function (g) { return (g.titulo || '').trim(); }).filter(Boolean);
+    } else {
+      jogos = [];
+    }
+
+    var link = montarLinkWhatsAppPack(jogos);
+
+    // Guarda o link atual para o botão "Confirmar"
+    var btnConfirmar = document.getElementById('btn-confirmar-pack');
+    if (btnConfirmar) btnConfirmar.setAttribute('data-link', link);
+
+    // Gera o QR Code apontando para o link do WhatsApp
+    var qrImg = document.getElementById('confirma-pack-qr');
+    if (qrImg) {
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=190x190&data=' + encodeURIComponent(link);
+    }
+
+    // Renderiza a galeria com as capas dos jogos escolhidos
+    var grid = document.getElementById('confirma-pack-grid');
+    if (grid) {
+      if (lista && lista.length > 0) {
+        grid.innerHTML = lista.map(function (f) {
+          var img = f.game_img || '';
+          return '<div class="confirma-pack-item"><img src="' + img + '" alt="' + f.game_name + '" loading="lazy"></div>';
+        }).join('');
+      } else {
+        grid.innerHTML = '';
+      }
+    }
+
+    var modal = document.getElementById('modal-confirmacao-pack');
+    if (modal) {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  });
+}
+
+/* ── FECHA A TELA DE CONFIRMAÇÃO ───────────────────────────── */
+function fecharConfirmacaoPack() {
+  var modal = document.getElementById('modal-confirmacao-pack');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+/* ── BOTÃO "CONFIRMAR": MESMA AÇÃO DO QR CODE ──────────────── */
+function confirmarEnvioPack() {
+  var btnConfirmar = document.getElementById('btn-confirmar-pack');
+  var link = btnConfirmar ? btnConfirmar.getAttribute('data-link') : null;
+  if (!link) return;
+  window.open(link, '_blank');
+}
+
+/* Fecha a tela de confirmação clicando fora do card */
+document.addEventListener('DOMContentLoaded', function () {
+  var confirmaOverlay = document.getElementById('modal-confirmacao-pack');
+  if (confirmaOverlay) {
+    confirmaOverlay.addEventListener('click', function (e) {
+      if (e.target === this) fecharConfirmacaoPack();
+    });
+  }
+});
+
 /* ── INIT ──────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', function() {
   /* Sincroniza botão do banner ao carregar */
@@ -233,7 +326,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') fecharModalFavoritos();
+    if (e.key === 'Escape') {
+      fecharModalFavoritos();
+      fecharConfirmacaoPack();
+    }
   });
 });
 
