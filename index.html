@@ -1,2071 +1,1508 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <script src="https://player.vimeo.com/api/player.js"></script>
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-984C9PT9MG"></script>
-<script> 
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Premium — Como ter todos jogos os titulos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ─── TOKENS ─────────────────────────────────────────── */
+        :root {
+            --red:        #e50914;
+            --red-glow:   rgba(229, 9, 20, 0.55);
+            --red-dim:    rgba(229, 9, 20, 0.15);
+            --black:      #000000;
+            --surface:    #0d0d0d;
+            --border:     rgba(255,255,255,0.07);
+            --text:       #ffffff;
+            --muted:      rgba(255,255,255,0.45);
+        }
 
-  gtag('config', 'G-984C9PT9MG');
-</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Início - Gameflix</title>
-  
-<link rel="icon" type="image/png" href="https://cdn.awsli.com.br/300x300/138/138431/produto/247791692/mac-4397-p1-2uo82k2e1g.png">
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Goldman&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    @keyframes pulse-unmute {
-      0%   { box-shadow: 0 0 16px rgba(229,9,20,0.5); transform: scale(1); }
-      50%  { box-shadow: 0 0 36px rgba(229,9,20,0.9); transform: scale(1.05); }
-      100% { box-shadow: 0 0 16px rgba(229,9,20,0.5); transform: scale(1); }
-    }
-  </style>
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: var(--black);
+            font-family: 'Barlow', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ─── GRAIN OVERLAY ──────────────────────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* ─── LAYOUT ─────────────────────────────────────────── */
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 48px 16px 60px;
+        }
+
+        /* ─── LOGO ───────────────────────────────────────────── */
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.12em;
+            color: var(--red);
+            margin-bottom: 36px;
+            text-shadow: 0 0 24px var(--red-glow);
+        }
+
+        /* ─── HEADLINE ───────────────────────────────────────── */
+        .headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2rem, 6vw, 3.6rem);
+            line-height: 1.05;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            text-align: center;
+            max-width: 780px;
+            margin-bottom: 40px;
+        }
+        .headline em {
+            font-style: normal;
+            color: var(--red);
+            text-shadow: 0 0 32px var(--red-glow);
+        }
+
+        /* ─── IMAGEM ESTÁTICA (antes era o card de vídeo) ───────── */
+        .video-card {
+            width: 100%;
+            max-width: 820px;
+            background: var(--surface);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03),
+                0 8px 60px rgba(0,0,0,0.8),
+                0 0 80px var(--red-dim);
+            overflow: hidden;
+            position: relative;
+        }
+        .video-ratio {
+            position: relative;
+            width: 100%;
+            padding-bottom: 125%; /* proporção 4x5 (largura x altura) */
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           PLANOS — seção de escolha de planos (substitui o CTA único)
+           ═══════════════════════════════════════════════════════════ */
+        #plans-wrap {
+            width: 100%;
+            max-width: 820px;
+            margin-top: 26px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(14px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
+            text-align: center;
+        }
+        #plans-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            max-height: 2200px;
+        }
+        .plans-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.5rem, 4.4vw, 2.1rem);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .plans-subtitle {
+            font-size: 0.88rem;
+            color: var(--muted);
+            margin-bottom: 28px;
+        }
+        .plans-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: stretch;
+            justify-content: center;
+        }
+
+        /* ─── FAIXA DE OFERTA (estilo premium, comprida, cheia de efeito) ─── */
+        .offer-strip {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            width: 100%;
+            padding: 20px 26px;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            isolation: isolate;
+            background:
+                linear-gradient(90deg, #1a0304 0%, #2b0608 40%, #3a0a0d 100%);
+            border: 1px solid rgba(229,9,20,0.5);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.04) inset,
+                0 10px 34px rgba(0,0,0,0.65),
+                0 0 26px var(--red-dim);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: strip-glow 2.6s ease-in-out infinite;
+        }
+        .offer-strip:hover {
+            transform: translateY(-3px) scale(1.012);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.06) inset,
+                0 14px 44px rgba(0,0,0,0.75),
+                0 0 46px var(--red-glow);
+        }
+
+        /* Faixa lateral vermelha decorativa (referência: "TIRO, FOCO E PRECISÃO") */
+        .offer-strip::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 6px;
+            background: linear-gradient(180deg, #ff4444, var(--red) 60%, #c40812);
+            box-shadow: 0 0 14px var(--red);
+        }
+
+        /* Brilho "correndo para a esquerda" — efeito shine/sweep */
+        .offer-strip::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 100%;
+            width: 55%;
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.14) 45%,
+                rgba(255,255,255,0.35) 50%,
+                rgba(255,255,255,0.14) 55%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: skewX(-18deg);
+            animation: strip-sweep 3.4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .offer-strip__left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        .offer-strip__icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 35% 30%, #ff5b5b, var(--red) 55%, #8c0009);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.06), 0 0 24px var(--red-glow);
+            animation: strip-pulse 2.6s ease-in-out infinite;
+        }
+        .offer-strip__icon svg { width: 24px; height: 24px; fill: #fff; }
+
+        .offer-strip__badge {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.66rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #ffb3b3;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .offer-strip__title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.3rem, 4vw, 1.9rem);
+            letter-spacing: 0.03em;
+            line-height: 1.05;
+            color: #fff;
+            text-shadow: 0 0 18px rgba(229,9,20,0.55);
+        }
+        .offer-strip__title em {
+            font-style: normal;
+            color: var(--red);
+        }
+
+        .offer-strip__right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        .offer-strip__price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1;
+        }
+        .offer-strip__price-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .offer-strip__price-value {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.5rem, 4.6vw, 2.1rem);
+            color: #fff;
+        }
+        .offer-strip__cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 22px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #1b8a3d 0%, #25d366 55%, #34e37a 100%);
+            box-shadow: 0 0 0 2px rgba(37,211,102,0.25), 0 0 22px rgba(37,211,102,0.35);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .offer-strip__cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 0 2px rgba(37,211,102,0.5), 0 0 34px rgba(37,211,102,0.55);
+        }
+
+        @keyframes strip-glow {
+            0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 10px 34px rgba(0,0,0,0.65), 0 0 22px var(--red-dim); }
+            50%      { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 10px 34px rgba(0,0,0,0.65), 0 0 40px var(--red-glow); }
+        }
+        @keyframes strip-sweep {
+            0%   { left: 120%; }
+            55%  { left: -60%; }
+            100% { left: -60%; }
+        }
+        @keyframes strip-pulse {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.08); }
+        }
+
+        @media (max-width: 700px) {
+            .offer-strip {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 14px;
+                padding: 22px 18px;
+            }
+            .offer-strip__left { flex-direction: column; text-align: center; }
+            .offer-strip__right { justify-content: space-between; width: 100%; }
+            .offer-strip__price { align-items: center; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           GARANTIA DE 7 DIAS
+           ═══════════════════════════════════════════════════════════ */
+        #guarantee-wrap {
+            width: 100%;
+            max-width: 820px;
+            margin-top: 26px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(14px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
+            text-align: center;
+            padding: 4px 20px;
+        }
+        #guarantee-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            max-height: 300px;
+        }
+        .guarantee-icon {
+            font-size: 1.9rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 10px var(--red-dim));
+        }
+        .guarantee-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .guarantee-text {
+            font-size: 0.86rem;
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.55;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ELEMENTOS DE CONFIANÇA / SEGURANÇA
+           ═══════════════════════════════════════════════════════════ */
+        #trust-wrap {
+            width: 100%;
+            max-width: 820px;
+            margin-top: 22px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(14px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px 26px;
+            padding: 4px 10px;
+        }
+        #trust-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            max-height: 200px;
+        }
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 0.76rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* Título acima do carrossel de provas sociais */
+        .social-proof-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .social-proof-subtitle {
+            font-size: 0.84rem;
+            color: var(--muted);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* ─── AJUSTE 2: CARROSSEL DE PROVA SOCIAL ─────────────── */
+        #social-proof-wrap {
+            width: 100%;
+            max-width: 820px;
+            margin-top: 22px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(14px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease;
+        }
+        #social-proof-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            max-height: 600px;
+        }
+        .carousel-outer {
+            position: relative;
+            width: 100%;
+            -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+        }
+        .carousel-track {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 4px 32px;
+            cursor: grab;
+            user-select: none;
+        }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .carousel-track.dragging { cursor: grabbing; scroll-snap-type: none; }
+        .carousel-slide {
+            flex: 0 0 78%;
+            max-width: 320px;
+            aspect-ratio: 4 / 8;
+            scroll-snap-align: center;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-align: center;
+            padding: 12px;
+            pointer-events: none;
+        }
+        @media (max-width: 600px) {
+            .carousel-slide { flex: 0 0 82%; }
+        }
+
+        /* ─── BOTÃO DE WHATSAPP (abaixo do carrossel) ─────────── */
+        #whatsapp-wrap {
+            width: 100%;
+            max-width: 820px;
+            margin-top: 22px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(14px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
+        }
+        #whatsapp-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            max-height: 200px;
+        }
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 40px;
+            max-width: 500px;
+            width: 100%;
+            justify-content: center;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(135deg, #1b8a3d 0%, #25d366 55%, #34e37a 100%);
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            box-shadow:
+                0 0 0 2px rgba(37,211,102,0.25),
+                0 0 32px rgba(37,211,102,0.4),
+                0 4px 24px rgba(0,0,0,0.6);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .whatsapp-btn:hover {
+            box-shadow: 0 0 0 2px rgba(37,211,102,0.55), 0 0 46px rgba(37,211,102,0.6), 0 4px 24px rgba(0,0,0,0.6);
+            transform: translateY(-2px);
+        }
+        .whatsapp-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+
+        /* ─── ANIMATIONS ─────────────────────────────────────── */
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50%       { transform: scale(1.08); opacity: 0.85; }
+        }
+        @keyframes pulse-btn {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(229,9,20,0); }
+            50%       { transform: scale(1.03); box-shadow: 0 0 18px rgba(229,9,20,0.6); }
+        }
+        @keyframes float-cta {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-6px); }
+        }
+
+        /* ─── MOBILE ─────────────────────────────────────────── */
+           @media (max-width: 600px) {
+    .page { padding: 28px 8px 48px; }
+    .logo { font-size: 1.6rem; margin-bottom: 22px; }
+    .video-card { border-radius: 6px; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           POPUP DE CHECKOUT
+           ═══════════════════════════════════════════════════════════ */
+        .checkout-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            background: rgba(0,0,0,0.86);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .checkout-overlay.active { display: flex; }
+        .checkout-overlay.show { opacity: 1; }
+
+        .checkout-modal {
+            width: 100%;
+            max-width: 440px;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03),
+                0 20px 80px rgba(0,0,0,0.85),
+                0 0 90px var(--red-dim);
+            padding: 30px 24px 26px;
+            position: relative;
+            transform: translateY(18px) scale(0.98);
+            transition: transform 0.3s ease;
+        }
+        .checkout-overlay.show .checkout-modal { transform: translateY(0) scale(1); }
+
+        .checkout-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.04);
+            color: var(--muted);
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .2s ease, color .2s ease;
+        }
+        .checkout-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .checkout-header { margin-bottom: 22px; text-align: center; }
+        .checkout-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        .checkout-plan-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            color: var(--text);
+        }
+        .checkout-plan-price {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 2.1rem;
+            color: var(--red);
+            text-shadow: 0 0 24px var(--red-glow);
+            margin-top: 2px;
+        }
+
+        .checkout-error {
+            display: none;
+            background: rgba(229,9,20,0.1);
+            border: 1px solid rgba(229,9,20,0.4);
+            color: #ff9498;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            padding: 10px 12px;
+            border-radius: 7px;
+            margin-bottom: 14px;
+        }
+        .checkout-error.show { display: block; }
+
+        .checkout-field { margin-bottom: 16px; }
+        .checkout-label {
+            display: block;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 7px;
+        }
+        .checkout-input {
+            width: 100%;
+            padding: 13px 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color .2s ease, background .2s ease;
+        }
+        .checkout-input::placeholder { color: rgba(255,255,255,0.28); }
+        .checkout-input:focus { border-color: var(--red); background: rgba(255,255,255,0.06); }
+
+        .checkout-pay-toggle { display: flex; gap: 10px; margin-bottom: 18px; }
+        .pay-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
+            color: var(--muted);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.92rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pay-option svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+        .pay-option.active {
+            border-color: var(--red);
+            color: #fff;
+            background: var(--red-dim);
+            box-shadow: 0 0 20px var(--red-dim);
+        }
+
+        .pay-panel { display: none; }
+        .pay-panel.active { display: block; }
+
+        .pix-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.18);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .pix-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.76rem;
+            color: rgba(255,255,255,0.75);
+            word-break: break-all;
+            line-height: 1.5;
+            max-height: 90px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+        .pix-copy-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 7px;
+            background: linear-gradient(135deg, #1b8a3d 0%, #25d366 55%, #34e37a 100%);
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .pix-copy-btn:hover { transform: translateY(-1px); box-shadow: 0 0 24px rgba(37,211,102,0.4); }
+        .pix-copy-btn.copied { background: linear-gradient(135deg, #0e5c26 0%, #1b8a3d 100%); }
+        .pix-note { font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.4; }
+
+        .card-row { display: flex; gap: 12px; }
+        .card-row .checkout-field { flex: 1; }
+
+        .checkout-submit {
+            width: 100%;
+            padding: 16px;
+            margin-top: 6px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--red) 0%, #ff2b3a 100%);
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 900;
+            font-size: 1.05rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 0 0 2px var(--red-dim), 0 0 30px var(--red-glow);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .checkout-submit:hover { transform: translateY(-2px); box-shadow: 0 0 0 2px var(--red-dim), 0 0 44px var(--red-glow); }
+        .checkout-submit:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+        .checkout-secure {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+            font-size: 0.76rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 480px) {
+            .checkout-modal { padding: 26px 18px 22px; }
+            .card-row { flex-direction: column; gap: 0; }
+}
+    </style>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2116314405584988');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2116314405584988&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 <body>
 
+<div class="page">
 
-
-<header class="pinning-header" id="header">
-  <div class="main-header"> 
-    <a href="#" class="logo" id="logo-back-to-top">
-      <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349062/l_ogo-removebg-preview_yodvdt.png" alt="GAMEFLIX">
-    </a>
-    
-    <ul class="nav-links">
-      
-J7NU     
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('promocoes')" class="nav-promocoes"></a></li>
-       <li><a href="javascript:void(0)" onclick="openCategoryModal('instalar')">  </a></li>
-      
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('sorteios')"꧁꧂</a></li>
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('duvidas')">Dúvidas / Suporte</a></li>
-      <li><a href="javascript:void(0)" id="nav-meus-favoritos" class="nav-favoritos"> MINHA SELEÇÃO DE JOGOS</a></li>
-     
-      <li><a href="javascript:void(0)" onclick="openCategoryModal('ofertas')">JOGOS EM PROMOÇAO ESTA SEMANA </a></li>
-    </ul>
-
-    <div class="header-actions">
-      <div class="search-wrapper">
-        <span class="search-text">Pesquise aqui...</span>
-        
-        <div class="search-container" id="search-container">
-          <div class="search-box">
-            <input type="text" id="game-search" placeholder="Títulos, personagens..." autocomplete="off">
-          </div>
-          <div class="search-results-dropdown" id="search-results-dropdown"></div>
-        </div>
-      </div>
-
-      <img class="profile" src="https://cdn2.steamgriddb.com/icon_thumb/c08667a5c4e674eec06bb4b2875395ff.png" alt="Perfil">
-    </div>
-  </div>
-</header>
-
-<section class="banner" id="main-banner">
-    <div id="banner-video" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:0;">
-  <iframe 
-    src="https://player.vimeo.com/video/1189613164?autoplay=1&muted=1&loop=1&background=1&badge=0&autopause=0&player_id=0&app_id=58479" 
-    style="position:absolute;top:50%;left:50%;width:177.78vh;height:100vh;min-width:100%;min-height:56.25vw;transform:translate(-50%,-50%);border:none;" 
-    allow="autoplay; fullscreen" 
-    title="Banner Video">
-  </iframe>
-</div>
-<div data-banner-overlay="1" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:transparent;pointer-events:none;"></div>
-   <div class="banner-content">
-  <img src="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png" id="banner-logo" alt="Logo do Jogo">
-  <p id="banner-desc">BF6 ocupa o top 1 da Gameflix como o jogo mais baixado da plataforma!</p>
-  
-  <a href="info.html?id=battlefield-6" id="banner-link" target="_blank" rel="noopener noreferrer">
-    <button class="btn-play" id="btn-main-action">ⓘ SABER MAIS</button>
-  </a>
-  
-  <button class="btn-info btn-favorito-banner" id="btn-favorito" data-jogo="Battlefield 6" data-img="https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25">
-  ♡ ADICIONAR JOGO AOS FAVORITOS
-</button>
-
-</div>
-
-  <button id="btn-unmute" style="
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-    background: rgba(20,20,20,0.85);
-    color: #fff;
-    border: 2px solid #e50914;
-    border-radius: 50px;
-    padding: 14px 26px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-    box-shadow: 0 0 24px rgba(229,9,20,0.5);
-    animation: pulse-unmute 1.2s infinite;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-  ">🔊 ATIVAR SOM</button>
-  <div id="volume-indicator">
-  <svg id="icon-vol-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-  <svg id="icon-vol-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-</div>
-  </section>
-
-  
-
-  <div class="top10-banner">
-    <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777348844/Banner_Horizontal_Black_Friday_Vibrante_Preto_e_Vermelho_2_h5dwso.png" alt="Banner Top 10">
-  </div>
-
-  <div class="row">
-   <h2>⚡VEJA A LISTA DOS TOP 10 JOGOS DA GAMEFLIX</h2>
-<div class="top-10-container">
-      
-    <button onclick="scrollTop10Left()">⮜</button>
-
-  <div id="top10" class="top-10-row">
-  
-  <div class="card-container">
-    <span class="rank-number">1</span>
-    <img src="https://cdn1.epicgames.com/offer/a14a02aa3c8143729605eaf7c93d7501/EGS_Battlefield6_BattlefieldStudios_S2_1200x1600-a88625a836120c55650c83d17a010c25" 
-         class="poster-img" 
-         data-title="Battlefield 6" 
-         data-logo="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png"
-         data-desc="O jogo mais baixado da plataforma! Destruição total, gráficos fotorrealistas e a franquia Battlefield no seu auge — BF6 ocupa o TOP 1 da GAMEFLIX." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci">
-  </div>
-
-  <div class="card-container">
-    <span class="rank-number">2</span>
-    <img src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" 
-         class="poster-img" 
-         data-title="Resident Evil Requiem" 
-         data-logo="https://cdn2.steamgriddb.com/logo/5b91726d21e05916d2eb308f2fd0444e.png"
-         data-desc="Lançamento Exclusivo." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187563729?share=copy&fl=sv&fe=ci">
-  </div>
-
-  <div class="card-container">
-    <span class="rank-number">3</span>
-    <img src="https://www.notebookcheck.info/fileadmin/Notebooks/News/_nc5/image_2025-09-24_193459770.png" 
-         class="poster-img" 
-         data-title="Crimson Desert" 
-         data-logo="https://upload.wikimedia.org/wikipedia/fr/6/6c/Crimson_Desert_Logo.png"
-         data-desc="O mundo é seu para explorar como quiser e há muitos caminhos para você descobrir." 
-         data-video="https://vimeo.com/1187774922?share=copy&fl=sv&fe=ci">
-  </div>
-
- <div class="card-container">
-    <span class="rank-number">4</span>
-    <img src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" 
-         class="poster-img" 
-         data-title="Red Dead Redemption 2" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Red_Dead_Redemption_2_Logo.png/1280px-Red_Dead_Redemption_2_Logo.png"
-         data-desc="A lenda do oeste." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-        data-video="https://vimeo.com/1187556626?share=copy&fl=sv&fe=ci">
-  </div>
-
-  <div class="card-container">
-    <span class="rank-number">5</span>
-    <img src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" 
-         class="poster-img" 
-         data-title="God of War Ragnarok" 
-         data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/92554480-bde6-4f5c-9861-7022237da1ce/dfk2top-494d7ab4-4d24-4455-bcda-402bf76378d6.png/v1/fill/w_1024,h_277/god_of_war_ragnarok_logo_by_brsbr_dfk2top-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Mjc3IiwicGF0aCI6Ii9mLzkyNTU0NDgwLWJkZTYtNGY1Yy05ODYxLTcwMjIyMzdkYTFjZS9kZmsydG9wLTQ5NGQ3YWI0LTRkMjQtNDQ1NS1iY2RhLTQwMmJmNzYzNzhkNi5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.KNYp9QreC-k_Wmb-HqRtR4VeFLImmeSWYDXwwt4pNMM"
-         data-desc="Pai e Filho contra o Impossível. Juntos, eles devem atravessar os Nove Reinos e escolher entre o peso do passado e a esperança do futuro." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187555294?share=copy&fl=sv&fe=ci">
-  </div>
-
-  <div class="card-container">
-    <span class="rank-number">6</span>
-    <img src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" 
-         class="poster-img" 
-         data-title="Cyberpunk 2077" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png"
-         data-desc="O futuro é uma armadilha. Roube o protótipo da imortalidade, enfrente corporações impiedosas e molde o destino de Night City com suas escolhas." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci">
-  </div>
-
-  <div class="card-container">
-    <span class="rank-number">7</span>
-    <img src="https://m.media-amazon.com/images/M/MV5BODIwYWZmYWMtYTliNC00YWQ5LTg5ZmEtNTZhNmUxNjdiMzNiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" 
-         class="poster-img" 
-         data-title="The Last Of Us II" 
-         data-logo="https://gamerview.com.br/wp-content/uploads/2020/06/the-last-of-us-part-2-logo.png"
-         data-desc="Perdoe ou destrua. Em um mundo devastado, as maiores cicatrizes não são físicas. Sobreviver é apenas o começo.." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187559294?share=copy&fl=sv&fe=ci">
-  </div>
-
-   <div class="card-container">
-    <span class="rank-number">8</span>
-    <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349189/Captura_de_tela_2026-02-23_185713_p4mvr5.png" 
-         class="poster-img" 
-         data-title="FIFA 26" 
-         data-logo="https://fifauteam.com/images/fc26/logo/long-green.png"
-         data-desc="A nova geração do futebol." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187554625?share=copy&fl=sv&fe=ci">
-  </div>
-  
-    <div class="card-container">
-    <span class="rank-number">9</span>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Pragmata_cover.jpg" 
-         class="poster-img" 
-         data-title="Pragmata" 
-         data-logo="https://assets.pinnyarcade.com/img/pin-art/2025-pragmata.png"
-         data-desc="Pragmata é um jogo de ação e aventura com elementos de ficção científica da Capcom." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187773003?share=copy&fl=sv&fe=ci">
-  </div>
-
-  <div class="card-container">
-    <span class="rank-number">10</span>
-    <img src="https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_MarvelsSpiderManDigitalDeluxeEdition_InsomniacGamesNixxesSoftware_Editions_S2_1200x1600-148e0014e79aa7c2cb23ae2414b11a16" 
-         class="poster-img" 
-         data-title="Spider-Man 2" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/2/25/Marvel%27s_Spider-Man_2_%282025%29_logo_official_%28SGDB_124347%29.png"
-         data-desc="Explore uma Nova York expandida com as novas Asas de Teia e viva a experiência definitiva do Amigão da Vizinhança." 
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!"
-         data-video="https://vimeo.com/1187558637?share=copy&fl=sv&fe=ci">
-  </div>
-
- 
-
-
-</div>
-       <button onclick="scrollTop10Right()">⮞</button>
-</div>
+    <!-- Logo -->
     
 
-     <h2>⚡TOP 20 DOS LENDARIOS MAIS BAIXADOS DA GAMEFLIX</h2>
-<div class="top-10-container">
- 
-
-  <!-- BOTÃO ESQUERDA -->
-  <button onclick="scrollTop20Left()">❮</button>
-
-  <!-- LISTA -->
- <div class="games-scroll" id="top20">
-    
-
-    <img class="game-card" 
-     src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" 
-     alt="RE 9 REQUIM" 
-     data-title="Resident Evil 9: Requiem" 
-     data-desc="O capítulo final da saga Winters? Ou um novo despertar para o bioterrorismo? Prepare-se para o próximo nível de horror de sobrevivência." 
-     data-video="https://vimeo.com/1187563729?share=copy&fl=sv&fe=ci" 
-     data-logo="https://cdn2.steamgriddb.com/logo/5b91726d21e05916d2eb308f2fd0444e.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-     onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" 
-         alt="Red Dead Redemption 2" 
-         data-title="Red Dead Redemption 2" 
-         data-desc="Fora da lei por toda a vida. Herói por escolha? Reviva a trajetória épica de lealdade, perda e redenção em Red Dead Redemption 2. O pôr do sol nunca foi tão perigoso." 
-         data-video="https://vimeo.com/1187556626?share=copy&fl=sv&fe=ci" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Red_Dead_Redemption_2_Logo.png/1280px-Red_Dead_Redemption_2_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/0c40923dd1174a768f732a3b013dcff2/EGS_TheLastofUsPartIDigitalDeluxeEdition_NaughtyDogLLC_Editions_S2_1200x1600-6db4887c7913c5a43ae3a086de2ad29c" 
-           alt="TLoU I" 
-           data-title="The Last of Us Part I" 
-           data-desc="Uma jornada emocionante por um mundo brutal e perigoso." 
-           data-video="https://vimeo.com/1187558964?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/1956768b78ac039215c9600c9691c572.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://assets-prd.ignimgs.com/2022/05/27/9781506732022-1653620982308.jpg" 
-         alt="Horizon Forbidden West" 
-         data-title="Horizon Forbidden West" 
-         data-desc="Novas máquinas, novas tribos e um mundo vasto para explorar. A jornada de Aloy continua em Horizon Forbidden West. A sobrevivência exige evolução." 
-         data-video="https://vimeo.com/1187555815?share=copy&fl=sv&fe=ci" 
-         data-logo="https://cdn2.steamgriddb.com/logo_thumb/0a31b8b048c10332ece27bef9670bda8.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://cdn1.epicgames.com/offer/6e6aa039c73347b885803de65ac5d3db/EGS_GhostofTsushima_SuckerPunchProductions_S2_1200x1600-e23e02c1d70be7b528dba50860f87d39" 
-         alt="Ghost of Tsushima" 
-         data-title="Ghost of Tsushima" 
-         data-desc="No final do século XIII, o império mongol devastou nações inteiras. Jin Sakai deve ir além das tradições samurai para libertar Tsushima." 
-         data-video="https://vimeo.com/1187555468?share=copy&fl=sv&fe=ci" 
-         data-logo="https://cdn2.steamgriddb.com/logo/f894cbc7551b7dea91a6aa9fbfc95c21.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" 
-         alt="God of War Ragnarök" 
-         data-title="God of War Ragnarök" 
-         data-desc="Kratos e Atreus devem viajar pelos Nove Reinos em busca de respostas enquanto as forças asgardianas se preparam para a guerra profetizada." 
-         data-video="https://vimeo.com/1187555294?share=copy&fl=sv&fe=ci" 
-         data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/92554480-bde6-4f5c-9861-7022237da1ce/dfk2top-494d7ab4-4d24-4455-bcda-402bf76378d6.png/v1/fill/w_1024,h_277/god_of_war_ragnarok_logo_by_brsbr_dfk2top-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Mjc3IiwicGF0aCI6Ii9mLzkyNTU0NDgwLWJkZTYtNGY1Yy05ODYxLTcwMjIyMzdkYTFjZS9kZmsydG9wLTQ5NGQ3YWI0LTRkMjQtNDQ1NS1iY2RhLTQwMmJmNzYzNzhkNi5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.KNYp9QreC-k_Wmb-HqRtR4VeFLImmeSWYDXwwt4pNMM"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://meups.com.br/wp-content/uploads/2025/10/Battlefield-6-REVIEW-PS5-scaled.jpg" 
-         alt="BF VI" 
-         data-title="Battlefield VI" 
-         data-desc="Entre no maior conflito da humanidade com Battlefield V enquanto a série retorna às suas raízes na Segunda Guerra Mundial." 
-         data-video="https://vimeo.com/1189613164?share=copy&fl=sv&fe=ci" 
-         data-logo="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" 
-         alt="Cyberpunk" 
-         data-title="Cyberpunk 2077" 
-         data-desc="Um RPG de ação e aventura em mundo aberto ambientado na megalópole de Night City, onde você joga como um mercenário urbano." 
-         data-video="https://vimeo.com/1187562867?share=copy&fl=sv&fe=ci" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://bdjogos.com.br/capas/6265-the-witcher-3-wild-hunt-capa-1.jpg" 
-         alt="Witcher 3" 
-         data-title="The Witcher 3: Wild Hunt" 
-         data-desc="Torne-se um caçador de monstros profissional e embarque em uma aventura de proporções épicas." 
-         data-video="https://vimeo.com/1187559486?share=copy&fl=sv&fe=ci'" 
-        data-logo="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1775455305/pngimg.com_-_witcher_PNG48_whepoi.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1301/0a5face6e59f61c2ed7f9423c778b10f2e4b8cada54d164f.png" 
-         alt="Spider-Man 2" 
-         data-title="Marvel's Spider-Man 2" 
-         data-desc="Os Spiders Peter Parker e Miles Morales enfrentam a prova definitiva de força ao lutar para salvar a cidade e um ao outro." 
-         data-video="https://vimeo.com/1187538348?share=copy&fl=sv&fe=ci" 
-         data-logo="https://upload.wikimedia.org/wikipedia/commons/2/25/Marvel%27s_Spider-Man_2_%282025%29_logo_official_%28SGDB_124347%29.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://bdjogos.com.br/capas/24175-call-of-duty-black-ops-6-capa-1.webp" 
-         alt="CoD BO6" 
-         data-title="Call of Duty: Black Ops 6" 
-         data-desc="Ação de tirar o fôlego e espionagem de alto risco no mais novo capítulo da franquia Black Ops." 
-         data-video="https://vimeo.com/1187551182?share=copy&fl=sv&fe=ci" 
-         data-logo="https://pbs.twimg.com/media/GORUbGjWIAEDNY6.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://upload.wikimedia.org/wikipedia/pt/3/30/Resident_Evil_4_%28remake%29.png" 
-         alt="RE 4" 
-         data-title="Resident Evil 4 Remake" 
-         data-desc="Sobrevivência é apenas o começo. Seis anos se passaram desde o desastre biológico em Raccoon City." 
-         data-video="https://vimeo.com/1187557074?share=copy&fl=sv&fe=ci" 
-         data-logo="https://i.psnprofiles.com/guides/16426/c91425.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-
-    <img class="game-card" 
-         src="https://hobbygames.ru/image/enaza/19184698/box2.jpg.jpg" 
-         alt="Wukong" 
-         data-title="Black Myth: Wukong" 
-         data-desc="Um RPG de ação baseado na mitologia chinesa. Você partirá em uma jornada como o Predestinado para desvendar a verdade obscurecida." 
-         data-video="https://vimeo.com/1187550907?share=copy&fl=sv&fe=ci" 
-         data-logo="https://www.pngall.com/wp-content/uploads/15/Black-Myth-Wukong-Logo-Chinese-Game-PNG.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-           src="https://e.snmc.io/lk/f/x/2f5dbf23974d6391c11c7b5b2fce6bb0/9667231" 
-           alt="Assetto Corsa" 
-           data-title="Assetto Corsa" 
-           data-desc="O simulador de corridas mais realista, com carros e pistas licenciados." 
-           data-video="https://vimeo.com/1187539879?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fi/a/a0/Assetto_Corsa_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-    <img class="game-card" 
-         src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349189/Captura_de_tela_2026-02-23_185713_p4mvr5.png" 
-         alt="FIFA 26" 
-         data-title="EA SPORTS FC 26" 
-         data-desc="O jogo de todo mundo. Sinta a emoção do futebol com o maior realismo já visto em um simulador de esporte." 
-         data-video="https://vimeo.com/1187554625?share=copy&fl=sv&fe=ci" 
-         data-logo="https://fifauteam.com/images/fc26/logo/long-green.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Assassins_Creed_Valhalla_capa.png" 
-         alt="AC Valhalla" 
-         data-title="Assassin's Creed Valhalla" 
-         data-desc="Torne-se Eivor, uma lenda viking em busca de glória. Explore a Idade das Trevas da Inglaterra enquanto ataca seus inimigos." 
-         data-video="xIYSlglSJQw" 
-         data-logo="https://cdn2.steamgriddb.com/logo_thumb/7a963088b715398a4438ad53935af1cb.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000089518/cc83ebef3be669c8fcc66f9c53e3c6e6dabf5cbc44947c9e1c7e5febeb254ee6" 
-         alt="Bodycam" 
-         data-title="Bodycam" 
-         data-desc="Um jogo de tiro em primeira pessoa ultra-realista que utiliza as capacidades da Unreal Engine 5 para uma imersão total." 
-         data-video="https://vimeo.com/1187562849?share=copy&fl=sv&fe=ci" 
-         data-logo="https://cdn2.steamgriddb.com/logo/72424d6a9bd473f2f265c35df9751aaa.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://m.media-amazon.com/images/I/71kj4+Y5bHL._AC_UF1000,1000_QL80_.jpg" 
-         alt="MK 1" 
-         data-title="Mortal Kombat 1" 
-         data-desc="Descubra um universo de Mortal Kombat renascido, criado pelo Deus do Fogo Liu Kang. Um novo começo para a franquia." 
-         data-video="https://vimeo.com/1187562905?share=copy&fl=sv&fe=ci" 
-         data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1d36d2cf-42e6-4629-a20a-a69ebb66bf05/dg8jmln-5f735c2d-2f12-419e-a8e6-6b95a45a0945.png/v1/fill/w_1280,h_995/mortal_kombat_1_logo_transparent_by_suleymanlikenan_dg8jmln-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTk1IiwicGF0aCI6Ii9mLzFkMzZkMmNmLTQyZTYtNDYyOS1hMjBhLWE2OWViYjY2YmYwNS9kZzhqbWxuLTVmNzM1YzJkLTJmMTItNDE5ZS1hOGU2LTZiOTVhNDVhMDk0NS5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.m3Rz7JKFxtLF6-g4FAuStRR9ezxXax5FhWXKEgHjcC8"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/ap/rnd/202208/1118/eqqPM2rRA1KnVNQuNkh4BhFn.png" 
-           alt="Dead Island 2" 
-           data-title="Dead Island 2" 
-           data-desc="Um RPG de ação em primeira pessoa vibrante e cheio de zumbis em Los Angeles." 
-           data-video="https://vimeo.com/1187553009?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/316134129f3d51513c1f9c5d8b2d7ee8.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-    <img class="game-card" 
-         src="https://cdn1.epicgames.com/offer/8b2d6cf2b45b41f1abe91bc5b7c1e8f9/EGS_UNCHARTEDLegacyofThievesCollection_NaughtyDogLLC_S2_1200x1600-9deaa177d8716bde5478cdd75d850c9c" 
-         alt="Uncharted" 
-         data-title="Uncharted: Legacy of Thieves Collection" 
-         data-desc="Busque seu legado e deixe sua marca no mapa em UNCHARTED: Coleção Legado dos Ladrões." 
-         data-video="https://vimeo.com/1187561868?share=copy&fl=sv&fe=ci" 
-         data-logo="https://upload.wikimedia.org/wikipedia/pt/d/d8/Uncharted_The_Lost_Legacy_logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-         onclick="openWppModal()">
-
-  </div>  
-   <button onclick="scrollTop20Right()">❯</button>
-</div>
-
-<div class="floating-btn-container">
-  <a href="https://gameflix2.github.io/GAMEFLIX-BLACK/" target="_blank" style="text-decoration: none;">
-    <button class="netflix-btn">⚡ RESGATAR MEU ACESSO BLACK ⚡</button>
-  </a>
-  </a>
-</div>
-    </div>
-
-
-<div class="row">
-  <h2>⚡Franquia Call of Duty</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-     <img class="game-card" 
-           src="https://images6.alphacoders.com/139/thumb-1920-1397239.jpg" 
-           alt="Black Ops 7" 
-           data-title="Black Ops 7" 
-           data-desc="Acompanhe David Mason em 2035 enfrentando uma nova ameaça global em uma campanha intensa e tecnológica." 
-           data-video="https://vimeo.com/1187561866?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/809d4bb5b3045d4d0b4be6f71c4094f3.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://bdjogos.com.br/capas/24175-call-of-duty-black-ops-6-capa-1.webp" 
-           alt="Black Ops 6" 
-           data-title="Black Ops 6" 
-           data-desc="Ação de espionagem alucinante ambientada no início dos anos 90." 
-           data-video="https://vimeo.com/1187551182?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/c3b0f4fac5389d3733c9c07a835fea73.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjG5gD2EPSegoWpyI0LAvVz1rzUV-MKZRmdDJXWuuCZLweBOAyrkpYNlxQ7FGomhRI6-IUA-IpPTxQh2iaYQNJceG03XR8puhMXRIfAluevOg9swrtBDItBQ_E1wPHcrxPz2Eovkktf03LupJPzy9_T6xJtIt79Xhz7LisCBS5aWtlbwiWYmurF1ckSJF2i/s16000/portalfps-call-of-duty-modern-warfare-iii-wallpaper.jpg" 
-           alt="MW III" 
-           data-title="Modern Warfare III" 
-           data-desc="Capitão Price e a Força-Tarefa 141 enfrentam a ameaça definitiva: Vladimir Makarov." 
-           data-video="https://vimeo.com/1187556024?share=copy&fl=sv&fe=ci" 
-           data-logo="https://static.wikia.nocookie.net/logopedia/images/5/50/MWIII_2023.png/revision/latest?cb=20230810190707"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://m.media-amazon.com/images/I/81mUtFXhFCL.jpg" 
-           alt="MW II" 
-           data-title="Modern Warfare II" 
-           data-desc="O retorno da icônica Força-Tarefa 141 em missões globais táticas e intensas." 
-           data-video="https://vimeo.com/1187556256?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/41eb08efab98ba98e7f12c1f42f065c7.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-      <img class="game-card" 
-           src="https://bdjogos.com.br/capas/7290-call-of-duty-black-ops-iii-capa-1.jpg" 
-           alt="Black Ops III" 
-           data-title="Black Ops III" 
-           data-desc="Um futuro sombrio onde as fronteiras entre humanidade e tecnologia militar se tornam confusas." 
-           data-video="https://vimeo.com/1187561867?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/6262fd2e1b7db9411e4d47ad093a1397.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-      <img class="game-card" 
-           src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjShfiHr6QsUdVkqkBfeIaVf0uWzcs6cX4zYwFJMNrs8KwxLb63dP0d_w3VoF8jd0cASElB8Xkqun8zpGNyDzE4gE3M-Dcg0_c3HD070hlwAvMhmx9WHGoAs47c-C0l4PAyQlZ1m9tUeid-/s1600/CALL-OF-DUTY-WWII-1080P-Wallpaper-1.jpg" 
-           alt="CoD WWII" 
-           data-title="Call of Duty: WWII" 
-           data-desc="A série retorna às suas raízes com uma experiência que redefine a Segunda Guerra Mundial." 
-           data-video="https://vimeo.com/1187560088?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/6/6f/CoD_WWII_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn.europosters.eu/image/1300/15042.jpg" 
-           alt="Ghosts" 
-           data-title="Call of Duty: Ghosts" 
-           data-desc="Lute por uma nação devastada não por liberdade, mas pela simples sobrevivência." 
-           data-video="https://vimeo.com/1187551598?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/ce96b83ed270d644c1922211c81c8e72.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://store-images.s-microsoft.com/image/apps.703.13739535057760905.34778648-088c-45a3-9d45-1117ca041901.c4d90513-3be4-4a22-9cd6-85a7ffa8df7f" 
-           alt="warezone" 
-           data-title="Call of Duty warezone" 
-           data-desc="Vivencie a intensidade da Segunda Guerra Mundial em combates implacáveis." 
-           data-video="https://vimeo.com/1187563698?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/96efe793e5f26bb330aac125634554ba.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()"> 
-
-            <img class="game-card" 
-           src="https://m.media-amazon.com/images/M/MV5BNzczN2VmMzEtNTk4NS00OTk0LTg4MWYtZWVkYzQ0MzE2NmQ4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" 
-           alt="MW 2019" 
-           data-title="Modern Warfare (2019)" 
-           data-desc="Uma releitura visceral e realista da série Modern Warfare, focada em operações especiais secretas." 
-           data-video="https://vimeo.com/1187552015?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/accd5a5480c79baadc2a8cdf8e253dd6.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-
-
-      <img class="game-card" 
-           src="https://cdn.loaded.com/496x700/media/catalog/product/c/a/call-of-duty-vanguard-xbox-one-xbox-one-game-microsoft-store-cover_1__3.jpg" 
-           alt="Vanguard" 
-           data-title="Call of Duty: Vanguard" 
-           data-desc="Vivencie as origens das Forças Especiais em diversas frentes da Segunda Guerra Mundial." 
-           data-video="https://vimeo.com/1187559825?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images.seeklogo.com/logo-png/43/2/call-of-duty-vanguard-logo-png_seeklogo-438737.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-
-<div class="row">
-  <h2>⚡Terror e Sobrevivência</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/ap/rnd/202208/1118/eqqPM2rRA1KnVNQuNkh4BhFn.png" 
-           alt="Dead Island 2" 
-           data-title="Dead Island 2" 
-           data-desc="Um RPG de ação em primeira pessoa vibrante e cheio de zumbis em Los Angeles." 
-           data-video="https://vimeo.com/1187553009?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/316134129f3d51513c1f9c5d8b2d7ee8.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-            <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/0c40923dd1174a768f732a3b013dcff2/EGS_TheLastofUsPartIDigitalDeluxeEdition_NaughtyDogLLC_Editions_S2_1200x1600-6db4887c7913c5a43ae3a086de2ad29c" 
-           alt="TLoU I" 
-           data-title="The Last of Us Part I" 
-           data-desc="Uma jornada emocionante por um mundo brutal e perigoso." 
-           data-video="https://vimeo.com/1187558964?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/1956768b78ac039215c9600c9691c572.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/7713e3fa4b234e0d8f553044205d53b6/EGS_TheLastofUsPartIIRemastered_NaughtyDogLLCNixxesSoftwareIronGalaxy_S2_1200x1600-2e13755a6b3fec2ee9dbcc231a1cf39c" 
-           alt="TLoU II" 
-           data-title="The Last of Us Part II" 
-           data-desc="Cinco anos após sua jornada perigosa, Ellie e Joel se estabeleceram em Jackson." 
-           data-video="https://vimeo.com/1187559294?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/078277ed-5380-4deb-b166-997beba79634/dggm0hv-bedf4534-b272-43b1-ae3c-ffa737cbfab5.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8wNzgyNzdlZC01MzgwLTRkZWItYjE2Ni05OTdiZWJhNzk2MzQvZGdnbTBodi1iZWRmNDUzNC1iMjcyLTQzYjEtYWUzYy1mZmE3MzdjYmZhYjUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Dj96wEDpwXCslbaHWOf4FdMRG2X0yxNIp3lLYJAkyk0"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-           <img class="game-card" 
-     src="https://cdn.loaded.com/496x700/media/catalog/product/r/e/resident_evil_requiem_cdkeys_1.png" 
-     alt="RE 9 REQUIM" 
-     data-title="Resident Evil 9: Requiem" 
-     data-desc="O capítulo final da saga Winters? Ou um novo despertar para o bioterrorismo? Prepare-se para o próximo nível de horror de sobrevivência." 
-     data-video="https://vimeo.com/1187563729?share=copy&fl=sv&fe=ci" 
-     data-logo="https://cdn2.steamgriddb.com/logo/5b91726d21e05916d2eb308f2fd0444e.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-     onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://tm.ibxk.com.br/2021/05/05/05040759331000.jpg" 
-           alt="RE Village" 
-           data-title="Resident Evil Village" 
-           data-desc="Ethan Winters busca sua filha em uma vila tomada por criaturas aterrorizantes." 
-           data-video="https://vimeo.com/1187558018?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/2/2c/Resident_Evil_Village.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-            <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/3/30/Resident_Evil_4_%28remake%29.png" 
-           alt="RE 4" 
-           data-title="Resident Evil 4 Remake" 
-           data-desc="Leon S. Kennedy enfrenta horrores inimagináveis para resgatar a filha do presidente." 
-           data-video="https://vimeo.com/1187557074?share=copy&fl=sv&fe=ci" 
-           data-logo="https://i.psnprofiles.com/guides/16426/c91425.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://howlongtobeat.com/games/72822_Resident_Evil_3_(2020).jpg" 
-           alt="RE 3" 
-           data-title="Resident Evil 3 (2020)" 
-           data-desc="A fuga desesperada de Jill Valentine de Raccoon City e da ameaça Nemesis." 
-           data-video="https://vimeo.com/1187558302?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fr/archive/b/b4/20221107130840%21Resident_Evil_3_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://static.wikia.nocookie.net/game-pedia/images/5/59/ResidentEvil7_Biohazard.jpeg/revision/latest?cb=20230110134349&path-prefix=de" 
-           alt="RE 7" 
-           data-title="Resident Evil 7: Biohazard" 
-           data-desc="O medo e o isolamento se infiltram nas paredes de uma fazenda abandonada no sul." 
-           data-video="https://vimeo.com/1187557744?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/6bfd090bb5caa368088b8954da79077a.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-         
-
-
-           
-      
-      <img class="game-card" 
-           src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0cd47e73-13d0-4574-99e7-6989ec6ac3fc/dg675d8-f9cebeeb-76b9-4bf3-9ffc-5e05db5c9db6.png/v1/fill/w_1280,h_1815,q_80,strp/resident_evil_5__2009____poster_by_thepatchedvest_dg675d8-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTgxNSIsInBhdGgiOiIvZi8wY2Q0N2U3My0xM2QwLTQ1NzQtOTllNy02OTg5ZWM2YWMzZmMvZGc2NzVkOC1mOWNlYmVlYi03NmI5LTRiZjMtOWZmYy01ZTA1ZGI1YzlkYjYucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.b9g4fE6oFpxVsRwVFhJ66M3Oe5vQsVH78W2jzQjtqBU" 
-           alt="RE 5" 
-           data-title="Resident Evil 5" 
-           data-desc="Chris Redfield enfrenta uma nova ameaça biológica no sol escaldante da África." 
-           data-video="https://vimeo.com/1187546547?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/2754518221cfbc8d25c13a06a4cb8421.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-
-     
-
-      <img class="game-card" 
-           src="https://store-images.s-microsoft.com/image/apps.23097.69886306496288395.9ec42146-6037-4440-b5c7-3a44e5213cc3.0e09163e-a6c4-40f6-9fe1-24a6b4685c64" 
-           alt="DayZ" 
-           data-title="DayZ" 
-           data-desc="Sobreviva em um mundo pós-apocalíptico implacável dominado por infectados." 
-           data-video="https://vimeo.com/1187540754?share=copy&fl=sv&fe=ci" 
-           data-logo="https://logodix.com/logo/554722.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/87b7846d2eba4bc49eead0854323aba8/EGS_DyingLight2StayHumanReloadedEdition_Techland_S2_1200x1600-76cef594ff94fbac64a8af1ebe4c7590" 
-           alt="Dying Light 2" 
-           data-title="Dying Light 2: Stay Human" 
-           data-desc="A humanidade está perdendo a luta contra o vírus. O destino da cidade está em suas mãos." 
-           data-video="https://vimeo.com/1187553371?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/d773061e2a645bc7db7508d45aec693d.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-
-           <img class="game-card" 
-           src="https://cdn.mobygames.com/covers/2299574-resident-evil-6-xbox-one-front-cover.jpg" 
-           alt="RE 6" 
-           data-title="Resident Evil 6" 
-           data-desc="Ação e terror em escala global com heróis icônicos da franquia." 
-           data-video="https://vimeo.com/1187557454?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/05e97c207235d63ceb1db43c60db7bbb.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-
-           
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-<div class="row">
-  <h2>⚡Corrida e Esportes</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-       <img class="game-card" 
-           src="https://e.snmc.io/lk/f/x/2f5dbf23974d6391c11c7b5b2fce6bb0/9667231" 
-           alt="Assetto Corsa" 
-           data-title="Assetto Corsa" 
-           data-desc="O simulador de corridas mais realista, com carros e pistas licenciados." 
-           data-video="https://vimeo.com/1187539879?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fi/a/a0/Assetto_Corsa_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/3mjMyRiJaq8lw1EFWiTCUJRV.png" 
-           alt="Gran Turismo 7" 
-           data-title="Gran Turismo 7" 
-           data-desc="O simulador de direção real definitivo. Com mais de 400 carros e pistas icônicas, sinta cada curva com um realismo sem precedentes e gráficos de tirar o fôlego" 
-           data-video="https://vimeo.com/1187542998?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/22d8c2229625f3fbfc8626b376b65deb.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/0/03/Forza_Horizon_6.jpg" 
-           alt="FH 6" 
-           data-title="Forza Horizon 6" 
-           data-desc="Sua aventura Horizon definitiva espera por você!" 
-           data-video="https://vimeo.com/1187541839?share=copy&fl=sv&fe=ci" 
-           data-logo="https://static.wikia.nocookie.net/logopedia/images/c/c9/Forza_Horizon_6.png/revision/latest?cb=20250925125338"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/d/dc/Capa_de_Forza_Horizon_5.jpg" 
-           alt="Fh5" 
-           data-title="Forza Horizon 5 " 
-           data-desc="O festival de automobilismo mais famoso do mundo volta com gráficos em 4K nativo e físico de pneus ultra-realistas. Acelere no próximo nível." 
-           data-video="https://vimeo.com/1187554906?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/98c2ca0a994619f0623700f58c77e3d5.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://m.media-amazon.com/images/M/MV5BNDk2NmRkOTQtYWM5Zi00MTBjLWEwZjktM2FmY2U5YWNkZGM0XkEyXkFqcGc@._V1_.jpg" 
-           alt="Motorsport" 
-           data-title="Forza Motorsport" 
-           data-desc="Supere a competição no novo modo carreira e em eventos multijogador." 
-           data-video="https://vimeo.com/1187555136?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/5cc085288d7afc9d76f6aa846b7e5d5f.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdnb.artstation.com/p/assets/images/images/019/956/143/large/mighoet-sundback-nfs-heat-cover.jpg?1565732891" 
-           alt="NFS Heat" 
-           data-title="Need for Speed Heat" 
-           data-desc="Trabalhe duro durante o dia e arrisque tudo à noite em corridas de rua." 
-           data-video="https://vimeo.com/1187545043?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/946c375daff5856fbf406371179bb997.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://images.steamusercontent.com/ugc/5109928331639408171/D260688DBD1EBFEF65BABF0D2E6956D8391E72B3/" 
-           alt="NFS Payback" 
-           data-title="Need for Speed Payback" 
-           data-desc="Sua equipe está reunida para se vingar contra o Clã em Fortune Valley." 
-           data-video="https://vimeo.com/1187545506?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/3dd6cfec510eae9cb9951c5099c97701.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://media.vandal.net/m/16160/need-for-speed-most-wanted-20162383311_1.jpg" 
-           alt="NFS Most Wanted" 
-           data-title="Need for Speed Most Wanted" 
-           data-desc="Seja o mais procurado enquanto foge de uma força policial implacável." 
-           data-video="https://vimeo.com/1187545469?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn1.epicgames.com/spt-assets/5d07664430944a95ae550da120ed0eeb/need-for-speed-most-wanted-logo-3pa8y.png?resize=1&w=480&h=270&quality=medium"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://m.media-amazon.com/images/M/MV5BNmFkNzc3MDMtYzY4MC00NTI5LWI2M2QtYjZiM2M1MWE4NjJlXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" 
-           alt="NFS 2015" 
-           data-title="Need for Speed (2015)" 
-           data-desc="Descubra um mundo aberto noturno de cultura urbana de carros." 
-           data-video="https://vimeo.com/1187546099?share=copy&fl=sv&fe=ci" 
-           data-logo="https://logosmarcas.net/wp-content/uploads/2021/10/Need-For-Speed-Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/82aa77fde0b14916a86b66b1e6345c30/EGS_RIDE5_MilestoneSrl_S2_1200x1600-abc515266abe022f93ee7517ca8ec7fa" 
-           alt="Ride 5" 
-           data-title="Ride 5" 
-           data-desc="Ligue o motor e entre na pista com RIDE 5." 
-           data-video="https://vimeo.com/1187558543?share=copy&fl=sv&fe=ci" 
-           data-logo="https://ride5.ridevideogame.com/wp-content/uploads/2023/03/Ride5_Logo_RGB_OnBlack-2048x725.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-    
-
-      <img class="game-card" 
-           src="https://sm.ign.com/ign_br/cover/f/farming-si/farming-simulator-25_p1nu.jpg" 
-           alt="FS 25" 
-           data-title="Farming Simulator 25" 
-           data-desc="Expanda sua fazenda com novas máquinas e culturas." 
-           data-video="https://vimeo.com/1187547285?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c907b781-0ad6-4ed3-86b0-f800bafa510f/diimq5d-5378f560-a92f-46b7-be35-769c2907fd87.png/v1/fill/w_800,h_310/farming_simulator_25_logo_by_craig_lowe_diimq5d-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzEwIiwicGF0aCI6Ii9mL2M5MDdiNzgxLTBhZDYtNGVkMy04NmIwLWY4MDBiYWZhNTEwZi9kaWltcTVkLTUzNzhmNTYwLWE5MmYtNDZiNy1iZTM1LTc2OWMyOTA3ZmQ4Ny5wbmciLCJ3aWR0aCI6Ijw9ODAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.IFdCs7CMdNuSHlYPRNFBWhKgGLnNWc-GjmSKkzz5NEo"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-
-<div class="row">
-  <h2>⚡Soulslike e RPG de Ação</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-      <img class="game-card" 
-           src="https://assets.xboxservices.com/assets/7b/54/7b54f5e4-0857-4ce3-8a18-2b8c431e8a9e.jpg?n=Elden-Ring_GLP-Page-Hero-0_1083x1222_01.jpg" 
-           alt="Elden Ring" 
-           data-title="Elden Ring" 
-           data-desc="Levante-se, Maculado, e seja guiado pela graça para portar o poder do Anel Príncipio." 
-           data-video="https://vimeo.com/1187553769?share=copy&fl=sv&fe=ci" 
-           data-logo="https://www.pngall.com/wp-content/uploads/13/Elden-Ring-Logo-PNG-File.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://hobbygames.ru/image/enaza/19184698/box2.jpg.jpg" 
-           alt="Wukong" 
-           data-title="Black Myth: Wukong" 
-           data-desc="Um RPG de ação inspirado na mitologia chinesa e no romance Jornada ao Oeste." 
-           data-video="https://vimeo.com/1187550907?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/2cb20cf1015104c145ddd098f482005e.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/ap/rnd/202305/2308/06b354c8015b3c71e54f43aa883aab4641285d4a91734681.png" 
-           alt="Lies of P" 
-           data-title="Lies of P" 
-           data-desc="Um soulslike emocionante que adapta a história de Pinóquio em um mundo sombrio." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://cdn2.steamgriddb.com/logo/77947f1bbfcfa47ce2686b9a2a5823e9.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/cdn/HP0700/CUSA03434_00/9Lvijwqww6gvFTsciIzMWqs61DlOg8xIAsomficGKF6g7z6bYgrYGAoG80gr87pw.png" 
-           alt="DS III" 
-           data-title="Dark Souls III" 
-           data-desc="Só restam as brasas... prepare-se para abraçar a escuridão." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://media.gamestop.com/i/gamestop/dark-souls-3-logo/dark-souls-3.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://m.media-amazon.com/images/M/MV5BMTM4N2JjZTEtNzE2YS00MTdmLTg1NTctZjVkNGFlOWU5OWFmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" 
-           alt="DS II Scholar" 
-           data-title="Dark Souls II: Scholar of the First Sin" 
-           data-desc="A experiência definitiva de Dark Souls II com novos desafios e segredos." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://image.api.playstation.com/vulcan/img/rnd/202011/0203/zoxs4BV7UufSeFj0fQ5mDyZl.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-           <img class="game-card" 
-           src="https://images3.alphacoders.com/117/thumb-1920-117095.jpg" 
-           alt="Skyrim" 
-           data-title="The Elder Scrolls V: Skyrim" 
-           data-desc="O épico de fantasia em mundo aberto da Bethesda Game Studios." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://blog.logomyway.com/wp-content/uploads/2021/08/skyrim-logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-      <img class="game-card" 
-           src="https://bdjogos.com.br/capas/6265-the-witcher-3-wild-hunt-capa-1.jpg" 
-           alt="Witcher 3" 
-           data-title="The Witcher 3: Wild Hunt" 
-           data-desc="Torne-se Geralt de Rívia, um caçador de monstros em um mundo aberto massivo." 
-           data-video="https://vimeo.com/1187559486?share=copy&fl=sv&fe=ci" 
-           data-logo="https://res.cloudinary.com/dlt1gqwnc/image/upload/v1775455305/pngimg.com_-_witcher_PNG48_whepoi.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://www.productsleutels.nl/wp-content/uploads/2021/01/Cyberpunk-2077-PC-COVER.jpg" 
-           alt="Cyberpunk" 
-           data-title="Cyberpunk 2077" 
-           data-desc="Torne-se um mercenário urbano em Night City, uma megalópole obcecada por poder." 
-           data-video="hhttps://vimeo.com/1187562867?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cyberpunk_2077_logo.svg/3840px-Cyberpunk_2077_logo.svg.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/c8738a4d1ead40368eab9688b3c7d737/EGS_SkyrimSpecialEdition_BethesdaGameStudios_S2_1200x1600-ae5d13f6510e81460fe80aa1ca19cf4c" 
-           alt="Skyrim SE" 
-           data-title="The Elder Scrolls V: Skyrim SE" 
-           data-desc="Vencedor de mais de 200 prêmios de Jogo do Ano." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/c7051811e49ab74434a470cf47e1e2ca.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-           <img class="game-card" 
-           src="https://sm.ign.com/ign_pt/gallery/d/dark-souls/dark-souls-remastered-box-art_pr4m.jpg" 
-           alt="DS Remastered" 
-           data-title="Dark Souls Remastered" 
-           data-desc="Revisite o jogo que definiu o gênero com gráficos e desempenho aprimorados." 
-           data-video="https://vimeo.com/1187552519?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/7d1cbc0cb9bc3fa1ee6fa52d5e21808c.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-      
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-
-<div class="row">
-  <h2>⚡Luta</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-      <img class="game-card" 
-           src="https://meups.com.br/wp-content/uploads/2023/09/Israel-Mobolaji-Temitayo-Odunayo-Oluwafemi-Owolabi-Adesanya-UFC.jpeg" 
-           alt="UFC" 
-           data-title="UFC 5" 
-           data-desc="Sinta o impacto de cada golpe com o realismo do Octógono." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5fbef0ad-821e-42ff-bd50-c54a0742abc7/dg8bpww-e5ed7e7f-ef58-4a02-923e-a2dbce86ab7b.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi81ZmJlZjBhZC04MjFlLTQyZmYtYmQ1MC1jNTRhMDc0MmFiYzcvZGc4YnB3dy1lNWVkN2U3Zi1lZjU4LTRhMDItOTIzZS1hMmRiY2U4NmFiN2IucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.7V-ryjKMzIRAvtAvb1WUQNKYMXaKK8iUCGwR8lim1dY"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-
-      <img class="game-card" 
-           src="https://pixelstore.cl/cdn/shop/files/Disenosintitulo_25.png" 
-           alt="MK 11" 
-           data-title="Mortal Kombat 11" 
-           data-desc="MK está de volta e melhor do que nunca na próxima evolução da franquia icônica." 
-           data-video="https://vimeo.com/1187544006?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/6a1249dfc7679f6c64c937d9c8432874.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-           <img class="game-card" 
-           src="https://static.wikia.nocookie.net/dublagempedia/images/8/85/Packshot-4f17aa8af0f3631bd8367b226c0fd263.jpg/revision/latest?cb=20191024001337&path-prefix=pt-br" 
-           alt="Injustice 2" 
-           data-title="Injustice 2" 
-           data-desc="Personalize e evolua os heróis e vilões mais icônicos da DC." 
-           data-video="https://vimeo.com/1187543521?share=copy&fl=sv&fe=ci" 
-           data-logo="https://www.pngplay.com/wp-content/uploads/11/Injustice-2-Logo-Transparent-File.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://images.gog.com/3272c0976e5651c0629daf5eab1ac4b2c49d7154b0a316886a1c7fa8b26af702_glx_vertical_cover.webp?namespace=gamesdb" 
-           alt="MK X" 
-           data-title="Mortal Kombat X" 
-           data-desc="Mortal Kombat X combina apresentação cinematográfica com jogabilidade inédita." 
-           data-video="https://vimeo.com/1187545029?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/3820fccb250037463096208fe8a48618.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn.europosters.eu/image/1300/230759.jpg" 
-           alt="Tekken 8" 
-           data-title="Tekken 8" 
-           data-desc="Prepare-se para o próximo capítulo da lendária franquia de jogos de luta." 
-           data-video="https://vimeo.com/1187548364?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/8278041de9b8124ebdd68726521a689a.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/cdn/UP0700/CUSA05972_00/4yfeeKKfJdD5WzDQsoiM3xrcqPlpDLm7.png" 
-           alt="Tekken 7" 
-           data-title="Tekken 7" 
-           data-desc="Descubra a conclusão épica da linhagem Mishima e as razões por trás de cada passo da sua luta incessante." 
-           data-video="https://vimeo.com/1187547752?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fr/thumb/3/35/Tekken_7_Logo.svg/500px-Tekken_7_Logo.svg.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/img/cfn/11307MTvkumhOsLQiA_3g0ZbFhLnHOOWVw3qR4Rum7sKAh8I3THtbG0aa-P7dF7-miXzo1ceqN897MfxYZ7Qx-GaEZs8kq4X.png" 
-           alt="SF V" 
-           data-title="Street Fighter V" 
-           data-desc="O lendário jogo de luta está de volta com visuais incríveis e lutas intensas." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://cdn2.steamgriddb.com/logo/4c25257cc0a490730dee6fe6a528accc.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-
-      <img class="game-card" 
-           src="http://cdn.awsli.com.br/2500x2500/22/22652/produto/295227042/dragon-ball-z-kakarot-legendary-edition-cover-vxuco0ery4.png" 
-           alt="Dragon Ball Z" 
-           data-title="Dragon Ball Z: Kakarot" 
-           data-desc="Reviva a história de Goku e outros guerreiros Z em DRAGON BALL Z: KAKAROT!" 
-           data-video="https://vimeo.com/1187540849?share=copy&fl=sv&fe=ci" 
-           data-logo="https://us-east-1-bandai.graphassets.com/AXzioIclSWilEjFtsMJPwz/ykzF6UdISOaowX5LniPz"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-           <img class="game-card" 
-           src="https://m.media-amazon.com/images/I/71kj4+Y5bHL._AC_UF1000,1000_QL80_.jpg" 
-           alt="MK 1" 
-           data-title="Mortal Kombat 1" 
-           data-desc="Um universo Mortal Kombat renascido criado pelo Deus do Fogo Liu Kang." 
-           data-video="https://vimeo.com/1187562905?share=copy&fl=sv&fe=ci" 
-           data-logo="https://image.api.playstation.com/vulcan/ap/rnd/202305/1515/5672fb236ca3c20e3a4faed4413ee34af042fc4a76ce2c25.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-<div class="row">
-  <h2>⚡Ação e Aventura (Mundo Aberto)</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png" 
-           alt="Red Dead Redemption 2" 
-           data-title="Red Dead Redemption 2" 
-           data-desc="Uma história épica sobre a vida no coração implacável da América no fim da era do faroeste." 
-           data-video="https://vimeo.com/1187556626?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Red_Dead_Redemption_2_Logo.png/1280px-Red_Dead_Redemption_2_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
- <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/8/80/Grand_Theft_Auto_V_capa.png" 
-           alt="GTA V" 
-           data-title="Grand Theft Auto V" 
-           data-desc="Três criminosos muito diferentes conectam suas vidas em uma série de assaltos ousados em Los Santos." 
-           data-video="https://vimeo.com/1187555645?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/91d52475-1788-4638-a5aa-d1eefcde9419/dgjske6-c13ada3e-9d4a-4270-acac-178864841647.png/v1/fill/w_1010,h_791/gta_iv_logo_by_robertkim092_dgjske6-pre.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/8b2d6cf2b45b41f1abe91bc5b7c1e8f9/EGS_UNCHARTEDLegacyofThievesCollection_NaughtyDogLLC_S2_1200x1600-9deaa177d8716bde5478cdd75d850c9c" 
-           alt="Uncharted 4" 
-           data-title="Uncharted: Coleção Legado dos Ladrões" 
-           data-desc="Busque seu legado e deixe sua marca no mapa em UNCHARTED: Coleção Legado dos Ladrões." 
-           data-video="https://vimeo.com/1187561868?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/b9763bdff688a0af26e130bab41feb61.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://assets-prd.ignimgs.com/2022/05/27/9781506732022-1653620982308.jpg" 
-           alt="Horizon Forbidden West" 
-           data-title="Horizon Forbidden West" 
-           data-desc="Enfrente máquinas letais e IAs erráticas em uma luta desesperada para restaurar Gaia e salvar a biosfera da Terra da aniquilação total." 
-           data-video="https://vimeo.com/1187555815?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/0a31b8b048c10332ece27bef9670bda8.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/6e6aa039c73347b885803de65ac5d3db/EGS_GhostofTsushima_SuckerPunchProductions_S2_1200x1600-e23e02c1d70be7b528dba50860f87d39" 
-           alt="Ghost of Tsushima" 
-           data-title="Ghost of Tsushima" 
-           data-desc="No Japão feudal, o samurai Jin Sakai precisa decidir entre o código de honra ou métodos não convencionais para salvar sua ilha." 
-           data-video="https://vimeo.com/1187555468?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/f894cbc7551b7dea91a6aa9fbfc95c21.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-store-art-01-10sep21$ru?$800px--t$" 
-           alt="God of War Ragnarök" 
-           data-title="God of War Ragnarök" 
-           data-desc="Kratos e Atreus devem viajar pelos Nove Reinos em busca de respostas enquanto as forças de Asgard se preparam para o fim do mundo." 
-           data-video="https://vimeo.com/1187555294?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/92554480-bde6-4f5c-9861-7022237da1ce/dfk2top-494d7ab4-4d24-4455-bcda-402bf76378d6.png/v1/fill/w_1024,h_277/god_of_war_ragnarok_logo_by_brsbr_dfk2top-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Mjc3IiwicGF0aCI6Ii9mLzkyNTU0NDgwLWJkZTYtNGY1Yy05ODYxLTcwMjIyMzdkYTFjZS9kZmsydG9wLTQ5NGQ3YWI0LTRkMjQtNDQ1NS1iY2RhLTQwMmJmNzYzNzhkNi5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.KNYp9QreC-k_Wmb-HqRtR4VeFLImmeSWYDXwwt4pNMM"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-    
-     <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/d/d0/Horizon_Zero_Dawn_capa.png" 
-           alt="Horizon zero danw" 
-           data-title="Horizon zero danw" 
-           data-desc="Junte-se a Aloy para desbravar o Oeste Proibido, uma fronteira letal que esconde novas ameaças misteriosas." 
-           data-video="https://vimeo.com/1187541692?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/4582ef600b4316d72eede3ef78fc77d9.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-          
-      <img class="game-card" 
-           src="https://static.posters.cz/image/750/116582.jpg" 
-           alt="God of War" 
-           data-title="God of War (2018)" 
-           data-desc="Kratos vive agora como um homem no reino dos Deuses e monstros nórdicos." 
-           data-video="https://vimeo.com/1187542300?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a66d9aa2-f0a2-4e8d-9d73-4ba543ea1a50/da6mjxh-2631eb1a-3779-4a52-b63d-82efb14e5c5f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hNjZkOWFhMi1mMGEyLTRlOGQtOWQ3My00YmE1NDNlYTFhNTAvZGE2bWp4aC0yNjMxZWIxYS0zNzc5LTRhNTItYjYzZC04MmVmYjE0ZTVjNWYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.bNqxyk30X8OWg34d-4lKBGQI9EKHOWtBRdNL2LERGkc"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-            <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/ap/rnd/202009/3021/BtsjAgHT9pqHRXtN9FCk7xc8.png" 
-           alt="Spider-Man Remastered" 
-           data-title="Spider-Man Remastered" 
-           data-desc="Viva a história completa de Peter Parker em uma experiência aprimorada para a nova geração." 
-           data-video="https://vimeo.com/1187538350?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/3fd6083ec914187fb775df5103ffb95d.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/vulcan/ap/rnd/202306/1301/0a5face6e59f61c2ed7f9423c778b10f2e4b8cada54d164f.png" 
-           alt="Spider-Man 2" 
-           data-title="Spider-Man 2" 
-           data-desc="Peter Parker e Miles Morales enfrentam a prova definitiva de força para salvar a cidade de Venom." 
-           data-video="https://vimeo.com/1187558637?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/2/25/Marvel%27s_Spider-Man_2_%282025%29_logo_official_%28SGDB_124347%29.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-          
-     
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/7/74/Spider-Man_Miles_Morales_capa.png" 
-           alt="Miles Morales" 
-           data-title="Spider-Man: Miles Morales" 
-           data-desc="O jovem Miles Morales tenta se ajustar à sua nova casa enquanto segue os passos de seu mentor." 
-           data-video="https://vimeo.com/1187538348?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c56bd0f6-87a9-4798-b74e-c6112f0a7773/de7ncqp-b3935744-2e89-4c22-b981-4ab445e90837.png/v1/fill/w_1280,h_720/spider_man_miles_morales_title_card___png_by_pngsandassets_de7ncqp-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6Ii9mL2M1NmJkMGY2LTg3YTktNDc5OC1iNzRlLWM2MTEyZjBhNzc3My9kZTduY3FwLWIzOTM1NzQ0LTJlODktNGMyMi1iOTgxLTRhYjQ0NWU5MDgzNy5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.hhx6asrSgj8-mo2tCirTJZNMB2LkaGCKQi0JXnsU1n4"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-        <img class="game-card" 
-           src="https://www.europanet.com.br/upload/id_produto/60_____/6000201g.jpg" 
-           alt="Hogwarts Legacy" 
-           data-title="Hogwarts Legacy" 
-           data-desc="Viva o não escrito em Hogwarts no século XIX. O seu personagem guarda a chave de um segredo antigo." 
-           data-video="https://vimeo.com/1187543487?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn-hogwartslegacy.warnerbrosgames.com/home/hero-logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-  
-
-      <img class="game-card" 
-           src="https://bdjogos.com.br/capas/5689-mad-max-capa-1.jpg" 
-           alt="Mad Max" 
-           data-title="Mad Max" 
-           data-desc="Torne-se Mad Max, o guerreiro solitário em um mundo pós-apocalíptico onde carros são a chave para a sobrevivência." 
-           data-video="https://vimeo.com/1187544395?share=copy&fl=sv&fe=ci" 
-           data-logo="https://pluspng.com/img-png/mad-max-png-madmax-icon-png-1129.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/angelonia/WDA_StorePortrait_1200x1600_1200x1600-75d21fb44d647ad69967ae1bb0ab0cbc" 
-           alt="Watch Dogs 2" 
-           data-title="Watch Dogs 2" 
-           data-desc="Jogue como Marcus, um jovem hacker brilhante que vive no berço da revolução tecnológica, a área da baía de São Francisco." 
-           data-video="https://vimeo.com/1187549212?share=copy&fl=sv&fe=ci" 
-           data-logo="https://www.nicepng.com/png/full/813-8135353_watch-dogs-multiple-save-slots-watch-dogs-2.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()"> 
-
-        
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/d/d3/Grand_Theft_Auto_San_Andreas_capa.png" 
-           alt="GTA San Andreas" 
-           data-title="GTA San Andreas" 
-           data-desc="Carl Johnson precisa salvar sua família e assumir o controle das ruas em um estado inteiro." 
-           data-video="https://vimeo.com/1187546604?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Grand_Theft_Auto_San_Andreas_logo.svg/500px-Grand_Theft_Auto_San_Andreas_logo.svg.png?_=20161111173935"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-
-           
-
-
-      
-
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-<div class="row">
-  <h2>⚡Franquia Far Cry</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-     <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/5/59/Far_cry_3_box_art.jpg" 
-           alt="FAR CRY 3" 
-           data-title="FAR CRY 3" 
-           data-desc="Descubra os segredos sombrios de uma ilha tropical onde a sanidade é um luxo e a sobrevivência é a única regra." 
-           data-video="https://vimeo.com/1187554128?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/e75d4d01cecdda3c64483016bd6af4c1.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/cf87285950ba492bbdc370b9d265ea36/FC4_StorePortrait_1200x1600_1200x1600-7f366d878f5553dae499860243c537ee" 
-           alt="FAR CRY 4" 
-           data-title="FAR CRY 4" 
-           data-desc="Um jovem retorna à sua terra natal para realizar o último desejo de sua mãe e acaba liderando uma rebelião para derrubar um ditador excêntrico no Himalaia." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/f/fc/Far_Cry_4.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-     <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/9/94/Far_cry_5_cover.jpg" 
-           alt="farcry5" 
-           data-title="Far Cry 5" 
-           data-desc="Enfrente um culto apocalíptico fanático no interior dos Estados Unidos, liderando a resistência para libertar uma comunidade sitiada por um profeta impiedoso." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://cdn2.steamgriddb.com/logo/bec73da182e851a5f9e71a3a6e19d3df.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-     <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/d/df/Far_Cry_6_capa.jpg" 
-           alt="farcry6" 
-           data-title="Far Cry 6" 
-           data-desc="Lute como um guerrilheiro moderno para derrubar um ditador implacável e libertar uma nação insular tropical parada no tempo." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="http://cdn2.steamgriddb.com/logo_thumb/0b7e83a0c6df5de1ea6f113af3b39319.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-     <img class="game-card" 
-           src="https://res.cloudinary.com/dnponjtdn/image/upload/v1777349197/maxresdefault_2_hvz0mw.jpg" 
-           alt="farcry7" 
-           data-title="Far Cry 7" 
-           data-desc="Embarque em uma corrida contra o tempo para resgatar sua família sequestrada por um grupo conspiratório em uma experiência de sobrevivência não linear." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e542ca9d-2008-4830-9ef1-5fcfa93e376c/dir7vb5-d68aa380-d8fd-4760-aac8-52d70cf48ac0.png/v1/fill/w_1280,h_235/far_cry_7__2025__by_captainclarke19_dir7vb5-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjM1IiwicGF0aCI6Ii9mL2U1NDJjYTlkLTIwMDgtNDgzMC05ZWYxLTVmY2ZhOTNlMzc2Yy9kaXI3dmI1LWQ2OGFhMzgwLWQ4ZmQtNDc2MC1hYWM4LTUyZDcwY2Y0OGFjMC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.aaCQDn52DXlqq-ezoga9ezrTPskd-VWpSvzmlUhLo5s"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-     <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/b/be/Farcry_primal_box.jpg" 
-           alt="primal" 
-           data-title="Far Cry Primal" 
-           data-desc="Lute pela sobrevivência na Idade da Pedra como um caçador que deve domar feras selvagens e unir sua tribo contra grupos rivais em um mundo pré-histórico brutal." 
-           data-video="https://vimeo.com/1187554390?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/Far_Cry_Primal_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-</div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-
-<div class="row">
-  <h2>⚡Franquia Assassin's Creed</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/e/e9/Assassins_Creed_Valhalla_capa.png" 
-           alt="AC Valhalla" 
-           data-title="Assassin's Creed Valhalla" 
-           data-desc="Escreva sua saga viking em busca de glória e um novo lar na Inglaterra da Idade das Trevas." 
-           data-video="xIYSlglSJQw" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/7a963088b715398a4438ad53935af1cb.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-<img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/camellia/ACOrigins_STD_Store_Portrait_1200x1600_1200x1600-4a79f9f393f7a3a9e5be3a0ae581f3d5" 
-           alt="AC Origins" 
-           data-title="Assassin's Creed Origins" 
-           data-desc="Explore o Egito Antigo e descubra a origem da Irmandade dos Assassinos." 
-           data-video="5x1PrT51IIs" 
-           data-logo="https://cdn2.steamgriddb.com/logo/20d71db174155578799901e0af9b24c7.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-      <img class="game-card" 
-           src="https://store-images.s-microsoft.com/image/apps.62015.13663198691635509.d632fab1-4bb2-4655-a619-75bb8f17a360.e00e5e77-8e14-490f-a51b-a024d0fe6e11" 
-           alt="AC III" 
-           data-title="Assassin's Creed III" 
-           data-desc="Lute pela liberdade nas colônias americanas durante a Revolução Americana." 
-           data-video="ExXGy0CzftQ" 
-           data-logo="https://cdn2.unrealengine.com/Diesel%2Fproduct%2Fanise%2Fhome%2FHelix_AC3r_Logo_Vertical_White_NoCrest-2561x800-c8a0249a8e0e15aa11d53e4d9052971945b9ab6e.png?resize=1&w=480&h=270&quality=medium"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/8/84/Assassins_Creed_Odyssey_capa.png" 
-           alt="AC Odyssey" 
-           data-title="Assassin's Creed Odyssey" 
-           data-desc="Escreva sua própria odisseia épica e torne-se um herói lendário da Grécia Antiga." 
-           data-video="ZDR_A4oQKlo" 
-           data-logo="https://cdn2.steamgriddb.com/logo/f4693942620b18fb077b314ab3b8f369.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/9/9a/Assassins_Creed_Unity_capa.png" 
-           alt="AC Unity" 
-           data-title="Assassin's Creed Unity" 
-           data-desc="A história de Arno na Paris da Revolução Francesa." 
-           data-video="URxJur7Cmfs" 
-           data-logo="https://cdn2.steamgriddb.com/logo/7289106c3ebccb21877f9a50b697e761.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/c/ca/Assassins_Creed_4_Black_Flag_capa.png" 
-           alt="AC Black Flag" 
-           data-title="Assassin's Creed IV: Black Flag" 
-           data-desc="Torne-se Edward Kenway, um pirata treinado por assassinos no Caribe." 
-           data-video="6i7mQ09b_vs" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/3e3c7e0018567873b322c3c00e51deda.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/a/ac/Assassins_Creed_2_capa.png" 
-           alt="AC II" 
-           data-title="Assassin's Creed II" 
-           data-desc="A jornada épica de Ezio Auditore na Itália Renascentista." 
-           data-video="p5NxqW4Tqmc" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/17cefda3639b47a724f51016319b911d.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-
-
-<div class="row">
-  <h2>⚡Outros Títulos (FPS, LEGO, Stealth, etc.)</h2>
-  <div class="category-wrapper">
-    <button class="scroll-btn left" onclick="scrollCategory(this, -1)">❮</button>
-    <div class="games-scroll">
-
-      <img class="game-card" 
-           src="https://universocroft.com.br/wp-content/uploads/2023/06/tr_2013_packshot-725x1024-1.jpg" 
-           alt="Tomb Raider" 
-           data-title="Tomb Raider (2013)" 
-           data-desc="Explore a história de origem de Lara Croft e sua ascensão de uma jovem sobrevivente a uma aventureira endurecida." 
-           data-video="https://vimeo.com/1187548578?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/9/9f/Tomb_Raider_%282013_video_game%29_%E2%80%93_Game%E2%80%99s_logo.svg"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-           
-      <img class="game-card" 
-           src="https://cdn1.epicgames.com/offer/hyacinth/GRW_StorePortrait_1200x1600_1200x1600-78b13dd96e208170ca3ed32b3034fcc2" 
-           alt="Ghost Recon" 
-           data-title="Tom Clancy's Ghost Recon Wildlands" 
-           data-desc="Crie uma equipe com até 3 amigos e aproveite a experiência definitiva de tiro militar." 
-           data-video="https://vimeo.com/1187542450?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/a3a8381281635a1926bd3ea09f29f4d9.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-            <img class="game-card" 
-           src="https://cdn.europosters.eu/image/750/26603.jpg" 
-           alt="MGS V" 
-           data-title="Metal Gear Solid V: The Phantom Pain" 
-           data-desc="Uma nova era para a franquia com tecnologia de ponta e mundo aberto." 
-           data-video="https://vimeo.com/1187544505?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo/0e189c35adab992d274c294586143ec9.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Pragmata_cover.jpg" 
-           alt="pragmata" 
-           data-title="PRAGMATA" 
-           data-desc="Pragmata é um jogo de ação e aventura com elementos de ficção científica da Capcom.!" 
-           data-video="https://vimeo.com/1187773003?share=copy&fl=sv&fe=ci" 
-           data-logo="https://assets.pinnyarcade.com/img/pin-art/2025-pragmata.png"      
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://www.notebookcheck.info/fileadmin/Notebooks/News/_nc5/image_2025-09-24_193459770.png" 
-           alt="C desert" 
-           data-title="Crimson Desert" 
-           data-desc="O mundo é seu para explorar como quiser e há muitos caminhos para você descobrir." 
-           data-video="https://vimeo.com/1187774922?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fr/6/6c/Crimson_Desert_Logo.png"
-         
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://upload.wikimedia.org/wikipedia/pt/1/1e/Hitman_2016_capa.png" 
-           alt="Hitman" 
-           data-title="Hitman" 
-           data-desc="Elimine alvos poderosos em locais exóticos ao redor do mundo." 
-           data-video="https://vimeo.com/1187543124?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/53092cbc9ebb151dc54c48c07788e0de.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-      <img class="game-card" 
-           src="https://m.media-amazon.com/images/I/71RBFJDW4DL._AC_UF1000,1000_QL80_DpWeblab_.jpg" 
-           alt="Batman Knight" 
-           data-title="Batman: Arkham Knight" 
-           data-desc="Seja o Batman e enfrente a ameaça final contra a cidade que você jurou proteger." 
-           data-video="https://vimeo.com/1187550556?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/6f6e0538ead46a68ea016263b2398ccd.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://static.wikia.nocookie.net/arkhamcity/images/7/7c/BatmanArkhamOrigins.png/revision/latest?cb=20160922155432&path-prefix=pt-br" 
-           alt="Batman Origins" 
-           data-title="Batman: Arkham Origins" 
-           data-desc="Explore uma Gotham City expandida e vivencie a história de origem do Cavaleiro das Trevas." 
-           data-video="https://vimeo.com/1187539598?share=copy&fl=sv&fe=ci" 
-           data-logo="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f9fd1ce8-6cd6-446b-a8b5-fc5cea739a59/d616u44-6cebd38e-67f1-40b4-8c29-be7d2cb135fc.png/v1/fill/w_1024,h_564/batman__arkham_origins___logo__render__by_gbmpersonal_d616u44-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTY0IiwicGF0aCI6Ii9mL2Y5ZmQxY2U4LTZjZDYtNDQ2Yi1hOGI1LWZjNWNlYTczOWE1OS9kNjE2dTQ0LTZjZWJkMzhlLTY3ZjEtNDBiNC04YzI5LWJlN2QyY2IxMzVmYy5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.FpeYOJqorcY7D-7ismNPSk-yUAa-j6X1zaaInXP9I1w"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/cdn/UP4363/CUSA04220_00/enPJKepv77SjDxBYHsetY8XwebH26W1Z.png" 
-           alt="Sniper Elite 4" 
-           data-title="Sniper Elite 4" 
-           data-desc="Descubra a liberdade incomparável de tiro de elite no maior e mais avançado jogo da Segunda Guerra Mundial." 
-           data-video="https://vimeo.com/1187547678?share=copy&fl=sv&fe=ci" 
-           data-logo="https://cdn2.steamgriddb.com/logo_thumb/9b4fab8ff395087fe3e4862dc62369ac.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://wallpapers.com/images/hd/left-4-dead-2-zombie-hand-t5rhv5o4w42ii7pg.jpg" 
-           alt="L4D2" 
-           data-title="Left 4 Dead 2" 
-           data-desc="O apocalipse zumbi cooperativo definitivo." 
-           data-video="https://vimeo.com/1187544018?share=copy&fl=sv&fe=ci" 
-           data-logo="https://developer.valvesoftware.com/w/images/thumb/9/95/Logo-Left_4_Dead_2.png/420px-Logo-Left_4_Dead_2.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      
-     
-
-      <img class="game-card" 
-           src="https://image.api.playstation.com/cdn/UP1018/CUSA00251_00/7YrRqN2wgRzpzX4K5RLUEecDyu53mz8U.png" 
-           alt="LEGO Marvel" 
-           data-title="LEGO Marvel Super Heroes" 
-           data-desc="Controle uma enorme lista de personagens da Marvel para deter Loki e outros vilões." 
-           data-video="https://res.cloudinary.com/dlt1gqwnc/video/upload/v1772215223/bf6-GAMEFLIX_o1ttw7.mp4" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fr/7/7d/Lego_Marvel_Super_Heroes_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-     
-      <img class="game-card" 
-           src="https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000002090/ecfc64f339579b17ed8d12d5bdb4acd0cad2811cb2ff7dd0a02ce7e512c2d26a" 
-           alt="Crash Trilogy" 
-           data-title="Crash Bandicoot N. Sane Trilogy" 
-           data-desc="Seu marsupial favorito está de volta melhorado e pronto para dançar!" 
-           data-video="https://vimeo.com/1187552282?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/fr/7/75/Crash_Bandicoot_N_Sane_Trilogy_Logo.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://cdn.kobo.com/book-images/6174c893-747b-449e-9794-fc9dcca86036/1200/1200/False/plants-vs-zombies-volume-3-bully-for-you.jpg" 
-           alt="PvZ" 
-           data-title="Plants vs. Zombies" 
-           data-desc="Prepare-se para sujar suas plantas enquanto uma horda de zumbis divertidos invade sua casa." 
-           data-video="https://vimeo.com/1187546143?share=copy&fl=sv&fe=cihttps://vimeo.com/1187546143?share=copy&fl=sv&fe=ci" 
-           data-logo="https://static.wikia.nocookie.net/logopedia/images/0/01/Pvz_logo_stacked_rgb.png/revision/latest?cb=20120408101754"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-
-      <img class="game-card" 
-           src="https://images.g2a.com/360x600/1x1x1/the-sims-2-legacy-collection-p10000509694/f0cedf020a3f4f29af84c3cb" 
-           alt="The Sims 2" 
-           data-title="The Sims 2" 
-           data-desc="Controle a vida de seus Sims desde o berço até o túmulo no simulador de vida clássico." 
-           data-video="https://vimeo.com/1187547218?share=copy&fl=sv&fe=ci" 
-           data-logo="https://upload.wikimedia.org/wikipedia/commons/c/c2/The_Sims_2_logo_%282024%29.png"
-         data-link="https://wa.me/559810219909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" 
-           onclick="openWppModal()">
-    </div>
-    <button class="scroll-btn right" onclick="scrollCategory(this, 1)">❯</button>
-  </div>
-</div>
-
-
-
-
-
-
-
-<div class="floating-btn-container">
-  <a href="https://gameflix2.github.io/GAMEFLIX-BLACK/" target="_blank" style="text-decoration: none;">
-    <button class="netflix-btn">⚡ SEJA MEMBRO BLACK - DOMINE A PLATAFORMA ⚡</button>
-  </a>
-</div>
-    </div>
-
-
-<!-- ====== MODAL WHATSAPP ====== -->
-<div id="wppModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column;">
-  <div style="background:#141414; border:1px solid #e50914; border-radius:12px; padding:40px 32px; max-width:420px; width:90%; text-align:center; position:relative; box-shadow:0 0 60px rgba(229,9,20,0.5);">
-    <button onclick="closeWppModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">✕</button>
-    <div style="font-size:48px; margin-bottom:12px;">🎮</div>
-    <h2 style="color:#e50914; font-family:'Bebas Neue',sans-serif; font-size:28px; margin-bottom:8px; letter-spacing:2px;">ACESSE A GAMEFLIX</h2>
-    <p style="color:#ccc; font-size:14px; margin-bottom:24px; line-height:1.6;">Clique no botão abaixo para falar com nossa equipe no WhatsApp e garantir seu acesso com condição exclusiva!</p>
-    <a href="https://wa.me/55981021909?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20a%20Gameflix!" target="_blank" style="display:inline-block; background:#25D366; color:#fff; padding:14px 32px; border-radius:8px; font-weight:bold; font-size:16px; text-decoration:none; letter-spacing:1px; transition:opacity 0.2s;">💬 FALAR NO WHATSAPP</a>
-    <p style="color:#666; font-size:11px; margin-top:20px;">Resposta em até 5 minutos • Suporte 24h</p>
-  </div>
-</div>
-
-  <div class="netflix-modal" id="netflixModal">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal()">×</span>
-      <iframe id="modalVideo" class="modal-video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-      <div class="modal-info">
-        <h2 id="modalTitle"></h2>
-        <p id="modalDesc"></p>
-      </div>
-    </div>
-  </div>
-
-<!-- ====== MODAIS DE CATEGORIA ESTILO NETFLIX ====== -->
-
-
-<!--
-  ╔══════════════════════════════════════════════════════════════════╗
-  ║   GAMEFLIX — MODAL: MELHORES OFERTAS                            ║
-  ║                                                                  ║
-  ║   COMO INTEGRAR:                                                 ║
-  ║   1. Cole este bloco no index.html (antes do </body>)            ║
-  ║   2. Substitua o link do nav de "Lançamentos" por:               ║
-  ║      onclick="openCategoryModal('ofertas')"  e texto "Melhores Ofertas"
-  ║   3. Cole o CSS em style.css (ou no <head> via <style>)          ║
-  ║   4. Cole o JS em script.js (ou antes do </body>)                ║
-  ╚══════════════════════════════════════════════════════════════════╝
--->
-
-<div class="cat-modal-overlay" id="modal-ofertas">
-  <div class="cat-modal-box gfo-modal-box">
-    <button class="cat-modal-close" onclick="closeCategoryModal('ofertas')">✕</button>
-
-    <!-- HEADER -->
-    <div class="gfo-header">
-      <div class="gfo-header-left">
-        <h2 class="gfo-title">MELHORES OFERTAS DA PLATAFORMA⚡</h2>
-        <span class="gfo-fire-badge">MAIS BAIXADOS DA GAMEFLIX</span>
-        
-        <p class="gfo-subtitle">Jogos com condição exclusiva esta semana, APROVEITE!!</p>
-      </div>
-      <div class="gfo-header-right">
-        <div class="gfo-savings-pill">
-          <span class="gfo-savings-label">ECONOMIZE ATÉ</span>
-          <span class="gfo-savings-value">70%</span>
+    <!-- Headline -->
+    <h1 class="headline">
+        KIT COMPLETO<br>PARA<em> COLORIR</em>
+    </h1>
+
+    <!-- Imagem estática (antes era o card de vídeo) -->
+    <div class="video-card">
+        <div class="video-ratio">
+            <!--
+                ┌──────────────────────────────────────────────────────────┐
+                │  Troque SUA_IMAGEM.jpg pela URL da sua imagem            │
+                └──────────────────────────────────────────────────────────┘
+            -->
+            <img src="SUA_IMAGEM.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
         </div>
-      </div>
-    </div>
+    </div><!-- /.video-card -->
 
-    <!-- GRID DE JOGOS -->
-    <div class="cat-modal-body gfo-body">
-      <div class="gfo-grid" id="gfo-games-grid">
-        <!-- Preenchido dinamicamente pelo JS -->
-      </div>
-    </div>
+    <!-- PLANOS — aparece no momento em que a oferta é liberada -->
+    <div id="plans-wrap">
+        <h2 class="plans-title">ESCOLHA SEU PLANO</h2>
+        <p class="plans-subtitle">Selecione a opção que melhor combina com você.</p>
 
-    <!-- CTA FOOTER -->
-    <button class="cat-cta-btn gfo-cta-btn" onclick="window.open('combo.html','_blank')">
-      ⚡ COMPRAR TODOS OS JOGOS ACIMA POR R$ 149,00 ⚡ </button>
-  </div>
-</div>
+        <div class="plans-grid">
 
-<!-- ============================================================
-     GAMEFLIX — MODAL: COMO INSTALAR (UPGRADE)
-     Substitua todo o bloco <div class="cat-modal-overlay" id="modal-instalar">
-     pelo código abaixo.
-     ============================================================ -->
-
-<div class="cat-modal-overlay" id="modal-instalar">
-  <div class="cat-modal-box cat-instalar">
-    <button class="cat-modal-close" onclick="closeCategoryModal('instalar')">✕</button>
-
-    <div class="cat-modal-header">
-      <span class="cat-modal-icon">⚙️</span>
-      <div>
-        <h2 class="cat-modal-title">COMO INSTALAR</h2>
-        <p class="cat-modal-subtitle">Passo a passo simples para jogar em minutos</p>
-      </div>
-    </div>
-
-    <div class="cat-modal-body">
-      <!-- GRID DE CARDS DE INSTALAÇÃO -->
-      <div class="gf-install-grid">
-
-        <div class="gf-install-card">
-          <span class="gf-install-step-bg">01</span>
-          <i class="gf-install-icon">🎯</i>
-          <h3 class="gf-install-card-title">ESCOLHA SEU JOGO OU PACK'</h3>
-     <p class="gf-install-card-desc">Acesse nossos packs e escolha o ideal para você. Opções a partir de R$&nbsp;00,00.</p>
-        </div>
-
-        <div class="gf-install-card">
-          <span class="gf-install-step-bg">02</span>
-          <i class="gf-install-icon">💳</i>
-          <h3 class="gf-install-card-title">FAÇA O PAGAMENTO</h3>
-          <p class="gf-install-card-desc">PIX ou cartão (se o game for gratis voce recebe direto o download).</p>
-        </div>
-
-        <div class="gf-install-card">
-          <span class="gf-install-step-bg">03</span>
-          <i class="gf-install-icon">🔑</i>
-          <h3 class="gf-install-card-title">RECEBA O ACESSO</h3>
-          <p class="gf-install-card-desc">Email e senha enviados direto no WhatsApp ou e-mail cadastrado.</p>
-        </div>
-
-        <div class="gf-install-card">
-          <span class="gf-install-step-bg">04</span>
-          <i class="gf-install-icon">🎮</i>
-          <h3 class="gf-install-card-title">BAIXE E JOGUE</h3>
-          <p class="gf-install-card-desc">Login no site, escolha o jogo, clique em Download. instale e jogue. Simples assim!</p>
-        </div>
-
-        <div class="gf-install-card gf-install-card--full">
-          <span class="gf-install-step-bg">05</span>
-          <i class="gf-install-icon">🛟</i>
-          <h3 class="gf-install-card-title">PRECISA DE AJUDA?</h3>
-          <p class="gf-install-card-desc">Nossa equipe está disponível via WhatsApp para te ajudar com qualquer dúvida na instalação.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('instalar')">💬 FALAR COM SUPORTE</button>
-  </div>
-</div>
-
-
-<!-- ============================================================
-     GAMEFLIX — MODAL: SORTEIOS (UPGRADE)
-     Substitua todo o bloco <div class="cat-modal-overlay" id="modal-sorteios">
-     pelo código abaixo.
-     ============================================================ -->
-
-<div class="cat-modal-overlay" id="modal-sorteios">
-  <div class="cat-modal-box cat-sorteios">
-    <button class="cat-modal-close" onclick="closeCategoryModal('sorteios')">✕</button>
-
-    <div class="cat-modal-header">
-      <span class="cat-modal-icon">🎁</span>
-      <div>
-        <h2 class="cat-modal-title">SORTEIOS GAMEFLIX</h2>
-        <p class="cat-modal-subtitle">Todo mês sorteios em dinheiro, PARTICIPE!</p>
-      </div>
-    </div>
-
-    <div class="cat-modal-body">
-
-      <!-- HERO CARD DO SORTEIO -->
-      <div class="gf-draw-container">
-        <div class="gf-draw-hero">
-
-          <!-- Faixa de status ATIVO -->
-          <div class="gf-draw-badge-row">
-            <span class="gf-draw-badge">
-              <span class="gf-draw-badge-dot"></span>
-              ATIVO
-            </span>
-            <span class="gf-draw-badge-label">SORTEIO DO MÊS</span>
-          </div>
-
-          <!-- Prêmio principal -->
-          <div class="gf-draw-prize-icon">🏆</div>
-          <h2 class="gf-draw-prize-title">💠 R$ 1.000 NO PIX 💠</h2>
-          <p class="gf-draw-prize-sub">corre e participe você também‼</p>
-
-          <!-- Countdown -->
-          <div class="gf-draw-countdown">
-            <div class="gf-draw-countdown-item">
-              <span id="raffle-days">--</span>
-              <small>DIAS</small>
+            <!-- FAIXA 1 — edite o selo, título, preço e o texto do botão livremente -->
+            <div class="offer-strip" id="strip1" data-plan="plano1" role="button" tabindex="0">
+                <div class="offer-strip__left">
+                    <div class="offer-strip__icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5a1 1 0 0 0-1 1v1a5 5 0 0 0 4.5 4.97A5.01 5.01 0 0 0 11 15.9V18H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 2.5-4.93A5 5 0 0 0 20 7V6a1 1 0 0 0-1-1zM6 7v-.001L6 7zm12 0a3 3 0 0 1-2.83 3H16V6h2v.999L18 7z"/></svg>
+                    </div>
+                    <div>
+                        <span class="offer-strip__badge">OFERTA ESPECIAL</span>
+                        <div class="offer-strip__title">5 fotos <em>para colorir</em></div>
+                    </div>
+                </div>
+                <div class="offer-strip__right">
+                    <div class="offer-strip__price">
+                        <span class="offer-strip__price-label">por apenas</span>
+                        <span class="offer-strip__price-value">R$ 29</span>
+                    </div>
+                    <a href="#" class="offer-strip__cta" id="planBtn1" data-plan="plano1" target="_blank" rel="noopener">
+                        QUERO ESTA
+                    </a>
+                </div>
             </div>
-            <div class="gf-draw-countdown-sep">:</div>
-            <div class="gf-draw-countdown-item">
-              <span id="raffle-hours">--</span>
-              <small>HORAS</small>
-            </div>
-            <div class="gf-draw-countdown-sep">:</div>
-            <div class="gf-draw-countdown-item">
-              <span id="raffle-mins">--</span>
-              <small>MIN</small>
-            </div>
-          </div>
 
-        </div><!-- /gf-draw-hero -->
+            <!-- FAIXA 2 -->
+            <div class="offer-strip" id="strip2" data-plan="plano2" role="button" tabindex="0">
+                <div class="offer-strip__left">
+                    <div class="offer-strip__icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5a1 1 0 0 0-1 1v1a5 5 0 0 0 4.5 4.97A5.01 5.01 0 0 0 11 15.9V18H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 2.5-4.93A5 5 0 0 0 20 7V6a1 1 0 0 0-1-1zM6 7v-.001L6 7zm12 0a3 3 0 0 1-2.83 3H16V6h2v.999L18 7z"/></svg>
+                    </div>
+                    <div>
+                        <span class="offer-strip__badge">OFERTA ESPECIAL</span>
+                        <div class="offer-strip__title">10 fotos <em>para colorir</em></div>
+                    </div>
+                </div>
+                <div class="offer-strip__right">
+                    <div class="offer-strip__price">
+                        <span class="offer-strip__price-label">por apenas</span>
+                        <span class="offer-strip__price-value">R$ 49</span>
+                    </div>
+                    <a href="#" class="offer-strip__cta" id="planBtn2" data-plan="plano2" target="_blank" rel="noopener">
+                        QUERO ESTA
+                    </a>
+                </div>
+            </div>
 
-        <!-- Regras de participação -->
-        <div class="gf-draw-rules">
-          <h4 class="gf-draw-rules-title">📋 COMO PARTICIPAR:</h4>
-          <ul class="gf-draw-rules-list">
-            <li><strong>PARA PARTICIPAR É MUITO SIMPLES!!</strong></li>
-            <li>✅ Clique no botão abaixo e chame no WhatsApp dizendo <em>"quero participar do sorteio de R$&nbsp;1.000"</em>.</li>
-            <li>✅ O sorteio acontece todo dia 30 de cada mês, ao vivo.</li>
-            <li>⬇️ <strong>CLICA NO BOTÃO ABAIXO E VEM PARA GAMEFLIX</strong></li>
-          </ul>
+            <!-- FAIXA 3 -->
+            <div class="offer-strip" id="strip3" data-plan="plano3" role="button" tabindex="0">
+                <div class="offer-strip__left">
+                    <div class="offer-strip__icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5a1 1 0 0 0-1 1v1a5 5 0 0 0 4.5 4.97A5.01 5.01 0 0 0 11 15.9V18H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 2.5-4.93A5 5 0 0 0 20 7V6a1 1 0 0 0-1-1zM6 7v-.001L6 7zm12 0a3 3 0 0 1-2.83 3H16V6h2v.999L18 7z"/></svg>
+                    </div>
+                    <div>
+                        <span class="offer-strip__badge">MAIS VANTAGENS</span>
+                        <div class="offer-strip__title">20 fotos <em>para colorir</em></div>
+                    </div>
+                </div>
+                <div class="offer-strip__right">
+                    <div class="offer-strip__price">
+                        <span class="offer-strip__price-label">por apenas</span>
+                        <span class="offer-strip__price-value">R$ 79</span>
+                    </div>
+                    <a href="#" class="offer-strip__cta" id="planBtn3" data-plan="plano3" target="_blank" rel="noopener">
+                        QUERO ESTA
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    
+
+    <!-- AJUSTE 2: Carrossel de prova social (existente, reaproveitado) — agora aparece junto com a oferta -->
+    <div id="social-proof-wrap">
+        <h3 class="social-proof-title">VEJA O QUE ESTÃO DIZENDO</h3>
+        <p class="social-proof-subtitle">Confira alguns registros e experiências de clientes.</p>
+        <div class="carousel-outer">
+            <div class="carousel-track" id="carouselTrack">
+                <!--
+                    ┌──────────────────────────────────────────────────────────┐
+                    │  Para colocar suas imagens, troque o background-image    │
+                    │  de cada slide abaixo por:                                │
+                    │  style="background-image:url('SUA_IMAGEM.jpg')"          │
+                    └──────────────────────────────────────────────────────────┘
+                -->
+          <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786413650/IMG_2721_deiixe.png)"></div>
+                <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786415810/IMG_2728_krgufa.png)"></div>
+                <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786413661/IMG_2729_ijwc0b.png)"></div>
+                <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786413646/IMG_2737_beub9l.jpg)"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Botão de WhatsApp — abaixo do carrossel -->
+    <div id="whatsapp-wrap">
+        <!--
+            ┌──────────────────────────────────────────────────────────┐
+            │  INSIRA  número no formato internacional, sem espaços  │
+            │  ou símbolos, no lugar de "5500000000000" abaixo:         │
+            │  Ex: 55 + DDD + número → 5551999999999                    │
+            └──────────────────────────────────────────────────────────┘
+        -->
+        <a href="https://wa.me/5500000000000?text=Acabei%20de%20assistir%20o%20v%C3%ADdeo%20e%20gostaria%20de%20tirar%20algumas%20d%C3%BAvidas." class="whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5.01L2.05 22l5.25-1.37a9.94 9.94 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.93 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.55-3.7 8.25-8.25 8.25a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.55 3.71-8.25 8.26-8.25M8.53 6.85c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03 0 1.2.87 2.36.99 2.52.12.16 1.7 2.72 4.2 3.71 2.08.82 2.5.66 2.95.62.45-.04 1.45-.59 1.65-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.45-.72-1.68-.8-.22-.08-.39-.12-.55.12-.16.24-.63.8-.78.96-.14.16-.29.18-.53.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.35-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.34-.76-1.83-.2-.48-.4-.4-.55-.41-.14 0-.3-.01-.46-.01z"/>
+            </svg>
+            Dúvidas? Fale no WhatsApp!
+        </a>
+    </div>
+
+    <!-- GARANTIA DE 7 DIAS -->
+    <div id="guarantee-wrap">
+        <div class="guarantee-icon">🛡️</div>
+        <div class="guarantee-title">GARANTIA DE 7 DIAS</div>
+        <!-- Texto editável -->
+        <p class="guarantee-text">Você tem 7 dias para conhecer o serviço. Caso não fique satisfeito dentro do período de garantia, entre em contato para solicitar o suporte conforme as condições da oferta.</p>
+    </div>
+
+    <!-- ELEMENTOS DE CONFIANÇA / SEGURANÇA -->
+    <div id="trust-wrap">
+        <div class="trust-item">🔒 <span>COMPRA SEGURA</span></div>
+        <div class="trust-item">✓ <span>GARANTIA DE 7 DIAS</span></div>
+        <div class="trust-item">⚡ <span>ATENDIMENTO VIA WHATSAPP</span></div>
+        <div class="trust-item">🛡️ <span>SUPORTE AO CLIENTE</span></div>
+    </div>
+
+</div><!-- /.page -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     POPUP DE CHECKOUT
+     ═══════════════════════════════════════════════════════════ -->
+<div class="checkout-overlay" id="checkoutOverlay">
+    <div class="checkout-modal" onclick="event.stopPropagation()">
+        <button type="button" class="checkout-close" id="checkoutClose" aria-label="Fechar">✕</button>
+
+        <div class="checkout-header">
+            <div class="checkout-eyebrow">Finalizar assinatura</div>
+            <div class="checkout-plan-name" id="checkoutPlanName">—</div>
+            <div class="checkout-plan-price" id="checkoutPlanPrice">R$ 0</div>
         </div>
 
-      </div><!-- /gf-draw-container -->
+        <div class="checkout-error" id="checkoutError"></div>
 
-    </div><!-- /cat-modal-body -->
+        <div class="checkout-field">
+            <label class="checkout-label" for="checkoutNome">Nome completo</label>
+            <input type="text" id="checkoutNome" class="checkout-input" placeholder="Digite seu nome">
+        </div>
 
-    <button class="cat-cta-btn gf-draw-cta" onclick="openWppModal(); closeCategoryModal('sorteios')">🎯 QUERO PARTICIPAR</button>
+        <div class="checkout-field">
+            <label class="checkout-label" for="checkoutWhats">WhatsApp</label>
+            <input type="tel" id="checkoutWhats" class="checkout-input" placeholder="(00) 00000-0000">
+        </div>
 
-  </div>
+        <div class="checkout-field">
+            <label class="checkout-label" for="checkoutCpf">CPF</label>
+            <input type="text" id="checkoutCpf" class="checkout-input" placeholder="000.000.000-00" maxlength="14" inputmode="numeric">
+        </div>
+
+        <div class="checkout-field">
+            <label class="checkout-label">Forma de pagamento</label>
+            <div class="checkout-pay-toggle">
+                <div class="pay-option" id="payOptionPix" onclick="selectPaymentMethod('pix')">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.32 2.5a3.6 3.6 0 0 1 2.55 1.06l3.4 3.4a1.2 1.2 0 0 0 .85.35h.6a3.6 3.6 0 0 1 2.55 1.06l1.13 1.13a3.6 3.6 0 0 1 0 5.1l-1.13 1.13a3.6 3.6 0 0 1-2.55 1.06h-.6a1.2 1.2 0 0 0-.85.35l-3.4 3.4a3.6 3.6 0 0 1-5.1 0l-3.4-3.4a1.2 1.2 0 0 0-.85-.35h-.6a3.6 3.6 0 0 1-2.55-1.06L.24 14.6a3.6 3.6 0 0 1 0-5.1l1.13-1.13A3.6 3.6 0 0 1 3.92 7.3h.6c.32 0 .62-.13.85-.35l3.4-3.4A3.6 3.6 0 0 1 11.32 2.5z"/></svg>
+                    Pix
+                </div>
+                <div class="pay-option" id="payOptionCard" onclick="selectPaymentMethod('cartao')">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
+                    Cartão
+                </div>
+            </div>
+        </div>
+
+        <!-- PIX -->
+        <div class="pay-panel" id="panelPix">
+            <div class="pix-box">
+                <div class="pix-code" id="pixCode">Selecione Pix para gerar o código…</div>
+                <button type="button" class="pix-copy-btn" id="pixCopyBtn" onclick="copyPixCode()">Copiar código Pix</button>
+            </div>
+            <p class="pix-note">Copie o código acima e cole no app do seu banco para efetuar o pagamento. Após a confirmação, seu acesso é liberado.</p>
+        </div>
+
+        <!-- CARTÃO -->
+        <div class="pay-panel" id="panelCard">
+            <div class="checkout-field">
+                <label class="checkout-label" for="cardNumero">Número do cartão</label>
+                <input type="text" id="cardNumero" class="checkout-input" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
+            </div>
+            <div class="card-row">
+                <div class="checkout-field">
+                    <label class="checkout-label" for="cardValidade">Validade</label>
+                    <input type="text" id="cardValidade" class="checkout-input" placeholder="MM/AA" maxlength="5" inputmode="numeric">
+                </div>
+                <div class="checkout-field">
+                    <label class="checkout-label" for="cardCvv">CVV</label>
+                    <input type="text" id="cardCvv" class="checkout-input" placeholder="000" maxlength="4" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="checkout-submit" id="checkoutSubmitBtn" onclick="finalizarCompra()">Finalizar Compra</button>
+
+        <div class="checkout-secure">🔒 Ambiente seguro — seus dados estão protegidos</div>
+    </div>
 </div>
 
-
-<!-- MODAL: JOGOS EM PROMOÇÃO -->
-<div class="cat-modal-overlay" id="modal-promocoes">
-  <div class="cat-modal-box cat-promocoes">
-    <button class="cat-modal-close" onclick="closeCategoryModal('promocoes')">✕</button>
-
-    <div class="cat-modal-header">
-      <span class="cat-modal-icon"></span>
-      <div>
-        <h2 class="cat-modal-title">JOGOS GRÁTIS, EXCLUSIVO PARA TESTAR A GAMEFLIX!</h2>
-        <p class="cat-modal-subtitle">Na Gameflix é assim, BAIXOU - JOGOU!</p>
-      </div>
-    </div>
-
-    <div class="cat-modal-body">
-      <div class="promo-grid" id="promo-games-grid">
-        <!-- Preenchido dinamicamente por promoGamesConfig em script.js -->
-      </div>
-      <p class="promo-empty-msg" id="promo-empty-msg" style="display:none;">Nenhuma promoção ativa no momento. Volte em breve!</p>
-    </div>
-
-   
-  </div>
-</div>
-
-<!-- MODAL: DÚVIDAS -->
-<div class="cat-modal-overlay" id="modal-duvidas">
-  <div class="cat-modal-box cat-duvidas">
-    <button class="cat-modal-close" onclick="closeCategoryModal('duvidas')">✕</button>
-    <div class="cat-modal-header">
-      <span class="cat-modal-icon">❓</span>
-   <div>
-  <h2 class="cat-modal-title">DÚVIDAS FREQUENTES</h2>
-  <p class="cat-modal-subtitle">Respostas rápidas para o que você precisa saber</p>
-</div>
-</div>
-
-<div class="cat-modal-body">
-  <div class="cat-faq">
-
-    <div class="cat-faq-item" onclick="toggleFaq(this)">
-      <div class="cat-faq-q">Os jogos são originais? <span class="faq-arrow">▼</span></div>
-      <div class="cat-faq-a">
-        A GAMEFLIX oferece acesso a jogos via plataforma própria. Todos os títulos são testados e funcionam 100% no PC.
-      </div>
-    </div>
-
-    <div class="cat-faq-item" onclick="toggleFaq(this)">
-      <div class="cat-faq-q">Precisa de internet para jogar? <span class="faq-arrow">▼</span></div>
-      <div class="cat-faq-a">
-        Não! Após o download, a maioria dos jogos funciona 100% offline. Alguns títulos online requerem conexão.
-      </div>
-    </div>
-
-    <div class="cat-faq-item" onclick="toggleFaq(this)">
-      <div class="cat-faq-q">Funciona em qualquer PC? <span class="faq-arrow">▼</span></div>
-      <div class="cat-faq-a">
-        Funciona em PCs com Windows 10/11, 8GB de RAM e processador i5 ou equivalente. Nosso suporte auxilia na instalação.
-      </div>
-    </div>
-
-    <div class="cat-faq-item" onclick="toggleFaq(this)">
-      <div class="cat-faq-q">Pago todos os meses ou só uma vez? <span class="faq-arrow">▼</span></div>
-      <div class="cat-faq-a">
-        Não! Você paga apenas uma única vez pelo jogo ou combo, e ele é seu para sempre!
-      </div>
-    </div>
-
-    <div class="cat-faq-item" onclick="toggleFaq(this)">
-      <div class="cat-faq-q">Como funcionam os combos? <span class="faq-arrow">▼</span></div>
-      <div class="cat-faq-a">
-        Os combos são ideais para quem busca custo-benefício e liberdade: você paga uma única vez e desbloqueia acesso a todos os títulos da plataforma!
-      </div>
-    </div>
-
-    <div class="cat-faq-item" onclick="toggleFaq(this)">
-      <div class="cat-faq-q">Tem suporte? <span class="faq-arrow">▼</span></div>
-      <div class="cat-faq-a">
-        Sim! Oferecemos suporte via WhatsApp para qualquer dúvida ou problema técnico.
-      </div>
-    </div>
-
-  </div>
-</div>
-    <button class="cat-cta-btn" onclick="openWppModal(); closeCategoryModal('duvidas')">💬 AINDA TEM DÚVIDAS? FALE CONOSCO PELO WHATSAPP</button>
-  </div>
-</div>
-
-  <footer class="footer">
-  <div class="footer-container">
-    <p class="footer-contact">Dúvidas? Ligue <a href="https://wa.me/55981021909">0800-GAMEFLIX</a></p>
-    
-    <div class="footer-links">
-      <ul class="footer-column">
-        <li><a href="#">Perguntas frequentes</a></li>
-        <li><a href="#">Relações com investidores</a></li>
-        <li><a href="#">Formas de assistir</a></li>
-        <li><a href="#">Informações corporativas</a></li>
-      </ul>
-
-      <ul class="footer-column">
-        <li><a href="#">Central de ajuda</a></li>
-        <li><a href="#">Carreiras</a></li>
-        <li><a href="#">Termos de uso</a></li>
-        <li><a href="https://instagram.com/Ian_Ferreira_MKT">Entre em contato</a></li>
-      </ul>
-
-      <ul class="footer-column">
-        <li><a href="#">Conta</a></li>
-        <li><a href="#">Resgatar cartões pré-pagos</a></li>
-        <li><a href="#">Privacidade</a></li>
-        <li><a href="#">Teste de velocidade</a></li>
-      </ul>
-
-      <ul class="footer-column">
-        <li><a href="#">Media Center</a></li>
-        <li><a href="#">Comprar cartões pré-pagos</a></li>
-        <li><a href="#">Preferências de cookies</a></li>
-        <li><a href="#">Avisos legais</a></li>
-      </ul>
-    </div>
-
-    <p class="footer-country">GAMEFLIX Brasil</p>
-  </div>
-</footer>
-
-<!-- TOAST DE NOTIFICAÇÃO -->
-<div id="fav-toast"></div>
-
-<!-- MODAL MEUS FAVORITOS -->
-<div class="cat-modal-overlay" id="modal-favoritos">
-  <div class="fav-modal">
-    <div class="fav-modal-header">
-      <h2>♥ Minha Lista de JOGOS Favoritos</h2>
-      <div class="fav-modal-header-actions">
-        <button class="fav-orcamento-btn" id="btn-orcamento-whatsapp" onclick="abrirTelaConfirmacaoPack()" title="Solicitar orçamento com seus favoritos">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.136 1.535 5.875L0 24l6.305-1.506A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.368l-.36-.214-3.732.891.924-3.64-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
-          ENVIAR MEU PACK E LIBERAR TESTE ➟
-        </button>
-        <button class="fav-modal-close" onclick="fecharModalFavoritos()">✕</button>
-      </div>
-    </div>
-    <style>
-      .fav-modal-header-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .fav-orcamento-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 9px 16px;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.3px;
-        cursor: pointer;
-        transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-        box-shadow: 0 2px 12px rgba(37,211,102,0.35);
-        white-space: nowrap;
-      }
-      .fav-orcamento-btn:hover {
-        opacity: 0.92;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 18px rgba(37,211,102,0.5);
-      }
-      .fav-orcamento-btn:active {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      @media (max-width: 480px) {
-        .fav-orcamento-btn span { display: none; }
-        .fav-orcamento-btn { padding: 9px 12px; }
-      }
-    </style>
-    <div class="favoritos-grid" id="favoritos-grid">
-      <div class="fav-empty">
-        <div class="fav-empty-icon">♡</div>
-        <p>Sua lista está vazia.</p>
-        <span>Clique em "Minha Lista" em qualquer jogo para salvar aqui.</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL CONFIRMAÇÃO DO PACK (QR CODE) -->
-<div class="cat-modal-overlay" id="modal-confirmacao-pack">
-  <div class="fav-modal confirma-pack-modal">
-    
-
-    <div class="confirma-pack-body">
-      <button class="fav-modal-close" onclick="fecharConfirmacaoPack()">✕</button>
-      <p class="confirma-pack-titulo">Confira os jogos escolhidos</p>
-
-      <div class="confirma-pack-carousel">
-        <button type="button" class="seta-esquerda" id="seta-pack-esquerda" aria-label="Ver jogos anteriores">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-        <div class="confirma-pack-grid" id="confirma-pack-grid"></div>
-        <button type="button" class="seta-direita" id="seta-pack-direita" aria-label="Ver próximos jogos">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-      </div>
-
-      <p class="confirma-pack-instrucao">Escaneie o QR Code para solicitar os seus jogos no WHATSAPP.</p>
-
-      <div class="confirma-pack-qr-wrap">
-        <img id="confirma-pack-qr" class="confirma-pack-qr" alt="QR Code WhatsApp" src="">
-      </div>
-
-      <p class="confirma-pack-instrucao">Ou clique no botão abaixo para chamar no WhatsApp pelo PC.</p>
-
-      <button class="fav-orcamento-btn confirma-pack-btn" id="btn-confirmar-pack" onclick="confirmarEnvioPack()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.136.558 4.136 1.535 5.875L0 24l6.305-1.506A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.368l-.36-.214-3.732.891.924-3.64-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
-        WhatsApp Web
-      </button>
-    </div>
-  </div>
-</div>
-
-<script src="script.js"></script>
-<script src="supabase.js"></script>
-<script src="tracking.js"></script>
-<script src="auth.js"></script>
-<script src="favoritos.js"></script>
+<!-- SDK do Mercado Pago (tokeniza o cartão no navegador — o número do cartão nunca chega ao seu servidor) -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <script>
-/* Inicializa botão de som para o banner padrão (hardcoded no HTML) */
-document.addEventListener('DOMContentLoaded', function () {
-  function initBannerPrincipal() {
-    if (typeof Vimeo === 'undefined' || typeof setupUnmuteButton === 'undefined') {
-      return setTimeout(initBannerPrincipal, 150);
-    }
-    var iframe = document.querySelector('#banner-video iframe');
-    if (!iframe) return;
-    if (!window.vimeoPlayer) {
-      window.vimeoPlayer = new Vimeo.Player(iframe);
-      window.vimeoPlayer.off('ended');
-      window.vimeoPlayer.on('ended', function () {
-        window.vimeoPlayer.setVolume(0).then(function () {
-          window.vimeoPlayer.setCurrentTime(0).then(function () {
-            window.vimeoPlayer.play().catch(function () {});
-          });
+    /* ═══════════════════════════════════════════════════════════
+       CONFIGURAÇÃO DOS PLANOS — edite aqui o número de WhatsApp
+       e a mensagem enviada por cada botão de plano
+       ═══════════════════════════════════════════════════════════ */
+    const PLAN_CONFIG = {
+        whatsappNumber: '5553981021909', // ← DDI + DDD + número, sem espaços/símbolos (não usado mais pelos botões dos planos, mantido para referência)
+        plano1: {
+            nome: '5 FOTOS PARA COLORIR',
+            preco: 'R$ 29',
+            mensagem: 'Quero fazer o pagamento da oferta 5 fotos para colorir'
+        },
+        plano2: {
+            nome: '10 FOTOS PARA COLORIR',
+            preco: 'R$ 49',
+            mensagem: 'Quero fazer o pagamento da oferta 10 fotos para colorir'
+        },
+        plano3: {
+            nome: '20 FOTOS PARA COLORIR',
+            preco: 'R$ 79',
+            mensagem: 'Quero fazer o pagamento da oferta 20 fotos para colorir'
+        }
+    };
+
+    /* Os botões das faixas de oferta agora abrem o pop-up de checkout em vez de ir direto pro WhatsApp */
+    function attachPlanButtons() {
+        document.querySelectorAll('.offer-strip__cta[data-plan]').forEach((btn) => {
+            btn.removeAttribute('href');
+            btn.removeAttribute('target');
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openCheckout(btn.getAttribute('data-plan'));
+            });
         });
-      });
+        /* A faixa inteira também é clicável, não só o botão */
+        document.querySelectorAll('.offer-strip[data-plan]').forEach((strip) => {
+            strip.addEventListener('click', () => openCheckout(strip.getAttribute('data-plan')));
+            strip.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openCheckout(strip.getAttribute('data-plan'));
+                }
+            });
+        });
     }
-    var overlay = document.querySelector('[data-banner-overlay]');
-    if (overlay) overlay.style.pointerEvents = 'none';
-    window._bannerInitialized = true;
-    setupUnmuteButton();
-    showUnmuteBtn();
-  }
-  initBannerPrincipal();
-});
+    attachPlanButtons();
+    /* ═══════════════════════════════════════════════════════════ */
+
+    /* ═══════════════════════════════════════════════════════════
+       POPUP DE CHECKOUT — integração real com Mercado Pago
+       ═══════════════════════════════════════════════════════════ */
+
+    // ── Public Key de produção do Mercado Pago (segura para expor no navegador) ──
+    const MP_PUBLIC_KEY = 'APP_USR-e45dd721-cfe5-47b0-a46d-7d311f476f24';
+    const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
+
+    // Endpoint único no Supabase (Edge Function) — substitui os antigos PHPs
+    const MP_ENDPOINT = 'https://iminfhdxpuhitkmylvba.supabase.co/functions/v1/mp-checkout';
+
+    let currentCheckoutPlan   = null;
+    let selectedPaymentMethod = null;
+    let pixCodeGenerated      = false;
+    let paymentMethodIdCartao = null; // ex: "visa", "master" — detectado pelo BIN do cartão
+    let pixPaymentId          = null;
+    let pixPollInterval       = null;
+
+    /* Fica checando a cada 5s se o Pix já foi pago, enquanto o pop-up estiver aberto */
+    function iniciarPollingPix(paymentId) {
+        pararPollingPix();
+        pixPaymentId = paymentId;
+        pixPollInterval = setInterval(async () => {
+            try {
+                const resp = await fetch(MP_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'status', payment_id: paymentId })
+                });
+                const data = await resp.json();
+                if (data.status === 'approved') {
+                    pararPollingPix();
+                    if (typeof fbq === 'function') {
+                        fbq('track', 'Purchase', {
+                            content_name: currentCheckoutPlan,
+                            value: valorNumericoDoPlano(),
+                            currency: 'BRL'
+                        });
+                    }
+                    document.querySelector('.checkout-modal').innerHTML =
+                        '<div style="text-align:center; padding:20px 6px;">' +
+                        '<div style="font-size:2.6rem; margin-bottom:10px;">✅</div>' +
+                        '<div class="checkout-plan-name" style="margin-bottom:8px;">Pagamento aprovado!</div>' +
+                        '<p class="pix-note">Seu acesso será liberado em instantes. Qualquer dúvida, fale com a gente pelo WhatsApp.</p>' +
+                        '</div>';
+                }
+            } catch (err) {
+                /* silencioso — tenta de novo no próximo ciclo */
+            }
+        }, 5000);
+    }
+
+    function pararPollingPix() {
+        if (pixPollInterval) {
+            clearInterval(pixPollInterval);
+            pixPollInterval = null;
+        }
+    }
+
+    function openCheckout(planKey) {
+        const cfg = PLAN_CONFIG[planKey];
+        if (!cfg) return;
+        currentCheckoutPlan = planKey;
+        pararPollingPix();
+
+        document.getElementById('checkoutPlanName').textContent  = cfg.nome;
+        document.getElementById('checkoutPlanPrice').textContent = cfg.preco;
+
+        /* reseta o formulário toda vez que abre */
+        document.getElementById('checkoutNome').value    = '';
+        document.getElementById('checkoutWhats').value   = '';
+        document.getElementById('checkoutCpf').value     = '';
+        document.getElementById('cardNumero').value      = '';
+        document.getElementById('cardValidade').value    = '';
+        document.getElementById('cardCvv').value         = '';
+        hideCheckoutError();
+
+        selectedPaymentMethod = null;
+        pixCodeGenerated = false;
+        paymentMethodIdCartao = null;
+        document.getElementById('pixCode').textContent = 'Selecione Pix para gerar o código…';
+        document.getElementById('payOptionPix').classList.remove('active');
+        document.getElementById('payOptionCard').classList.remove('active');
+        document.getElementById('panelPix').classList.remove('active');
+        document.getElementById('panelCard').classList.remove('active');
+        document.getElementById('pixCopyBtn').classList.remove('copied');
+        document.getElementById('pixCopyBtn').textContent = 'Copiar código Pix';
+
+        const submitBtn = document.getElementById('checkoutSubmitBtn');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Finalizar Compra';
+
+        const overlay = document.getElementById('checkoutOverlay');
+        overlay.classList.add('active');
+        requestAnimationFrame(() => overlay.classList.add('show'));
+        document.body.style.overflow = 'hidden';
+
+        if (typeof fbq === 'function') {
+            fbq('track', 'InitiateCheckout', {
+                content_name: planKey,
+                value: valorNumericoDoPlano(),
+                currency: 'BRL'
+            });
+        }
+    }
+
+    function closeCheckout() {
+        const overlay = document.getElementById('checkoutOverlay');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+        setTimeout(() => overlay.classList.remove('active'), 250);
+        pararPollingPix();
+    }
+
+    document.getElementById('checkoutOverlay').addEventListener('click', closeCheckout);
+    document.getElementById('checkoutClose').addEventListener('click', closeCheckout);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeCheckout();
+    });
+
+    function selectPaymentMethod(method) {
+        selectedPaymentMethod = method;
+        document.getElementById('payOptionPix').classList.toggle('active', method === 'pix');
+        document.getElementById('payOptionCard').classList.toggle('active', method === 'cartao');
+        document.getElementById('panelPix').classList.toggle('active', method === 'pix');
+        document.getElementById('panelCard').classList.toggle('active', method === 'cartao');
+    }
+
+    /* Extrai o valor numérico (ex: "R$ 99" → 99) pra mandar pro backend */
+    function valorNumericoDoPlano() {
+        const cfg = PLAN_CONFIG[currentCheckoutPlan];
+        if (!cfg) return 0;
+        return parseFloat(cfg.preco.replace('R$', '').replace(',', '.').trim());
+    }
+
+    function dadosComunsValidos() {
+        const nome  = document.getElementById('checkoutNome').value.trim();
+        const whats = document.getElementById('checkoutWhats').value.trim();
+        const cpf   = document.getElementById('checkoutCpf').value.replace(/\D/g, '');
+
+        if (!nome) { showCheckoutError('Preencha seu nome.'); return null; }
+        if (whats.replace(/\D/g, '').length < 10) { showCheckoutError('Informe um WhatsApp válido.'); return null; }
+        if (cpf.length !== 11) { showCheckoutError('Informe um CPF válido.'); return null; }
+
+        return { nome, whatsapp: whats, cpf };
+    }
+
+    /* ── PIX real — chama o backend, que fala com a API do Mercado Pago ── */
+    async function gerarPixReal() {
+        hideCheckoutError();
+        const dados = dadosComunsValidos();
+        if (!dados) return;
+
+        const pixBox = document.getElementById('pixCode');
+        pixBox.textContent = 'Gerando código Pix…';
+
+        try {
+            const resp = await fetch(MP_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'pix',
+                    nome: dados.nome,
+                    whatsapp: dados.whatsapp,
+                    cpf: dados.cpf,
+                    valor: valorNumericoDoPlano(),
+                    plano: PLAN_CONFIG[currentCheckoutPlan].nome,
+                }),
+            });
+            const data = await resp.json();
+
+            if (!resp.ok) {
+                pixBox.textContent = 'Selecione Pix para gerar o código…';
+                showCheckoutError(data.erro || 'Não foi possível gerar o Pix. Tente novamente.');
+                return;
+            }
+
+            pixBox.textContent = data.qr_code;
+            pixCodeGenerated = true;
+            iniciarPollingPix(data.payment_id);
+        } catch (err) {
+            pixBox.textContent = 'Selecione Pix para gerar o código…';
+            showCheckoutError('Erro de conexão ao gerar o Pix. Verifique o backend.');
+        }
+    }
+
+    function copyPixCode() {
+        const code = document.getElementById('pixCode').textContent;
+        const btn  = document.getElementById('pixCopyBtn');
+
+        const markCopied = () => {
+            btn.textContent = 'Código copiado ✓';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = 'Copiar código Pix';
+                btn.classList.remove('copied');
+            }, 2500);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(markCopied).catch(() => fallbackCopy(code, markCopied));
+        } else {
+            fallbackCopy(code, markCopied);
+        }
+    }
+
+    function fallbackCopy(text, cb) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        try { document.execCommand('copy'); } catch(_) {}
+        document.body.removeChild(temp);
+        cb();
+    }
+
+    function showCheckoutError(msg) {
+        const box = document.getElementById('checkoutError');
+        box.textContent = msg;
+        box.classList.add('show');
+    }
+    function hideCheckoutError() {
+        document.getElementById('checkoutError').classList.remove('show');
+    }
+
+    /* Quando escolhe Pix, gera o código de verdade na hora */
+    document.getElementById('payOptionPix').addEventListener('click', () => {
+        if (!pixCodeGenerated) gerarPixReal();
+    });
+
+    /* Máscaras simples dos campos */
+    document.getElementById('checkoutWhats').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').substring(0, 11);
+        if (v.length > 6) v = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7)}`;
+        else if (v.length > 2) v = `(${v.substring(0,2)}) ${v.substring(2)}`;
+        e.target.value = v;
+    });
+    document.getElementById('checkoutCpf').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').substring(0, 11);
+        if (v.length > 9) v = `${v.substring(0,3)}.${v.substring(3,6)}.${v.substring(6,9)}-${v.substring(9)}`;
+        else if (v.length > 6) v = `${v.substring(0,3)}.${v.substring(3,6)}.${v.substring(6)}`;
+        else if (v.length > 3) v = `${v.substring(0,3)}.${v.substring(3)}`;
+        e.target.value = v;
+    });
+    document.getElementById('cardNumero').addEventListener('input', async (e) => {
+        let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+        e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+
+        // Descobre a bandeira (visa, master...) pelos 6 primeiros dígitos assim que possível
+        if (v.length >= 6) {
+            try {
+                const methods = await mp.getPaymentMethods({ bin: v.substring(0, 6) });
+                if (methods.results && methods.results.length) {
+                    paymentMethodIdCartao = methods.results[0].id;
+                }
+            } catch (_) { /* segue sem bandeira detectada; a API acusa erro se faltar */ }
+        }
+    });
+    document.getElementById('cardValidade').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').substring(0, 4);
+        if (v.length > 2) v = v.substring(0,2) + '/' + v.substring(2);
+        e.target.value = v;
+    });
+    document.getElementById('cardCvv').addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+    });
+
+    /* ── CARTÃO real — tokeniza no navegador (SDK do Mercado Pago) e
+       manda só o token pro backend. O número do cartão NUNCA passa
+       pelo seu servidor. ── */
+    async function pagarComCartaoReal(dados) {
+        const numero    = document.getElementById('cardNumero').value.replace(/\D/g, '');
+        const validade  = document.getElementById('cardValidade').value;
+        const cvv       = document.getElementById('cardCvv').value;
+
+        if (numero.length < 13) { showCheckoutError('Número de cartão inválido.'); return; }
+        if (!/^\d{2}\/\d{2}$/.test(validade)) { showCheckoutError('Validade inválida (use MM/AA).'); return; }
+        if (cvv.length < 3) { showCheckoutError('CVV inválido.'); return; }
+        if (!paymentMethodIdCartao) { showCheckoutError('Não foi possível identificar a bandeira do cartão.'); return; }
+
+        const [mes, ano] = validade.split('/');
+        const btn = document.getElementById('checkoutSubmitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Processando...';
+
+        try {
+            const cardToken = await mp.createCardToken({
+                cardNumber: numero,
+                cardholderName: dados.nome,
+                cardExpirationMonth: mes,
+                cardExpirationYear: '20' + ano,
+                securityCode: cvv,
+                identificationType: 'CPF',
+                identificationNumber: dados.cpf,
+            });
+
+            const resp = await fetch(MP_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'cartao',
+                    nome: dados.nome,
+                    whatsapp: dados.whatsapp,
+                    cpf: dados.cpf,
+                    valor: valorNumericoDoPlano(),
+                    plano: PLAN_CONFIG[currentCheckoutPlan].nome,
+                    card_token: cardToken.id,
+                    payment_method_id: paymentMethodIdCartao,
+                    installments: 1,
+                }),
+            });
+            const data = await resp.json();
+
+            btn.disabled = false;
+            btn.textContent = 'Finalizar Compra';
+
+            if (!resp.ok) {
+                showCheckoutError(data.erro || 'Pagamento recusado. Confira os dados do cartão.');
+                return;
+            }
+
+            if (data.status === 'approved') {
+                if (typeof fbq === 'function') {
+                    fbq('track', 'Purchase', {
+                        content_name: currentCheckoutPlan,
+                        value: valorNumericoDoPlano(),
+                        currency: 'BRL'
+                    });
+                }
+                document.querySelector('.checkout-modal').innerHTML =
+                    '<div style="text-align:center; padding:20px 6px;">' +
+                    '<div style="font-size:2.6rem; margin-bottom:10px;">✅</div>' +
+                    '<div class="checkout-plan-name" style="margin-bottom:8px;">Pagamento aprovado!</div>' +
+                    '<p class="pix-note">Seu acesso será liberado em instantes. Qualquer dúvida, fale com a gente pelo WhatsApp.</p>' +
+                    '</div>';
+            } else {
+                showCheckoutError('Pagamento com status "' + data.status + '". Tente novamente ou use outro cartão.');
+            }
+        } catch (err) {
+            btn.disabled = false;
+            btn.textContent = 'Finalizar Compra';
+            showCheckoutError('Erro ao processar o cartão. Verifique os dados e tente de novo.');
+        }
+    }
+
+    /* ── Botão "Finalizar Compra" ── */
+    async function finalizarCompra() {
+        hideCheckoutError();
+        const dados = dadosComunsValidos();
+        if (!dados) return;
+
+        if (!selectedPaymentMethod) { showCheckoutError('Escolha uma forma de pagamento.'); return; }
+
+        if (selectedPaymentMethod === 'pix') {
+            if (!pixCodeGenerated) { showCheckoutError('Aguarde o código Pix ser gerado.'); return; }
+            showCheckoutError('Após pagar o Pix copiado, a confirmação chega automaticamente pelo webhook — pode fechar esta janela.');
+            return;
+        }
+
+        if (selectedPaymentMethod === 'cartao') {
+            await pagarComCartaoReal(dados);
+        }
+    }
+    /* ═══════════════════════════════════════════════════════════ */
+
+    /* A oferta (planos, garantia, confiança, prova social, WhatsApp)
+       agora aparece direto na página, já que não há mais vídeo/CTA
+       controlando quando ela é revelada. */
+    document.getElementById('plans-wrap').classList.add('visible');
+    document.getElementById('guarantee-wrap').classList.add('visible');
+    document.getElementById('trust-wrap').classList.add('visible');
+    document.getElementById('social-proof-wrap').classList.add('visible');
+    document.getElementById('whatsapp-wrap').classList.add('visible');
+
+    /* ═══════════════════════════════════════════════════════════
+       Carrossel de prova social (arrastar para o lado)
+       ═══════════════════════════════════════════════════════════ */
+    (function initCarousel() {
+        const track = document.getElementById('carouselTrack');
+        if (!track) return;
+
+        let isDown = false;
+        let startX = 0;
+        let scrollStart = 0;
+
+        track.addEventListener('mousedown', (e) => {
+            isDown = true;
+            track.classList.add('dragging');
+            startX = e.pageX;
+            scrollStart = track.scrollLeft;
+        });
+        window.addEventListener('moup', () => {
+            isDown = false;
+            track.classList.remove('dragging');
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const delta = e.pageX - startX;
+            track.scrollLeft = scrollStart - delta;
+        });
+
+        /* Touch já funciona nativamente via overflow-x + scroll-snap */
+    })();
 </script>
 </body>
 </html>
