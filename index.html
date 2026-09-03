@@ -16,13 +16,21 @@
     --muted:#9aa3b5;
   }
   *{box-sizing:border-box;}
+  html{
+    height:100%;
+    background:var(--bg);
+  }
   body{
     margin:0;
+    min-height:100%;
     font-family:'Poppins', 'Segoe UI', Roboto, Arial, sans-serif;
     background:
       radial-gradient(circle at 50% 0%, rgba(255,122,26,0.10), transparent 40%),
       radial-gradient(circle at 20% 90%, rgba(37,211,102,0.08), transparent 45%),
       var(--bg);
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-size:100% 100%;
     color:var(--text);
   }
 
@@ -105,7 +113,7 @@
   .brands{
     display:flex;
     gap:14px;
-    margin-bottom:56px;
+    margin-bottom:0;
   }
   .brands .b{
     width:46px;height:46px;
@@ -124,82 +132,9 @@
     color:var(--muted);
   }
 
-  /* ---------- PHONE ---------- */
-  .phone{
-    position:relative;
-    width:300px;
-    height:620px;
-    background:#0d0f14;
-    border-radius:46px;
-    padding:12px;
-    box-shadow:
-      0 0 0 2px #262b38,
-      0 30px 60px -20px rgba(0,0,0,0.7),
-      0 0 40px rgba(255,122,26,0.08);
-  }
-  .phone::before{
-    content:"";
-    position:absolute;
-    top:28px; left:50%;
-    transform:translateX(-50%);
-    width:80px; height:20px;
-    background:#000;
-    border-radius:12px;
-    z-index:5;
-  }
-  .screen{
-    width:100%;
-    height:100%;
-    border-radius:34px;
-    overflow:hidden;
-    background:#000;
-    position:relative;
-  }
-  .screen iframe{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    border:0;
-    pointer-events:none;
-  }
-  .playpause{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:transparent;
-    border:0;
-    padding:0;
-    cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .playpause .icon{
-    width:58px;
-    height:58px;
-    border-radius:50%;
-    background:rgba(0,0,0,0.45);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    transition:opacity .2s ease;
-  }
-  .playpause:hover .icon,
-  .playpause.show .icon{
-    opacity:1;
-  }
-  .playpause svg{
-    width:26px;
-    height:26px;
-    fill:#fff;
-  }
-
   @media (max-width:520px){
     .page{padding:40px 20px 56px;}
     h1{font-size:38px;}
-    .phone{width:260px; height:540px;}
   }
 </style>
 </head>
@@ -213,7 +148,7 @@
       + de 500.000 pessoas já economizam com a gente
     </div>
 
-    <h1><br>CENTRAL DO IPHONE<span class="hl">CANGUCU</span></h1>
+    <h1>CENTRAL DO IPHONE<br><span class="hl">CANGUCU</span></h1>
 
     <p class="subtext">
       Encontro as melhores ofertas de tênis <b>ORIGINAIS</b> e compartilho tudo com você.
@@ -238,53 +173,6 @@
       <div class="b plus">+</div>
     </div>
 
-  
-
   </div>
-
-  <script>
-    let player;
-    let isPlaying = true;
-
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('ytPlayer', {
-        events: { 'onReady': onPlayerReady }
-      });
-    }
-
-    function onPlayerReady(e) {
-      e.target.playVideo();
-    }
-
-    const btn = document.getElementById('playPauseBtn');
-    const playSvg = document.getElementById('playSvg');
-    const pauseSvg = document.getElementById('pauseSvg');
-    const icon = document.getElementById('ppIcon');
-
-    function flashIcon(){
-      icon.classList.add('show');
-      clearTimeout(window._iconTimer);
-      window._iconTimer = setTimeout(()=> icon.classList.remove('show'), 700);
-    }
-
-    btn.addEventListener('click', function(){
-      if (!player || !player.playVideo) return;
-      if (isPlaying) {
-        player.pauseVideo();
-        playSvg.style.display = 'block';
-        pauseSvg.style.display = 'none';
-      } else {
-        player.playVideo();
-        playSvg.style.display = 'none';
-        pauseSvg.style.display = 'block';
-      }
-      isPlaying = !isPlaying;
-      flashIcon();
-    });
-
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-  </script>
 </body>
 </html>
