@@ -1,1581 +1,315 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Premium — Como ter todos jogos os titulos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        /* ─── TOKENS ─────────────────────────────────────────── */
-        :root {
-            --red:        #e50914;
-            --red-glow:   rgba(229, 9, 20, 0.55);
-            --red-dim:    rgba(229, 9, 20, 0.15);
-            --black:      #000000;
-            --surface:    #0d0d0d;
-            --border:     rgba(255,255,255,0.07);
-            --text:       #ffffff;
-            --muted:      rgba(255,255,255,0.45);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tênis Ofertas | Grupo VIP</title>
+<style>
+  :root{
+    --bg:#05070d;
+    --bg-2:#0c1120;
+    --accent:#ff7a1a;
+    --accent-2:#25d366;
+    --text:#f5f6f8;
+    --muted:#9aa3b5;
+    --frame:#111624;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(circle at 78% 20%, rgba(255,122,26,0.14), transparent 45%),
+      radial-gradient(circle at 15% 80%, rgba(37,211,102,0.10), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+  }
+  .wrap{
+    max-width:1200px;
+    margin:0 auto;
+    padding:56px 24px;
+    display:grid;
+    grid-template-columns:420px 1fr;
+    gap:60px;
+    align-items:center;
+    min-height:100vh;
+  }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ---------- PHONE ---------- */
+  .phone{
+    position:relative;
+    width:340px;
+    height:700px;
+    margin:0 auto;
+    background:#0d0f14;
+    border-radius:52px;
+    padding:14px;
+    box-shadow:
+      0 0 0 2px #262b38,
+      0 30px 60px -20px rgba(0,0,0,0.7),
+      0 0 40px rgba(255,122,26,0.08);
+  }
+  .phone::before{
+    content:"";
+    position:absolute;
+    top:34px; left:50%;
+    transform:translateX(-50%);
+    width:90px; height:22px;
+    background:#000;
+    border-radius:14px;
+    z-index:5;
+  }
+  .screen{
+    width:100%;
+    height:100%;
+    border-radius:38px;
+    overflow:hidden;
+    background:#000;
+    position:relative;
+  }
+  .screen iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    pointer-events:none; /* clicks go to our own play/pause layer */
+  }
+  .playpause{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:transparent;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .playpause .icon{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.45);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  .playpause:hover .icon,
+  .playpause.show .icon{
+    opacity:1;
+  }
+  .playpause svg{
+    width:28px;
+    height:28px;
+    fill:#fff;
+  }
 
-        html, body {
-            width: 100%;
-            min-height: 100vh;
-            background: var(--black);
-            font-family: 'Barlow', sans-serif;
-            color: var(--text);
-            overflow-x: hidden;
-        }
+  /* ---------- RIGHT PANEL ---------- */
+  .content{
+    max-width:640px;
+  }
+  .social-proof{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:8px 16px 8px 8px;
+    border-radius:999px;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:32px;
+  }
+  .avatars{display:flex;}
+  .avatars span{
+    width:26px;height:26px;border-radius:50%;
+    border:2px solid var(--bg);
+    margin-left:-8px;
+    background:linear-gradient(135deg,#ff7a1a,#25d366);
+  }
+  .avatars span:first-child{margin-left:0;}
 
-        /* ─── GRAIN OVERLAY ──────────────────────────────────── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
-        }
+  h1{
+    font-size:56px;
+    line-height:1.05;
+    font-weight:800;
+    margin:0 0 24px;
+    letter-spacing:-0.5px;
+  }
+  h1 .hl{color:var(--accent);}
 
-        /* ─── LAYOUT ─────────────────────────────────────────── */
-        .page {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 48px 16px 60px;
-        }
+  .subtext{
+    font-size:19px;
+    color:var(--muted);
+    line-height:1.5;
+    max-width:480px;
+    margin-bottom:36px;
+  }
+  .subtext b{color:var(--text);}
 
-        /* ─── LOGO ───────────────────────────────────────────── */
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 0.12em;
-            color: var(--red);
-            margin-bottom: 36px;
-            text-shadow: 0 0 24px var(--red-glow);
-        }
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    background:var(--accent-2);
+    color:#08210f;
+    font-weight:800;
+    font-size:19px;
+    padding:20px 40px;
+    border-radius:999px;
+    text-decoration:none;
+    box-shadow:0 18px 40px -14px rgba(37,211,102,0.55);
+    transition:transform .15s ease;
+  }
+  .cta:hover{transform:translateY(-2px);}
+  .cta svg{width:24px;height:24px;flex-shrink:0;}
 
-        /* ─── HEADLINE ───────────────────────────────────────── */
-        .headline {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: clamp(2rem, 6vw, 3.6rem);
-            line-height: 1.05;
-            text-transform: uppercase;
-            letter-spacing: 0.01em;
-            text-align: center;
-            max-width: 780px;
-            margin-bottom: 40px;
-        }
-        .headline em {
-            font-style: normal;
-            color: var(--red);
-            text-shadow: 0 0 32px var(--red-glow);
-        }
+  .cta-note{
+    margin:18px 0 34px;
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+  .cta-note b{color:var(--text);}
 
-        /* ─── IMAGEM ESTÁTICA (antes era o card de vídeo) ───────── */
-        .video-card {
-            width: 100%;
-            max-width: 820px;
-            background: var(--surface);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.03),
-                0 8px 60px rgba(0,0,0,0.8),
-                0 0 80px var(--red-dim);
-            overflow: hidden;
-            position: relative;
-        }
-        .video-ratio {
-            position: relative;
-            width: 100%;
-            padding-bottom: 125%; /* proporção 4x5 (largura x altura) */
-        }
+  .brands{
+    display:flex;
+    gap:14px;
+  }
+  .brands .b{
+    width:46px;height:46px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:15px;
+    color:#111;
+  }
+  .brands .plus{
+    background:transparent;
+    border:1.5px dashed rgba(255,255,255,0.35);
+    color:var(--muted);
+  }
 
-        /* ═══════════════════════════════════════════════════════════
-           PLANOS — seção de escolha de planos (substitui o CTA único)
-           ═══════════════════════════════════════════════════════════ */
-        #plans-wrap {
-            width: 100%;
-            max-width: 820px;
-            margin-top: 26px;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(14px);
-            max-height: 0;
-            overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
-            text-align: center;
-        }
-        #plans-wrap.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            max-height: 2200px;
-        }
-        .plans-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: clamp(1.5rem, 4.4vw, 2.1rem);
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-        .plans-subtitle {
-            font-size: 0.88rem;
-            color: var(--muted);
-            margin-bottom: 28px;
-        }
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-            align-items: stretch;
-            justify-content: center;
-        }
-        @media (max-width: 860px) {
-            .plans-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           CARDS DE PLANO — estilo premium "gamer"
-           ═══════════════════════════════════════════════════════════ */
-        @property --angle {
-            syntax: '<angle>';
-            inherits: false;
-            initial-value: 0deg;
-        }
-
-        .offer-strip {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            gap: 18px;
-            width: 100%;
-            padding: 30px 22px 24px;
-            border-radius: 14px;
-            text-decoration: none;
-            cursor: pointer;
-            overflow: hidden;
-            isolation: isolate;
-            background:
-                radial-gradient(circle at 85% -10%, rgba(229,9,20,0.18), transparent 55%),
-                linear-gradient(165deg, #0c0c0e 0%, #120507 55%, #170608 100%);
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.02) inset,
-                0 24px 50px rgba(0,0,0,0.55);
-            transition: transform 0.35s cubic-bezier(.2,.85,.25,1), box-shadow 0.35s ease, border-color 0.35s ease;
-        }
-
-        /* moldura giratória neon — o efeito "premium" do card */
-        .offer-strip::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            padding: 1.5px;
-            border-radius: 14px;
-            background: conic-gradient(from var(--angle), transparent 0 72%, #ff7a7a 82%, var(--red) 88%, transparent 96%);
-            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: rotate-border 5s linear infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-        @keyframes rotate-border { to { --angle: 360deg; } }
-
-        /* brilho de scan que passa de vez em quando pelo card */
-        .offer-strip::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: -60%;
-            width: 45%;
-            background: linear-gradient(
-                90deg,
-                rgba(255,255,255,0) 0%,
-                rgba(255,255,255,0.05) 45%,
-                rgba(255,255,255,0.14) 50%,
-                rgba(255,255,255,0.05) 55%,
-                rgba(255,255,255,0) 100%
-            );
-            transform: skewX(-16deg);
-            animation: card-sweep 4.5s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-        @keyframes card-sweep {
-            0%   { left: -60%; }
-            35%  { left: 140%; }
-            100% { left: 140%; }
-        }
-
-        .offer-strip:hover {
-            transform: translateY(-6px);
-            border-color: rgba(229,9,20,0.4);
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.04) inset,
-                0 30px 60px rgba(0,0,0,0.65),
-                0 0 40px var(--red-dim);
-        }
-
-        /* card do meio (mais vantajoso) em destaque */
-        .offer-strip.is-featured {
-            border-color: rgba(229,9,20,0.55);
-            background:
-                radial-gradient(circle at 85% -10%, rgba(229,9,20,0.3), transparent 55%),
-                linear-gradient(165deg, #100507 0%, #180507 55%, #200709 100%);
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.03) inset,
-                0 26px 56px rgba(0,0,0,0.6),
-                0 0 46px var(--red-dim);
-        }
-        @media (min-width: 861px) {
-            .offer-strip.is-featured { transform: translateY(-10px); }
-            .offer-strip.is-featured:hover { transform: translateY(-16px); }
-        }
-
-        .offer-strip__ribbon {
-            position: absolute;
-            top: 14px;
-            right: -34px;
-            z-index: 3;
-            transform: rotate(40deg);
-            background: linear-gradient(135deg, #ff4444, var(--red) 70%);
-            color: #fff;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 800;
-            font-size: 0.62rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 4px 38px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.5), 0 0 18px var(--red-glow);
-        }
-
-        .offer-strip__left {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            position: relative;
-            z-index: 2;
-        }
-        .offer-strip__icon {
-            flex-shrink: 0;
-            width: 46px;
-            height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            background: radial-gradient(circle at 35% 30%, #ff5b5b, var(--red) 55%, #7a0007);
-            box-shadow: 0 0 0 2px rgba(255,255,255,0.05), 0 0 22px var(--red-glow);
-        }
-        .offer-strip__icon svg { width: 22px; height: 22px; fill: #fff; }
-
-        .offer-strip__badge {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            font-size: 0.66rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: #ffb3b3;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .offer-strip__title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(1.72rem, 4.5vw, 2.1rem);
-            letter-spacing: 0.03em;
-            line-height: 1.08;
-            color: #fff;
-            text-shadow: 0 0 18px rgba(229,9,20,0.4);
-        }
-        .offer-strip__title em {
-            font-style: normal;
-            color: var(--red);
-        }
-
-        .offer-strip__divider {
-            position: relative;
-            z-index: 2;
-            height: 1px;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
-        }
-
-        .offer-strip__right {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            position: relative;
-            z-index: 2;
-            margin-top: auto;
-            text-align: center;
-        }
-        .offer-strip__price {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            line-height: 1;
-        }
-        .offer-strip__price-old {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--muted);
-            text-decoration: line-through;
-            margin-bottom: 4px;
-        }
-        .offer-strip__price-label {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 600;
-            font-size: 0.64rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 6px;
-        }
-        .offer-strip__price-value {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: clamp(2rem, 6vw, 2.5rem);
-            color: #fff;
-            text-shadow: 0 0 24px rgba(229,9,20,0.35);
-        }
-        .offer-strip__price-value small {
-            font-size: 0.5em;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            margin-right: 2px;
-            vertical-align: middle;
-        }
-        .offer-strip__cta {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 14px 22px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            text-decoration: none;
-            color: #fff;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            font-size: 0.92rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #1b8a3d 0%, #25d366 55%, #34e37a 100%);
-            box-shadow: 0 0 0 2px rgba(37,211,102,0.22), 0 0 22px rgba(37,211,102,0.32);
-            transition: box-shadow 0.25s ease, transform 0.25s ease, filter 0.25s ease;
-        }
-        .offer-strip__cta:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.06);
-            box-shadow: 0 0 0 2px rgba(37,211,102,0.5), 0 0 34px rgba(37,211,102,0.55);
-        }
-        .offer-strip__cta svg { width: 16px; height: 16px; }
-
-        @media (max-width: 700px) {
-            .offer-strip { padding: 26px 20px 22px; }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           GARANTIA DE 7 DIAS
-           ═══════════════════════════════════════════════════════════ */
-        #guarantee-wrap {
-            width: 100%;
-            max-width: 820px;
-            margin-top: 26px;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(14px);
-            max-height: 0;
-            overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
-            text-align: center;
-            padding: 4px 20px;
-        }
-        #guarantee-wrap.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            max-height: 300px;
-        }
-        .guarantee-icon {
-            font-size: 1.9rem;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px var(--red-dim));
-        }
-        .guarantee-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 800;
-            font-size: 1.15rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .guarantee-text {
-            font-size: 0.86rem;
-            color: var(--muted);
-            max-width: 560px;
-            margin: 0 auto;
-            line-height: 1.55;
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           ELEMENTOS DE CONFIANÇA / SEGURANÇA
-           ═══════════════════════════════════════════════════════════ */
-        #trust-wrap {
-            width: 100%;
-            max-width: 820px;
-            margin-top: 22px;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(14px);
-            max-height: 0;
-            overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 14px 26px;
-            padding: 4px 10px;
-        }
-        #trust-wrap.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            max-height: 200px;
-        }
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 600;
-            font-size: 0.76rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        /* Título acima do carrossel de provas sociais */
-        .social-proof-title {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 800;
-            font-size: 1.1rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 6px;
-        }
-        .social-proof-subtitle {
-            font-size: 0.84rem;
-            color: var(--muted);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* ─── AJUSTE 2: CARROSSEL DE PROVA SOCIAL ─────────────── */
-        #social-proof-wrap {
-            width: 100%;
-            max-width: 820px;
-            margin-top: 22px;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(14px);
-            max-height: 0;
-            overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease;
-        }
-        #social-proof-wrap.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            max-height: 600px;
-        }
-        .carousel-outer {
-            position: relative;
-            width: 100%;
-            -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
-            mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
-        }
-        .carousel-track {
-            display: flex;
-            gap: 14px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            padding: 4px 32px;
-            cursor: grab;
-            user-select: none;
-        }
-        .carousel-track::-webkit-scrollbar { display: none; }
-        .carousel-track.dragging { cursor: grabbing; scroll-snap-type: none; }
-        .carousel-slide {
-            flex: 0 0 78%;
-            max-width: 320px;
-            aspect-ratio: 4 / 8;
-            scroll-snap-align: center;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            color: var(--muted);
-            text-align: center;
-            padding: 12px;
-            pointer-events: none;
-        }
-        @media (max-width: 600px) {
-            .carousel-slide { flex: 0 0 82%; }
-        }
-
-        /* ─── BOTÃO DE WHATSAPP (abaixo do carrossel) ─────────── */
-        #whatsapp-wrap {
-            width: 100%;
-            max-width: 820px;
-            margin-top: 22px;
-            display: flex;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(14px);
-            max-height: 0;
-            overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.6s ease, margin-top 0.6s ease;
-        }
-        #whatsapp-wrap.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            max-height: 200px;
-        }
-        .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            padding: 16px 40px;
-            max-width: 500px;
-            width: 100%;
-            justify-content: center;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            font-size: 1.05rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: #fff;
-            background: linear-gradient(135deg, #1b8a3d 0%, #25d366 55%, #34e37a 100%);
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            box-shadow:
-                0 0 0 2px rgba(37,211,102,0.25),
-                0 0 32px rgba(37,211,102,0.4),
-                0 4px 24px rgba(0,0,0,0.6);
-            transition: box-shadow 0.25s ease, transform 0.25s ease;
-        }
-        .whatsapp-btn:hover {
-            box-shadow: 0 0 0 2px rgba(37,211,102,0.55), 0 0 46px rgba(37,211,102,0.6), 0 4px 24px rgba(0,0,0,0.6);
-            transform: translateY(-2px);
-        }
-        .whatsapp-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
-
-        /* ─── ANIMATIONS ─────────────────────────────────────── */
-        @keyframes pulse-icon {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50%       { transform: scale(1.08); opacity: 0.85; }
-        }
-        @keyframes pulse-btn {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(229,9,20,0); }
-            50%       { transform: scale(1.03); box-shadow: 0 0 18px rgba(229,9,20,0.6); }
-        }
-        @keyframes float-cta {
-            0%, 100% { transform: translateY(0px); }
-            50%       { transform: translateY(-6px); }
-        }
-
-        /* ─── MOBILE ─────────────────────────────────────────── */
-           @media (max-width: 600px) {
-    .page { padding: 28px 8px 48px; }
-    .logo { font-size: 1.6rem; margin-bottom: 22px; }
-    .video-card { border-radius: 6px; }
-        }
-
-        /* ═══════════════════════════════════════════════════════════
-           POPUP DE CHECKOUT
-           ═══════════════════════════════════════════════════════════ */
-        .checkout-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 100000;
-            background: rgba(0,0,0,0.86);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-        .checkout-overlay.active { display: flex; }
-        .checkout-overlay.show { opacity: 1; }
-
-        .checkout-modal {
-            width: 100%;
-            max-width: 440px;
-            max-height: 92vh;
-            overflow-y: auto;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.03),
-                0 20px 80px rgba(0,0,0,0.85),
-                0 0 90px var(--red-dim);
-            padding: 30px 24px 26px;
-            position: relative;
-            transform: translateY(18px) scale(0.98);
-            transition: transform 0.3s ease;
-        }
-        .checkout-overlay.show .checkout-modal { transform: translateY(0) scale(1); }
-
-        .checkout-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.04);
-            color: var(--muted);
-            font-size: 1.05rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background .2s ease, color .2s ease;
-        }
-        .checkout-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
-
-        .checkout-header { margin-bottom: 22px; text-align: center; }
-        .checkout-eyebrow {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 0.76rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 6px;
-        }
-        .checkout-plan-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 0.05em;
-            color: var(--text);
-        }
-        .checkout-plan-price {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 2.1rem;
-            color: var(--red);
-            text-shadow: 0 0 24px var(--red-glow);
-            margin-top: 2px;
-        }
-
-        .checkout-error {
-            display: none;
-            background: rgba(229,9,20,0.1);
-            border: 1px solid rgba(229,9,20,0.4);
-            color: #ff9498;
-            font-size: 0.82rem;
-            line-height: 1.4;
-            padding: 10px 12px;
-            border-radius: 7px;
-            margin-bottom: 14px;
-        }
-        .checkout-error.show { display: block; }
-
-        .checkout-field { margin-bottom: 16px; }
-        .checkout-label {
-            display: block;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 7px;
-        }
-        .checkout-input {
-            width: 100%;
-            padding: 13px 14px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: 'Barlow', sans-serif;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color .2s ease, background .2s ease;
-        }
-        .checkout-input::placeholder { color: rgba(255,255,255,0.28); }
-        .checkout-input:focus { border-color: var(--red); background: rgba(255,255,255,0.06); }
-
-        .checkout-pay-toggle { display: flex; gap: 10px; margin-bottom: 18px; }
-        .pay-option {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 13px 10px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.03);
-            color: var(--muted);
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            font-size: 0.92rem;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all .2s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .pay-option svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
-        .pay-option.active {
-            border-color: var(--red);
-            color: #fff;
-            background: var(--red-dim);
-            box-shadow: 0 0 20px var(--red-dim);
-        }
-
-        .pay-panel { display: none; }
-        .pay-panel.active { display: block; }
-
-        .pix-box {
-            background: rgba(255,255,255,0.03);
-            border: 1px dashed rgba(255,255,255,0.18);
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 12px;
-        }
-        .pix-code {
-            font-family: 'Courier New', monospace;
-            font-size: 0.76rem;
-            color: rgba(255,255,255,0.75);
-            word-break: break-all;
-            line-height: 1.5;
-            max-height: 90px;
-            overflow-y: auto;
-            margin-bottom: 12px;
-        }
-        .pix-copy-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 7px;
-            background: linear-gradient(135deg, #1b8a3d 0%, #25d366 55%, #34e37a 100%);
-            color: #fff;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-        .pix-copy-btn:hover { transform: translateY(-1px); box-shadow: 0 0 24px rgba(37,211,102,0.4); }
-        .pix-copy-btn.copied { background: linear-gradient(135deg, #0e5c26 0%, #1b8a3d 100%); }
-        .pix-note { font-size: 0.78rem; color: var(--muted); text-align: center; line-height: 1.4; }
-
-        .card-row { display: flex; gap: 12px; }
-        .card-row .checkout-field { flex: 1; }
-
-        .checkout-submit {
-            width: 100%;
-            padding: 16px;
-            margin-top: 6px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--red) 0%, #ff2b3a 100%);
-            color: #fff;
-            font-family: 'Barlow Condensed', sans-serif;
-            font-weight: 900;
-            font-size: 1.05rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 0 0 2px var(--red-dim), 0 0 30px var(--red-glow);
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-        .checkout-submit:hover { transform: translateY(-2px); box-shadow: 0 0 0 2px var(--red-dim), 0 0 44px var(--red-glow); }
-        .checkout-submit:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-
-        .checkout-secure {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 14px;
-            font-size: 0.76rem;
-            color: var(--muted);
-        }
-
-        @media (max-width: 480px) {
-            .checkout-modal { padding: 26px 18px 22px; }
-            .card-row { flex-direction: column; gap: 0; }
-}
-    </style>
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '2116314405584988');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=2116314405584988&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
+  @media (max-width:980px){
+    .wrap{grid-template-columns:1fr; text-align:center; padding:40px 20px;}
+    .phone{margin-bottom:10px;}
+    h1{font-size:38px;}
+    .subtext{margin-left:auto; margin-right:auto;}
+    .social-proof{margin-left:auto;margin-right:auto;}
+    .brands{justify-content:center;}
+  }
+</style>
 </head>
 <body>
+  <div class="wrap">
 
-<div class="page">
-
-    <!-- Logo -->
-    
-
-    <!-- Headline -->
-    <h1 class="headline">
-        TODOS JOGOS<br>POR MENOS DE<em> R$100,00</em>
-    </h1>
-
-    <!-- Imagem estática (antes era o card de vídeo) -->
-    <div class="video-card">
-        <div class="video-ratio">
-            <!--
-                ┌──────────────────────────────────────────────────────────┐
-                │  Troque SUA_IMAGEM.jpg pela URL da sua imagem            │
-                └──────────────────────────────────────────────────────────┘
-            -->
-            <img src="https://res.cloudinary.com/dnponjtdn/image/upload/v1787191803/ChatGPT_Image_19_de_ago._de_2026_10_21_01_arlpvb.png" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
-        </div>
-    </div><!-- /.video-card -->
-
-    <!-- PLANOS — aparece no momento em que a oferta é liberada -->
-    <div id="plans-wrap">
-        <h2 class="plans-title">ESCOLHA SEU PLANO</h2>
-        <p class="plans-subtitle">Selecione a opção que melhor combina com você.</p>
-
-        <div class="plans-grid">
-
-
-            <!-- CARD 1 -->
-            <div class="offer-strip" id="strip1" data-plan="plano1" role="button" tabindex="0">
-                <div class="offer-strip__left">
-                    <div class="offer-strip__icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5a1 1 0 0 0-1 1v1a5 5 0 0 0 4.5 4.97A5.01 5.01 0 0 0 11 15.9V18H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 2.5-4.93A5 5 0 0 0 20 7V6a1 1 0 0 0-1-1zM6 7v-.001L6 7zm12 0a3 3 0 0 1-2.83 3H16V6h2v.999L18 7z"/></svg>
-                    </div>
-                    <div>
-                        <span class="offer-strip__badge">OFERTA ESPECIAL</span>
-                        <div class="offer-strip__title">1 JOGO <em>ESCOLHA LIVRE</em></div>
-                    </div>
-                </div>
-                <div class="offer-strip__divider"></div>
-                <div class="offer-strip__right">
-                    <div class="offer-strip__price">
-                        <span class="offer-strip__price-old">R$ 49</span>
-                        <span class="offer-strip__price-label">por apenas</span>
-                        <span class="offer-strip__price-value"><small>R$</small>29</span>
-                    </div>
-                    <a href="#" class="offer-strip__cta" id="planBtn1" data-plan="plano1" target="_blank" rel="noopener">
-                        QUERO ESTA
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- CARD 2 — plano em destaque -->
-            <div class="offer-strip is-featured" id="strip2" data-plan="plano2" role="button" tabindex="0">
-                <span class="offer-strip__ribbon">Mais escolhido</span>
-                <div class="offer-strip__left">
-                    <div class="offer-strip__icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5a1 1 0 0 0-1 1v1a5 5 0 0 0 4.5 4.97A5.01 5.01 0 0 0 11 15.9V18H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 2.5-4.93A5 5 0 0 0 20 7V6a1 1 0 0 0-1-1zM6 7v-.001L6 7zm12 0a3 3 0 0 1-2.83 3H16V6h2v.999L18 7z"/></svg>
-                    </div>
-                    <div>
-                        <span class="offer-strip__badge">OFERTA ESPECIAL</span>
-                        <div class="offer-strip__title">TODOS JOGOS <em>MODO HISTORIA</em></div>
-J7NU                   </div>
-                </div>
-                <div class="offer-strip__divider"></div>
-                <div class="offer-strip__right">
-                    <div class="offer-strip__price">
-                        <span class="offer-strip__price-old">R$ 89</span>
-                        <span class="offer-strip__price-label">por apenas</span>
-                        <span class="offer-strip__price-value"><small>R$</small>49</span>
-                    </div>
-                    <a href="#" class="offer-strip__cta" id="planBtn2" data-plan="plano2" target="_blank" rel="noopener">
-                        QUERO ESTA
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- CARD 3 -->
-            <div class="offer-strip" id="strip3" data-plan="plano3" role="button" tabindex="0">
-                <div class="offer-strip__left">
-                    <div class="offer-strip__icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 5h-2V3H7v2H5a1 1 0 0 0-1 1v1a5 5 0 0 0 4.5 4.97A5.01 5.01 0 0 0 11 15.9V18H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 2.5-4.93A5 5 0 0 0 20 7V6a1 1 0 0 0-1-1zM6 7v-.001L6 7zm12 0a3 3 0 0 1-2.83 3H16V6h2v.999L18 7z"/></svg>
-                    </div>
-                    <div>
-                        <span class="offer-strip__badge">MAIS VANTAGENS</span>
-                        <div class="offer-strip__title">TODOS JOGOS <em>MODO ONLINE</em></div>
-                    </div>
-                </div>
-                <div class="offer-strip__divider"></div>
-                <div class="offer-strip__right">
-                    <div class="offer-strip__price">
-                        <span class="offer-strip__price-old">R$ 149</span>
-                        <span class="offer-strip__price-label">por apenas</span>
-                        <span class="offer-strip__price-value"><small>R$</small>79</span>
-                    </div>
-                    <a href="#" class="offer-strip__cta" id="planBtn3" data-plan="plano3" target="_blank" rel="noopener">
-                        QUERO ESTA
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </a>
-                </div>
-            </div>
-
-        </div>
+    <!-- PHONE MOCKUP -->
+    <div class="phone">
+      <div class="screen">
+        <iframe
+          id="ytPlayer"
+          src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=M7lc1UVf-VE&controls=0&modestbranding=1&playsinline=1&rel=0"
+          title="Vídeo"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+        <button class="playpause" id="playPauseBtn" aria-label="Play/Pause">
+          <span class="icon" id="ppIcon">
+            <svg id="pauseSvg" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect></svg>
+            <svg id="playSvg" viewBox="0 0 24 24" style="display:none"><path d="M8 5v14l11-7z"></path></svg>
+          </span>
+        </button>
+      </div>
     </div>
 
-    
+    <script>
+      let player;
+      let isPlaying = true;
 
-    <!-- AJUSTE 2: Carrossel de prova social (existente, reaproveitado) — agora aparece junto com a oferta -->
-    <div id="social-proof-wrap">
-        <h3 class="social-proof-title">VEJA O QUE ESTÃO DIZENDO</h3>
-        <p class="social-proof-subtitle">Confira alguns registros e experiências de clientes.</p>
-        <div class="carousel-outer">
-            <div class="carousel-track" id="carouselTrack">
-                <!--
-                    ┌──────────────────────────────────────────────────────────┐
-                    │  Para colocar suas imagens, troque o background-image    │
-                    │  de cada slide abaixo por:                                │
-                    │  style="background-image:url('SUA_IMAGEM.jpg')"          │
-                    └──────────────────────────────────────────────────────────┘
-                -->
-          <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786413650/IMG_2721_deiixe.png)"></div>
-                <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786415810/IMG_2728_krgufa.png)"></div>
-                <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786413661/IMG_2729_ijwc0b.png)"></div>
-                <div class="carousel-slide" style="background-image:url(https://res.cloudinary.com/dnponjtdn/image/upload/v1786413646/IMG_2737_beub9l.jpg)"></div>
-            </div>
-        </div>
-    </div>
-    <!-- Botão de WhatsApp — abaixo do carrossel -->
-    <div id="whatsapp-wrap">
-        <!--
-            ┌──────────────────────────────────────────────────────────┐
-            │  INSIRA  número no formato internacional, sem espaços  │
-            │  ou símbolos, no lugar de "5500000000000" abaixo:         │
-            │  Ex: 55 + DDD + número → 5551999999999                    │
-            └──────────────────────────────────────────────────────────┘
-        -->
-        <a href="https://wa.me/5500000000000?text=Acabei%20de%20assistir%20o%20v%C3%ADdeo%20e%20gostaria%20de%20tirar%20algumas%20d%C3%BAvidas." class="whatsapp-btn" id="whatsappBtn" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5.01L2.05 22l5.25-1.37a9.94 9.94 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.93 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.55-3.7 8.25-8.25 8.25a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.55 3.71-8.25 8.26-8.25M8.53 6.85c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03 0 1.2.87 2.36.99 2.52.12.16 1.7 2.72 4.2 3.71 2.08.82 2.5.66 2.95.62.45-.04 1.45-.59 1.65-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28-.24-.12-1.45-.72-1.68-.8-.22-.08-.39-.12-.55.12-.16.24-.63.8-.78.96-.14.16-.29.18-.53.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.35-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.34-.76-1.83-.2-.48-.4-.4-.55-.41-.14 0-.3-.01-.46-.01z"/>
-            </svg>
-            Dúvidas? Fale no WhatsApp!
-        </a>
-    </div>
-
-    <!-- GARANTIA DE 7 DIAS -->
-    <div id="guarantee-wrap">
-        <div class="guarantee-icon">🛡️</div>
-        <div class="guarantee-title">GARANTIA DE 7 DIAS</div>
-        <!-- Texto editável -->
-        <p class="guarantee-text">Você tem 7 dias para conhecer o serviço. Caso não fique satisfeito dentro do período de garantia, entre em contato para solicitar o suporte conforme as condições da oferta.</p>
-    </div>
-
-    <!-- ELEMENTOS DE CONFIANÇA / SEGURANÇA -->
-    <div id="trust-wrap">
-        <div class="trust-item">🔒 <span>COMPRA SEGURA</span></div>
-        <div class="trust-item">✓ <span>GARANTIA DE 7 DIAS</span></div>
-        <div class="trust-item">⚡ <span>ATENDIMENTO VIA WHATSAPP</span></div>
-        <div class="trust-item">🛡️ <span>SUPORTE AO CLIENTE</span></div>
-    </div>
-
-</div><!-- /.page -->
-
-<!-- ═══════════════════════════════════════════════════════════
-     POPUP DE CHECKOUT
-     ═══════════════════════════════════════════════════════════ -->
-<div class="checkout-overlay" id="checkoutOverlay">
-    <div class="checkout-modal" onclick="event.stopPropagation()">
-        <button type="button" class="checkout-close" id="checkoutClose" aria-label="Fechar">✕</button>
-
-        <div class="checkout-header">
-            <div class="checkout-eyebrow">Finalizar assinatura</div>
-            <div class="checkout-plan-name" id="checkoutPlanName">—</div>
-            <div class="checkout-plan-price" id="checkoutPlanPrice">R$ 0</div>
-        </div>
-
-        <div class="checkout-error" id="checkoutError"></div>
-
-        <div class="checkout-field">
-            <label class="checkout-label" for="checkoutNome">Nome completo</label>
-            <input type="text" id="checkoutNome" class="checkout-input" placeholder="Digite seu nome">
-        </div>
-
-        <div class="checkout-field">
-            <label class="checkout-label" for="checkoutWhats">WhatsApp</label>
-            <input type="tel" id="checkoutWhats" class="checkout-input" placeholder="(00) 00000-0000">
-        </div>
-
-        <div class="checkout-field">
-            <label class="checkout-label" for="checkoutCpf">CPF</label>
-            <input type="text" id="checkoutCpf" class="checkout-input" placeholder="000.000.000-00" maxlength="14" inputmode="numeric">
-        </div>
-
-        <div class="checkout-field">
-            <label class="checkout-label">Forma de pagamento</label>
-            <div class="checkout-pay-toggle">
-                <div class="pay-option" id="payOptionPix" onclick="selectPaymentMethod('pix')">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.32 2.5a3.6 3.6 0 0 1 2.55 1.06l3.4 3.4a1.2 1.2 0 0 0 .85.35h.6a3.6 3.6 0 0 1 2.55 1.06l1.13 1.13a3.6 3.6 0 0 1 0 5.1l-1.13 1.13a3.6 3.6 0 0 1-2.55 1.06h-.6a1.2 1.2 0 0 0-.85.35l-3.4 3.4a3.6 3.6 0 0 1-5.1 0l-3.4-3.4a1.2 1.2 0 0 0-.85-.35h-.6a3.6 3.6 0 0 1-2.55-1.06L.24 14.6a3.6 3.6 0 0 1 0-5.1l1.13-1.13A3.6 3.6 0 0 1 3.92 7.3h.6c.32 0 .62-.13.85-.35l3.4-3.4A3.6 3.6 0 0 1 11.32 2.5z"/></svg>
-                    Pix
-                </div>
-                <div class="pay-option" id="payOptionCard" onclick="selectPaymentMethod('cartao')">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z"/></svg>
-                    Cartão
-                </div>
-            </div>
-        </div>
-
-        <!-- PIX -->
-        <div class="pay-panel" id="panelPix">
-            <div class="pix-box">
-                <div class="pix-code" id="pixCode">Selecione Pix para gerar o código…</div>
-                <button type="button" class="pix-copy-btn" id="pixCopyBtn" onclick="copyPixCode()">Copiar código Pix</button>
-            </div>
-            <p class="pix-note">Copie o código acima e cole no app do seu banco para efetuar o pagamento. Após a confirmação, seu acesso é liberado.</p>
-        </div>
-
-        <!-- CARTÃO -->
-        <div class="pay-panel" id="panelCard">
-            <div class="checkout-field">
-                <label class="checkout-label" for="cardNumero">Número do cartão</label>
-                <input type="text" id="cardNumero" class="checkout-input" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
-            </div>
-            <div class="card-row">
-                <div class="checkout-field">
-                    <label class="checkout-label" for="cardValidade">Validade</label>
-                    <input type="text" id="cardValidade" class="checkout-input" placeholder="MM/AA" maxlength="5" inputmode="numeric">
-                </div>
-                <div class="checkout-field">
-                    <label class="checkout-label" for="cardCvv">CVV</label>
-                    <input type="text" id="cardCvv" class="checkout-input" placeholder="000" maxlength="4" inputmode="numeric">
-                </div>
-            </div>
-        </div>
-
-        <button type="button" class="checkout-submit" id="checkoutSubmitBtn" onclick="finalizarCompra()">Finalizar Compra</button>
-
-        <div class="checkout-secure">🔒 Ambiente seguro — seus dados estão protegidos</div>
-    </div>
-</div>
-
-<!-- SDK do Mercado Pago (tokeniza o cartão no navegador — o número do cartão nunca chega ao seu servidor) -->
-<script src="https://sdk.mercadopago.com/js/v2"></script>
-<script>
-    /* ═══════════════════════════════════════════════════════════
-       CONFIGURAÇÃO DOS PLANOS — edite aqui o número de WhatsApp
-       e a mensagem enviada por cada botão de plano
-       ═══════════════════════════════════════════════════════════ */
-    const PLAN_CONFIG = {
-        whatsappNumber: '5553981021909', // ← DDI + DDD + número, sem espaços/símbolos (não usado mais pelos botões dos planos, mantido para referência)
-        plano1: {
-            nome: '5 FOTOS PARA COLORIR',
-            preco: 'R$ 29',
-            mensagem: 'Quero fazer o pagamento da oferta 5 fotos para colorir'
-        },
-        plano2: {
-            nome: '10 FOTOS PARA COLORIR',
-            preco: 'R$ 49',
-            mensagem: 'Quero fazer o pagamento da oferta 10 fotos para colorir'
-        },
-        plano3: {
-            nome: '20 FOTOS PARA COLORIR',
-            preco: 'R$ 79',
-            mensagem: 'Quero fazer o pagamento da oferta 20 fotos para colorir'
-        }
-    };
-
-    /* Os botões das faixas de oferta agora abrem o pop-up de checkout em vez de ir direto pro WhatsApp */
-    function attachPlanButtons() {
-        document.querySelectorAll('.offer-strip__cta[data-plan]').forEach((btn) => {
-            btn.removeAttribute('href');
-            btn.removeAttribute('target');
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                openCheckout(btn.getAttribute('data-plan'));
-            });
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('ytPlayer', {
+          events: { 'onReady': onPlayerReady }
         });
-        /* A faixa inteira também é clicável, não só o botão */
-        document.querySelectorAll('.offer-strip[data-plan]').forEach((strip) => {
-            strip.addEventListener('click', () => openCheckout(strip.getAttribute('data-plan')));
-            strip.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openCheckout(strip.getAttribute('data-plan'));
-                }
-            });
-        });
-    }
-    attachPlanButtons();
-    /* ═══════════════════════════════════════════════════════════ */
+      }
 
-    /* ═══════════════════════════════════════════════════════════
-       POPUP DE CHECKOUT — integração real com Mercado Pago
-       ═══════════════════════════════════════════════════════════ */
+      function onPlayerReady(e) {
+        e.target.playVideo();
+      }
 
-    // ── Public Key de produção do Mercado Pago (segura para expor no navegador) ──
-    const MP_PUBLIC_KEY = 'APP_USR-e45dd721-cfe5-47b0-a46d-7d311f476f24';
-    const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
+      const btn = document.getElementById('playPauseBtn');
+      const playSvg = document.getElementById('playSvg');
+      const pauseSvg = document.getElementById('pauseSvg');
+      const icon = document.getElementById('ppIcon');
 
-    // Endpoint único no Supabase (Edge Function) — substitui os antigos PHPs
-    const MP_ENDPOINT = 'https://iminfhdxpuhitkmylvba.supabase.co/functions/v1/mp-checkout';
+      function flashIcon(){
+        icon.classList.add('show');
+        clearTimeout(window._iconTimer);
+        window._iconTimer = setTimeout(()=> icon.classList.remove('show'), 700);
+      }
 
-    let currentCheckoutPlan   = null;
-    let selectedPaymentMethod = null;
-    let pixCodeGenerated      = false;
-    let paymentMethodIdCartao = null; // ex: "visa", "master" — detectado pelo BIN do cartão
-    let pixPaymentId          = null;
-    let pixPollInterval       = null;
-
-    /* Fica checando a cada 5s se o Pix já foi pago, enquanto o pop-up estiver aberto */
-    function iniciarPollingPix(paymentId) {
-        pararPollingPix();
-        pixPaymentId = paymentId;
-        pixPollInterval = setInterval(async () => {
-            try {
-                const resp = await fetch(MP_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'status', payment_id: paymentId })
-                });
-                const data = await resp.json();
-                if (data.status === 'approved') {
-                    pararPollingPix();
-                    if (typeof fbq === 'function') {
-                        fbq('track', 'Purchase', {
-                            content_name: currentCheckoutPlan,
-                            value: valorNumericoDoPlano(),
-                            currency: 'BRL'
-                        });
-                    }
-                    document.querySelector('.checkout-modal').innerHTML =
-                        '<div style="text-align:center; padding:20px 6px;">' +
-                        '<div style="font-size:2.6rem; margin-bottom:10px;">✅</div>' +
-                        '<div class="checkout-plan-name" style="margin-bottom:8px;">Pagamento aprovado!</div>' +
-                        '<p class="pix-note">Seu acesso será liberado em instantes. Qualquer dúvida, fale com a gente pelo WhatsApp.</p>' +
-                        '</div>';
-                }
-            } catch (err) {
-                /* silencioso — tenta de novo no próximo ciclo */
-            }
-        }, 5000);
-    }
-
-    function pararPollingPix() {
-        if (pixPollInterval) {
-            clearInterval(pixPollInterval);
-            pixPollInterval = null;
-        }
-    }
-
-    function openCheckout(planKey) {
-        const cfg = PLAN_CONFIG[planKey];
-        if (!cfg) return;
-        currentCheckoutPlan = planKey;
-        pararPollingPix();
-
-        document.getElementById('checkoutPlanName').textContent  = cfg.nome;
-        document.getElementById('checkoutPlanPrice').textContent = cfg.preco;
-
-        /* reseta o formulário toda vez que abre */
-        document.getElementById('checkoutNome').value    = '';
-        document.getElementById('checkoutWhats').value   = '';
-        document.getElementById('checkoutCpf').value     = '';
-        document.getElementById('cardNumero').value      = '';
-        document.getElementById('cardValidade').value    = '';
-        document.getElementById('cardCvv').value         = '';
-        hideCheckoutError();
-
-        selectedPaymentMethod = null;
-        pixCodeGenerated = false;
-        paymentMethodIdCartao = null;
-        document.getElementById('pixCode').textContent = 'Selecione Pix para gerar o código…';
-        document.getElementById('payOptionPix').classList.remove('active');
-        document.getElementById('payOptionCard').classList.remove('active');
-        document.getElementById('panelPix').classList.remove('active');
-        document.getElementById('panelCard').classList.remove('active');
-        document.getElementById('pixCopyBtn').classList.remove('copied');
-        document.getElementById('pixCopyBtn').textContent = 'Copiar código Pix';
-
-        const submitBtn = document.getElementById('checkoutSubmitBtn');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Finalizar Compra';
-
-        const overlay = document.getElementById('checkoutOverlay');
-        overlay.classList.add('active');
-        requestAnimationFrame(() => overlay.classList.add('show'));
-        document.body.style.overflow = 'hidden';
-
-        if (typeof fbq === 'function') {
-            fbq('track', 'InitiateCheckout', {
-                content_name: planKey,
-                value: valorNumericoDoPlano(),
-                currency: 'BRL'
-            });
-        }
-    }
-
-    function closeCheckout() {
-        const overlay = document.getElementById('checkoutOverlay');
-        overlay.classList.remove('show');
-        document.body.style.overflow = '';
-        setTimeout(() => overlay.classList.remove('active'), 250);
-        pararPollingPix();
-    }
-
-    document.getElementById('checkoutOverlay').addEventListener('click', closeCheckout);
-    document.getElementById('checkoutClose').addEventListener('click', closeCheckout);
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeCheckout();
-    });
-
-    function selectPaymentMethod(method) {
-        selectedPaymentMethod = method;
-        document.getElementById('payOptionPix').classList.toggle('active', method === 'pix');
-        document.getElementById('payOptionCard').classList.toggle('active', method === 'cartao');
-        document.getElementById('panelPix').classList.toggle('active', method === 'pix');
-        document.getElementById('panelCard').classList.toggle('active', method === 'cartao');
-    }
-
-    /* Extrai o valor numérico (ex: "R$ 99" → 99) pra mandar pro backend */
-    function valorNumericoDoPlano() {
-        const cfg = PLAN_CONFIG[currentCheckoutPlan];
-        if (!cfg) return 0;
-        return parseFloat(cfg.preco.replace('R$', '').replace(',', '.').trim());
-    }
-
-    function dadosComunsValidos() {
-        const nome  = document.getElementById('checkoutNome').value.trim();
-        const whats = document.getElementById('checkoutWhats').value.trim();
-        const cpf   = document.getElementById('checkoutCpf').value.replace(/\D/g, '');
-
-        if (!nome) { showCheckoutError('Preencha seu nome.'); return null; }
-        if (whats.replace(/\D/g, '').length < 10) { showCheckoutError('Informe um WhatsApp válido.'); return null; }
-        if (cpf.length !== 11) { showCheckoutError('Informe um CPF válido.'); return null; }
-
-        return { nome, whatsapp: whats, cpf };
-    }
-
-    /* ── PIX real — chama o backend, que fala com a API do Mercado Pago ── */
-    async function gerarPixReal() {
-        hideCheckoutError();
-        const dados = dadosComunsValidos();
-        if (!dados) return;
-
-        const pixBox = document.getElementById('pixCode');
-        pixBox.textContent = 'Gerando código Pix…';
-
-        try {
-            const resp = await fetch(MP_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'pix',
-                    nome: dados.nome,
-                    whatsapp: dados.whatsapp,
-                    cpf: dados.cpf,
-                    valor: valorNumericoDoPlano(),
-                    plano: PLAN_CONFIG[currentCheckoutPlan].nome,
-                }),
-            });
-            const data = await resp.json();
-
-            if (!resp.ok) {
-                pixBox.textContent = 'Selecione Pix para gerar o código…';
-                showCheckoutError(data.erro || 'Não foi possível gerar o Pix. Tente novamente.');
-                return;
-            }
-
-            pixBox.textContent = data.qr_code;
-            pixCodeGenerated = true;
-            iniciarPollingPix(data.payment_id);
-        } catch (err) {
-            pixBox.textContent = 'Selecione Pix para gerar o código…';
-            showCheckoutError('Erro de conexão ao gerar o Pix. Verifique o backend.');
-        }
-    }
-
-    function copyPixCode() {
-        const code = document.getElementById('pixCode').textContent;
-        const btn  = document.getElementById('pixCopyBtn');
-
-        const markCopied = () => {
-            btn.textContent = 'Código copiado ✓';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.textContent = 'Copiar código Pix';
-                btn.classList.remove('copied');
-            }, 2500);
-        };
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(code).then(markCopied).catch(() => fallbackCopy(code, markCopied));
+      btn.addEventListener('click', function(){
+        if (!player || !player.playVideo) return;
+        if (isPlaying) {
+          player.pauseVideo();
+          playSvg.style.display = 'block';
+          pauseSvg.style.display = 'none';
         } else {
-            fallbackCopy(code, markCopied);
+          player.playVideo();
+          playSvg.style.display = 'none';
+          pauseSvg.style.display = 'block';
         }
-    }
+        isPlaying = !isPlaying;
+        flashIcon();
+      });
 
-    function fallbackCopy(text, cb) {
-        const temp = document.createElement('textarea');
-        temp.value = text;
-        temp.style.position = 'fixed';
-        temp.style.opacity = '0';
-        document.body.appendChild(temp);
-        temp.select();
-        try { document.execCommand('copy'); } catch(_) {}
-        document.body.removeChild(temp);
-        cb();
-    }
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    </script>
 
-    function showCheckoutError(msg) {
-        const box = document.getElementById('checkoutError');
-        box.textContent = msg;
-        box.classList.add('show');
-    }
-    function hideCheckoutError() {
-        document.getElementById('checkoutError').classList.remove('show');
-    }
+    <!-- RIGHT CONTENT -->
+    <div class="content">
+      <div class="social-proof">
+        <div class="avatars">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        + de 500.000 pessoas já economizam com a gente
+      </div>
 
-    /* Quando escolhe Pix, gera o código de verdade na hora */
-    document.getElementById('payOptionPix').addEventListener('click', () => {
-        if (!pixCodeGenerated) gerarPixReal();
-    });
+      <h1>Chega de pagar caro<br>em <span class="hl">tênis!</span></h1>
 
-    /* Máscaras simples dos campos */
-    document.getElementById('checkoutWhats').addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, '').substring(0, 11);
-        if (v.length > 6) v = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7)}`;
-        else if (v.length > 2) v = `(${v.substring(0,2)}) ${v.substring(2)}`;
-        e.target.value = v;
-    });
-    document.getElementById('checkoutCpf').addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, '').substring(0, 11);
-        if (v.length > 9) v = `${v.substring(0,3)}.${v.substring(3,6)}.${v.substring(6,9)}-${v.substring(9)}`;
-        else if (v.length > 6) v = `${v.substring(0,3)}.${v.substring(3,6)}.${v.substring(6)}`;
-        else if (v.length > 3) v = `${v.substring(0,3)}.${v.substring(3)}`;
-        e.target.value = v;
-    });
-    document.getElementById('cardNumero').addEventListener('input', async (e) => {
-        let v = e.target.value.replace(/\D/g, '').substring(0, 16);
-        e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+      <p class="subtext">
+        Encontro as melhores ofertas de tênis <b>ORIGINAIS</b> e compartilho tudo com você.
+      </p>
 
-        // Descobre a bandeira (visa, master...) pelos 6 primeiros dígitos assim que possível
-        if (v.length >= 6) {
-            try {
-                const methods = await mp.getPaymentMethods({ bin: v.substring(0, 6) });
-                if (methods.results && methods.results.length) {
-                    paymentMethodIdCartao = methods.results[0].id;
-                }
-            } catch (_) { /* segue sem bandeira detectada; a API acusa erro se faltar */ }
-        }
-    });
-    document.getElementById('cardValidade').addEventListener('input', (e) => {
-        let v = e.target.value.replace(/\D/g, '').substring(0, 4);
-        if (v.length > 2) v = v.substring(0,2) + '/' + v.substring(2);
-        e.target.value = v;
-    });
-    document.getElementById('cardCvv').addEventListener('input', (e) => {
-        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
-    });
+      <a href="#" class="cta">
+        <svg viewBox="0 0 24 24" fill="#08210f"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 22c-1.68 0-3.33-.44-4.79-1.28l-.34-.2-3.55.93.95-3.46-.22-.36A9.94 9.94 0 0 1 2.05 12C2.05 6.5 6.55 2 12.05 2c2.66 0 5.16 1.04 7.04 2.93A9.9 9.9 0 0 1 22.02 12c0 5.5-4.5 10-9.97 10zm0-20C6 2 1.05 6.93 1.05 12c0 1.9.5 3.75 1.44 5.38L1 23l5.79-1.52A11.05 11.05 0 0 0 12.05 23c6.03 0 10.97-4.93 10.97-11S18.08 2 12.05 2z"/></svg>
+        Entrar no Grupo VIP
+      </a>
 
-    /* ── CARTÃO real — tokeniza no navegador (SDK do Mercado Pago) e
-       manda só o token pro backend. O número do cartão NUNCA passa
-       pelo seu servidor. ── */
-    async function pagarComCartaoReal(dados) {
-        const numero    = document.getElementById('cardNumero').value.replace(/\D/g, '');
-        const validade  = document.getElementById('cardValidade').value;
-        const cvv       = document.getElementById('cardCvv').value;
+      <p class="cta-note">
+        Grupo <b>100% GRATUITO</b> — saia quando quiser.<br>
+        Divulgamos promoções somente de lojas oficiais.
+      </p>
 
-        if (numero.length < 13) { showCheckoutError('Número de cartão inválido.'); return; }
-        if (!/^\d{2}\/\d{2}$/.test(validade)) { showCheckoutError('Validade inválida (use MM/AA).'); return; }
-        if (cvv.length < 3) { showCheckoutError('CVV inválido.'); return; }
-        if (!paymentMethodIdCartao) { showCheckoutError('Não foi possível identificar a bandeira do cartão.'); return; }
+      <div class="brands">
+        <div class="b">N</div>
+        <div class="b">A</div>
+        <div class="b">P</div>
+        <div class="b">M</div>
+        <div class="b">C</div>
+        <div class="b plus">+</div>
+      </div>
+    </div>
 
-        const [mes, ano] = validade.split('/');
-        const btn = document.getElementById('checkoutSubmitBtn');
-        btn.disabled = true;
-        btn.textContent = 'Processando...';
-
-        try {
-            const cardToken = await mp.createCardToken({
-                cardNumber: numero,
-                cardholderName: dados.nome,
-                cardExpirationMonth: mes,
-                cardExpirationYear: '20' + ano,
-                securityCode: cvv,
-                identificationType: 'CPF',
-                identificationNumber: dados.cpf,
-            });
-
-            const resp = await fetch(MP_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'cartao',
-                    nome: dados.nome,
-                    whatsapp: dados.whatsapp,
-                    cpf: dados.cpf,
-                    valor: valorNumericoDoPlano(),
-                    plano: PLAN_CONFIG[currentCheckoutPlan].nome,
-                    card_token: cardToken.id,
-                    payment_method_id: paymentMethodIdCartao,
-                    installments: 1,
-                }),
-            });
-            const data = await resp.json();
-
-            btn.disabled = false;
-            btn.textContent = 'Finalizar Compra';
-
-            if (!resp.ok) {
-                showCheckoutError(data.erro || 'Pagamento recusado. Confira os dados do cartão.');
-                return;
-            }
-
-            if (data.status === 'approved') {
-                if (typeof fbq === 'function') {
-                    fbq('track', 'Purchase', {
-                        content_name: currentCheckoutPlan,
-                        value: valorNumericoDoPlano(),
-                        currency: 'BRL'
-                    });
-                }
-                document.querySelector('.checkout-modal').innerHTML =
-                    '<div style="text-align:center; padding:20px 6px;">' +
-                    '<div style="font-size:2.6rem; margin-bottom:10px;">✅</div>' +
-                    '<div class="checkout-plan-name" style="margin-bottom:8px;">Pagamento aprovado!</div>' +
-                    '<p class="pix-note">Seu acesso será liberado em instantes. Qualquer dúvida, fale com a gente pelo WhatsApp.</p>' +
-                    '</div>';
-            } else {
-                showCheckoutError('Pagamento com status "' + data.status + '". Tente novamente ou use outro cartão.');
-            }
-        } catch (err) {
-            btn.disabled = false;
-            btn.textContent = 'Finalizar Compra';
-            showCheckoutError('Erro ao processar o cartão. Verifique os dados e tente de novo.');
-        }
-    }
-
-    /* ── Botão "Finalizar Compra" ── */
-    async function finalizarCompra() {
-        hideCheckoutError();
-        const dados = dadosComunsValidos();
-        if (!dados) return;
-
-        if (!selectedPaymentMethod) { showCheckoutError('Escolha uma forma de pagamento.'); return; }
-
-        if (selectedPaymentMethod === 'pix') {
-            if (!pixCodeGenerated) { showCheckoutError('Aguarde o código Pix ser gerado.'); return; }
-            showCheckoutError('Após pagar o Pix copiado, a confirmação chega automaticamente pelo webhook — pode fechar esta janela.');
-            return;
-        }
-
-        if (selectedPaymentMethod === 'cartao') {
-            await pagarComCartaoReal(dados);
-        }
-    }
-    /* ═══════════════════════════════════════════════════════════ */
-
-    /* A oferta (planos, garantia, confiança, prova social, WhatsApp)
-       agora aparece direto na página, já que não há mais vídeo/CTA
-       controlando quando ela é revelada. */
-    document.getElementById('plans-wrap').classList.add('visible');
-    document.getElementById('guarantee-wrap').classList.add('visible');
-    document.getElementById('trust-wrap').classList.add('visible');
-    document.getElementById('social-proof-wrap').classList.add('visible');
-    document.getElementById('whatsapp-wrap').classList.add('visible');
-
-    /* ═══════════════════════════════════════════════════════════
-       Carrossel de prova social (arrastar para o lado)
-       ═══════════════════════════════════════════════════════════ */
-    (function initCarousel() {
-        const track = document.getElementById('carouselTrack');
-        if (!track) return;
-
-        let isDown = false;
-        let startX = 0;
-        let scrollStart = 0;
-
-        track.addEventListener('mousedown', (e) => {
-            isDown = true;
-            track.classList.add('dragging');
-            startX = e.pageX;
-            scrollStart = track.scrollLeft;
-        });
-        window.addEventListener('moup', () => {
-            isDown = false;
-            track.classList.remove('dragging');
-        });
-        window.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const delta = e.pageX - startX;
-            track.scrollLeft = scrollStart - delta;
-        });
-
-        /* Touch já funciona nativamente via overflow-x + scroll-snap */
-    })();
-</script>
+  </div>
 </body>
 </html>
