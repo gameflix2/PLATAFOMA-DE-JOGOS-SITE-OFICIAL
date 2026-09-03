@@ -4,115 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tênis Ofertas | Grupo VIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#05070d;
-    --bg-2:#0c1120;
     --accent:#ff7a1a;
     --accent-2:#25d366;
     --text:#f5f6f8;
     --muted:#9aa3b5;
-    --frame:#111624;
   }
   *{box-sizing:border-box;}
   body{
     margin:0;
-    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    font-family:'Poppins', 'Segoe UI', Roboto, Arial, sans-serif;
     background:
-      radial-gradient(circle at 78% 20%, rgba(255,122,26,0.14), transparent 45%),
-      radial-gradient(circle at 15% 80%, rgba(37,211,102,0.10), transparent 45%),
+      radial-gradient(circle at 50% 0%, rgba(255,122,26,0.10), transparent 40%),
+      radial-gradient(circle at 20% 90%, rgba(37,211,102,0.08), transparent 45%),
       var(--bg);
     color:var(--text);
-    min-height:100vh;
-  }
-  .wrap{
-    max-width:1200px;
-    margin:0 auto;
-    padding:56px 24px;
-    display:grid;
-    grid-template-columns:420px 1fr;
-    gap:60px;
-    align-items:center;
-    min-height:100vh;
   }
 
-  /* ---------- PHONE ---------- */
-  .phone{
-    position:relative;
-    width:340px;
-    height:700px;
+  .page{
+    max-width:460px;
     margin:0 auto;
-    background:#0d0f14;
-    border-radius:52px;
-    padding:14px;
-    box-shadow:
-      0 0 0 2px #262b38,
-      0 30px 60px -20px rgba(0,0,0,0.7),
-      0 0 40px rgba(255,122,26,0.08);
-  }
-  .phone::before{
-    content:"";
-    position:absolute;
-    top:34px; left:50%;
-    transform:translateX(-50%);
-    width:90px; height:22px;
-    background:#000;
-    border-radius:14px;
-    z-index:5;
-  }
-  .screen{
-    width:100%;
-    height:100%;
-    border-radius:38px;
-    overflow:hidden;
-    background:#000;
-    position:relative;
-  }
-  .screen iframe{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    border:0;
-    pointer-events:none; /* clicks go to our own play/pause layer */
-  }
-  .playpause{
-    position:absolute;
-    inset:0;
+    padding:56px 24px 70px;
+    text-align:center;
     display:flex;
+    flex-direction:column;
     align-items:center;
-    justify-content:center;
-    background:transparent;
-    border:0;
-    padding:0;
-    cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .playpause .icon{
-    width:64px;
-    height:64px;
-    border-radius:50%;
-    background:rgba(0,0,0,0.45);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    opacity:0;
-    transition:opacity .2s ease;
-  }
-  .playpause:hover .icon,
-  .playpause.show .icon{
-    opacity:1;
-  }
-  .playpause svg{
-    width:28px;
-    height:28px;
-    fill:#fff;
   }
 
-  /* ---------- RIGHT PANEL ---------- */
-  .content{
-    max-width:640px;
-  }
   .social-proof{
     display:inline-flex;
     align-items:center;
@@ -123,7 +46,7 @@
     border-radius:999px;
     font-size:13px;
     color:var(--muted);
-    margin-bottom:32px;
+    margin-bottom:36px;
   }
   .avatars{display:flex;}
   .avatars span{
@@ -135,20 +58,22 @@
   .avatars span:first-child{margin-left:0;}
 
   h1{
-    font-size:56px;
-    line-height:1.05;
-    font-weight:800;
-    margin:0 0 24px;
-    letter-spacing:-0.5px;
+    font-family:'Anton', 'Poppins', sans-serif;
+    font-size:50px;
+    line-height:1.02;
+    font-weight:400;
+    text-transform:uppercase;
+    margin:0 0 26px;
+    letter-spacing:0.5px;
   }
   h1 .hl{color:var(--accent);}
 
   .subtext{
-    font-size:19px;
+    font-size:18px;
     color:var(--muted);
     line-height:1.5;
-    max-width:480px;
-    margin-bottom:36px;
+    max-width:380px;
+    margin:0 0 36px;
   }
   .subtext b{color:var(--text);}
 
@@ -163,14 +88,14 @@
     padding:20px 40px;
     border-radius:999px;
     text-decoration:none;
-    box-shadow:0 18px 40px -14px rgba(37,211,102,0.55);
+    box-shadow:0 0 40px rgba(37,211,102,0.55);
     transition:transform .15s ease;
   }
   .cta:hover{transform:translateY(-2px);}
   .cta svg{width:24px;height:24px;flex-shrink:0;}
 
   .cta-note{
-    margin:18px 0 34px;
+    margin:20px 0 30px;
     font-size:14px;
     color:var(--muted);
     line-height:1.5;
@@ -180,6 +105,7 @@
   .brands{
     display:flex;
     gap:14px;
+    margin-bottom:56px;
   }
   .brands .b{
     width:46px;height:46px;
@@ -198,60 +124,126 @@
     color:var(--muted);
   }
 
-  @media (max-width:980px){
-    .wrap{grid-template-columns:1fr; text-align:center; padding:40px 20px;}
-    .phone{margin-bottom:10px;}
+  /* ---------- PHONE ---------- */
+  .phone{
+    position:relative;
+    width:300px;
+    height:620px;
+    background:#0d0f14;
+    border-radius:46px;
+    padding:12px;
+    box-shadow:
+      0 0 0 2px #262b38,
+      0 30px 60px -20px rgba(0,0,0,0.7),
+      0 0 40px rgba(255,122,26,0.08);
+  }
+  .phone::before{
+    content:"";
+    position:absolute;
+    top:28px; left:50%;
+    transform:translateX(-50%);
+    width:80px; height:20px;
+    background:#000;
+    border-radius:12px;
+    z-index:5;
+  }
+  .screen{
+    width:100%;
+    height:100%;
+    border-radius:34px;
+    overflow:hidden;
+    background:#000;
+    position:relative;
+  }
+  .screen iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    pointer-events:none;
+  }
+  .playpause{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:transparent;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .playpause .icon{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.45);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  .playpause:hover .icon,
+  .playpause.show .icon{
+    opacity:1;
+  }
+  .playpause svg{
+    width:26px;
+    height:26px;
+    fill:#fff;
+  }
+
+  @media (max-width:520px){
+    .page{padding:40px 20px 56px;}
     h1{font-size:38px;}
-    .subtext{margin-left:auto; margin-right:auto;}
-    .social-proof{margin-left:auto;margin-right:auto;}
-    .brands{justify-content:center;}
+    .phone{width:260px; height:540px;}
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="page">
 
-
-    <!-- RIGHT CONTENT -->
-    <div class="content">
-      <div class="social-proof">
-        <div class="avatars">
-          <span></span><span></span><span></span><span></span>
-        </div>
-        + de 500.000 pessoas já economizam com a gente
+    <div class="social-proof">
+      <div class="avatars">
+        <span></span><span></span><span></span><span></span>
       </div>
-
-      <h1>CENTRAL DA<br>SORTE <span class="hl">CANGUÇU</span></h1>
-
-      <p class="subtext">
-        Encontro as melhores ofertas de tênis <b>ORIGINAIS</b> e compartilho tudo com você.
-      </p>
-
-      <a href="#" class="cta">
-        <svg viewBox="0 0 24 24" fill="#08210f"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 22c-1.68 0-3.33-.44-4.79-1.28l-.34-.2-3.55.93.95-3.46-.22-.36A9.94 9.94 0 0 1 2.05 12C2.05 6.5 6.55 2 12.05 2c2.66 0 5.16 1.04 7.04 2.93A9.9 9.9 0 0 1 22.02 12c0 5.5-4.5 10-9.97 10zm0-20C6 2 1.05 6.93 1.05 12c0 1.9.5 3.75 1.44 5.38L1 23l5.79-1.52A11.05 11.05 0 0 0 12.05 23c6.03 0 10.97-4.93 10.97-11S18.08 2 12.05 2z"/></svg>
-        Entrar no Grupo VIP
-      </a>
-
-      <p class="cta-note">
-        Grupo <b>100% GRATUITO</b> — saia quando quiser.<br>
-        Divulgamos promoções somente de lojas oficiais.
-      </p>
-
-      <div class="brands">
-        <div class="b">N</div>
-        <div class="b">A</div>
-        <div class="b">P</div>
-        <div class="b">M</div>
-        <div class="b">C</div>
-        <div class="b plus">+</div>
-      </div>
+      + de 500.000 pessoas já economizam com a gente
     </div>
+
+    <h1>Chega de pagar caro<br>em <span class="hl">tênis!</span></h1>
+
+    <p class="subtext">
+      Encontro as melhores ofertas de tênis <b>ORIGINAIS</b> e compartilho tudo com você.
+    </p>
+
+    <a href="#" class="cta">
+      <svg viewBox="0 0 24 24" fill="#08210f"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 22c-1.68 0-3.33-.44-4.79-1.28l-.34-.2-3.55.93.95-3.46-.22-.36A9.94 9.94 0 0 1 2.05 12C2.05 6.5 6.55 2 12.05 2c2.66 0 5.16 1.04 7.04 2.93A9.9 9.9 0 0 1 22.02 12c0 5.5-4.5 10-9.97 10zm0-20C6 2 1.05 6.93 1.05 12c0 1.9.5 3.75 1.44 5.38L1 23l5.79-1.52A11.05 11.05 0 0 0 12.05 23c6.03 0 10.97-4.93 10.97-11S18.08 2 12.05 2z"/></svg>
+      Entrar no Grupo VIP
+    </a>
+
+    <p class="cta-note">
+      Grupo <b>100% GRATUITO</b> — saia quando quiser.<br>
+      Divulgamos promoções somente de lojas oficiais.
+    </p>
+
+    <div class="brands">
+      <div class="b">N</div>
+      <div class="b">A</div>
+      <div class="b">P</div>
+      <div class="b">M</div>
+      <div class="b">C</div>
+      <div class="b plus">+</div>
+    </div>
+
     <!-- PHONE MOCKUP -->
     <div class="phone">
       <div class="screen">
         <iframe
           id="ytPlayer"
-          src="https://youtube.com/shorts/PBEUaDUkVME?si=epkwOV0HTTj2ai3U"
+          src="https://www.youtube.com/embed/M7lc1UVf-VE?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=M7lc1UVf-VE&controls=0&modestbranding=1&playsinline=1&rel=0"
           title="Vídeo"
           allow="autoplay; encrypted-media"
           allowfullscreen>
@@ -265,51 +257,51 @@
       </div>
     </div>
 
-    <script>
-      let player;
-      let isPlaying = true;
-
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('ytPlayer', {
-          events: { 'onReady': onPlayerReady }
-        });
-      }
-
-      function onPlayerReady(e) {
-        e.target.playVideo();
-      }
-
-      const btn = document.getElementById('playPauseBtn');
-      const playSvg = document.getElementById('playSvg');
-      const pauseSvg = document.getElementById('pauseSvg');
-      const icon = document.getElementById('ppIcon');
-
-      function flashIcon(){
-        icon.classList.add('show');
-        clearTimeout(window._iconTimer);
-        window._iconTimer = setTimeout(()=> icon.classList.remove('show'), 700);
-      }
-
-      btn.addEventListener('click', function(){
-        if (!player || !player.playVideo) return;
-        if (isPlaying) {
-          player.pauseVideo();
-          playSvg.style.display = 'block';
-          pauseSvg.style.display = 'none';
-        } else {
-          player.playVideo();
-          playSvg.style.display = 'none';
-          pauseSvg.style.display = 'block';
-        }
-        isPlaying = !isPlaying;
-        flashIcon();
-      });
-
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
-    </script>
-
   </div>
+
+  <script>
+    let player;
+    let isPlaying = true;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('ytPlayer', {
+        events: { 'onReady': onPlayerReady }
+      });
+    }
+
+    function onPlayerReady(e) {
+      e.target.playVideo();
+    }
+
+    const btn = document.getElementById('playPauseBtn');
+    const playSvg = document.getElementById('playSvg');
+    const pauseSvg = document.getElementById('pauseSvg');
+    const icon = document.getElementById('ppIcon');
+
+    function flashIcon(){
+      icon.classList.add('show');
+      clearTimeout(window._iconTimer);
+      window._iconTimer = setTimeout(()=> icon.classList.remove('show'), 700);
+    }
+
+    btn.addEventListener('click', function(){
+      if (!player || !player.playVideo) return;
+      if (isPlaying) {
+        player.pauseVideo();
+        playSvg.style.display = 'block';
+        pauseSvg.style.display = 'none';
+      } else {
+        player.playVideo();
+        playSvg.style.display = 'none';
+        pauseSvg.style.display = 'block';
+      }
+      isPlaying = !isPlaying;
+      flashIcon();
+    });
+
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  </script>
 </body>
 </html>
